@@ -1,0 +1,52 @@
+@{
+    ViewBag.Title = "Home";
+}
+
+
+<!-- the idea of this code html was used from several stackflow responses   -->
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- try to make it responsive  -->
+    <meta name="viewport" content="width=device-width" />
+    <title>Map</title>
+    <!--  page title  -->
+</head>
+<body>
+    <!-- send post request to the search action  -->
+    <form method="post" action="/Home/Search">
+        <select name="courtType">
+            <option value="tennis">Tennis Court</option>
+            <option value="basketball">Basketball Court</option>
+        </select>
+        <label for="zipcode">Zipcode:</label>
+        <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
+        <!-- it is being sumbitted here -->
+        <button type="submit">Search</button>
+    </form>
+    <!--  display nearby courts -->
+    <div style="float: left; width: 30%;">
+        <h3>Nearby Courts</h3>
+        <ul>
+            @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
+            {
+                foreach (var place in ViewBag.Places)
+                {
+                    <li>@place.Name</li>
+
+                }
+            }
+            else
+            {
+                <li>No courts found.</li>
+            }
+        </ul>
+    </div>
+    <!-- google map frame  -->
+    <div style="float: right; width: 70%;">
+        <iframe width="600" height="450" frameborder="0" style="border:0"
+                src="@ViewBag.MapUrl" allowfullscreen></iframe>
+    </div>
+</body>
+</html>
