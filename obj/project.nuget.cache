@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "8rscQTBo3N8vud/IfTrNB8vqNCza4zjrUxpAL0b35Y5oad69xm3zrOaQfUqnBb202SpBUJ1E/si7+5XE0laoDg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\maryambhuttor\\source\\repos\\GoogleMapss\\GoogleMapss\\GoogleMapss.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\maryambhuttor\\.nuget\\packages\\googlemaps.locationservices\\1.2.0.5\\googlemaps.locationservices.1.2.0.5.nupkg.sha512",
+    "C:\\Users\\maryambhuttor\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
