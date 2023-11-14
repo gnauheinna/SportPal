@@ -11536,24 +11536,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\annie\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Mic\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj",
+      "projectUniqueName": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj",
       "projectName": "SportMeApp",
-      "projectPath": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj",
-      "packagesPath": "C:\\Users\\annie\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\obj\\",
+      "projectPath": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj",
+      "packagesPath": "C:\\Users\\Mic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\annie\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Mic\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11635,7 +11630,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
