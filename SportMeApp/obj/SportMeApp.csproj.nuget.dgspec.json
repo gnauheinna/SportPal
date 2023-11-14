@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mic\\source\\repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj": {}
+    "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mic\\source\\repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj": {
+    "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mic\\source\\repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj",
+        "projectUniqueName": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj",
         "projectName": "SportMeApp",
-        "projectPath": "C:\\Users\\Mic\\source\\repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj",
-        "packagesPath": "C:\\Users\\Mic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mic\\source\\repos\\gnauheinna\\SportMe\\SportMeApp\\obj\\",
+        "projectPath": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\SportMeApp.csproj",
+        "packagesPath": "C:\\Users\\annie\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\annie\\Desktop\\SportMe\\SportMeApp\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Mic\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\annie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -67,6 +71,14 @@
             "PusherServer": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "RestClient": {
+              "target": "Package",
+              "version": "[3.1024.23771, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[110.2.0, )"
             }
           },
           "imports": [
@@ -88,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
