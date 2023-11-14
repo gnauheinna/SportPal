@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj": {}
+    "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj": {
+    "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj",
+        "projectUniqueName": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj",
         "projectName": "SportMeApp",
-        "projectPath": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\SportMeApp.csproj",
+        "projectPath": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj",
         "packagesPath": "C:\\Users\\Mic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mic\\Desktop\\SportPal3\\SportMeApp\\obj\\",
+        "outputPath": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Mic\\AppData\\Roaming\\NuGet\\NuGet.Config",
