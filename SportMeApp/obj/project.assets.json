@@ -11286,11 +11286,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Mic\\Source\\Repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj",
+      "projectUniqueName": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj",
       "projectName": "SportMeApp",
-      "projectPath": "C:\\Users\\Mic\\Source\\Repos\\gnauheinna\\SportMe\\SportMeApp\\SportMeApp.csproj",
+      "projectPath": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj",
       "packagesPath": "C:\\Users\\Mic\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Mic\\Source\\Repos\\gnauheinna\\SportMe\\SportMeApp\\obj\\",
+      "outputPath": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Mic\\AppData\\Roaming\\NuGet\\NuGet.Config",
