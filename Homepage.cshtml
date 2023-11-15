@@ -1,0 +1,146 @@
+@{
+    ViewBag.Title = "Home";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Map</title>
+    <style>
+        /* CSS for the top bar */
+        .top-bar {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-greeting {
+            color: white;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+            .search-form select, .search-form input[type="text"] {
+                margin-right: 10px;
+                padding: 5px;
+                height: 30px; /* Adjust the height as needed */
+            }
+
+            .search-form button {
+                background-color: #333;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                height: 30px; /* Adjust the height as needed */
+            }
+
+        /* CSS for the information box */
+        .info-box-container {
+            float: right;
+            width: 70%;
+        }
+
+        .info-box {
+            background-color: black;
+            color: orange;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+            .info-box h4 {
+                margin: 0;
+            }
+
+        /* CSS for the map */
+        .map-container {
+            float: right;
+            width: 70%;
+        }
+
+        .map {
+            width: 100%;
+            height: 450px;
+            border: 0;
+        }
+    </style>
+    <script>
+        // Your JavaScript functions here...
+    </script>
+</head>
+<body>
+    <!-- Top bar -->
+    <div class="top-bar">
+        <div class="user-greeting">Welcome User</div>
+        <div class="search-form">
+            <form method="post" action="/Home/Search">
+                <select name="courtType">
+                    <option value="tennis">Tennis Court</option>
+                    <option value="basketball">Basketball Court</option>
+                    <option value="volleyball">Volleyball Court</option>
+                    <option value="baseball">Baseball Field</option>
+                    <option value="soccer">Soccer Field</option>
+                </select>
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Map container -->
+    <div class="map-container">
+        <iframe class="map"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="@ViewBag.MapUrl">
+        </iframe>
+    </div>
+
+    <!-- Information boxes -->
+    <div class="info-box-container">
+        @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
+        {
+            var placesToDisplay = ((List<GoogleMapss.Controllers.HomeController.Location>)ViewBag.Places).Take(5); // Take the first 5 places
+
+            foreach (var place in placesToDisplay)
+            {
+                <div class="info-box">
+                    <h4>@place.Name</h4>
+                    <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                    <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
+                    <p>
+                        <strong>Opening Hours:</strong> @if (place.OpeningHours != null)
+                        {
+                            if (place.OpeningHours.open_now)
+                            {
+                                <span class="open">Open Now</span>
+                                ;
+                            }
+                            else
+                            {
+                                <span class="closed">Closed</span>
+                                ;
+                            }
+                        }
+                    </p>
+                    <p><strong>Rating:</strong> @place.Rating</p>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No courts found.</p>
+        }
+    </div>
+</body>
+</html>
