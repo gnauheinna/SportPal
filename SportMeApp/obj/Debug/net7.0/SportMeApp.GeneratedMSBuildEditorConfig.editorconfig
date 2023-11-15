@@ -16,6 +16,30 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Mic\Desktop\SportPal\SportMeApp
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/MessageView/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XE1lc3NhZ2VWaWV3XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/MessageView/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XE1lc3NhZ2VWaWV3XERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/MessageView/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XE1lc3NhZ2VWaWV3XERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/MessageView/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XE1lc3NhZ2VWaWV3XEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/MessageView/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XE1lc3NhZ2VWaWV3XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/GroupChat/RegisterEvent.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR3JvdXBDaGF0XFJlZ2lzdGVyRXZlbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Mic/Desktop/SportPal/SportMeApp/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

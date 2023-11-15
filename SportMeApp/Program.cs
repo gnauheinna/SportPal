@@ -13,8 +13,8 @@ builder.Services.AddControllersWithViews();
 
 
 // add mdf database service
-builder.Services.AddDbContext<SportMeAppContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SportMeAppContext") ?? throw new InvalidOperationException("Connection string 'SportMeAppContext' not found.")));
+builder.Services.AddDbContext<SportMeContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SportMeContext") ?? throw new InvalidOperationException("Connection string 'SportMeContext' not found.")));
 
 // pusher configuration
 var pusherOptions = new PusherOptions
@@ -30,7 +30,6 @@ builder.Services.AddSingleton(new Pusher(
 
 
 var app = builder.Build();
-
 
 
 

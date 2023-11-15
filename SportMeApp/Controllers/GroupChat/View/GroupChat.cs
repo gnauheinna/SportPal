@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SportMeApp.Controllers
+namespace SportMeApp.Controllers.GroupChat.View
 {
-    public class SportMeAppContext : Controller
+    public class GroupChat : Controller
     {
         public IActionResult RegisterEvent()
         {

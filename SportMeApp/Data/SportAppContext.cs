@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SportMeApp.Models;
 
-    public class SportMeAppContext : DbContext
+    public class SportMeContext : DbContext
     {
-        public SportMeAppContext(DbContextOptions<SportMeAppContext> options)
+        public SportMeContext(DbContextOptions<SportMeContext> options)
             : base(options)
         {
         }

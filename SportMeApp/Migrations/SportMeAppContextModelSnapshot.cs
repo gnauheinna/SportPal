@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace SportMeApp.Migrations
 {
-    [DbContext(typeof(SportMeAppContext))]
+    [DbContext(typeof(SportMeContext))]
     partial class SportMeAppContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

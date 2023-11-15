@@ -9,8 +9,8 @@ namespace SportMeApp.Controllers
     [Route("api/")]
     public class Utility : ControllerBase
     {
-        private readonly SportMeAppContext _context;
-        public Utility(SportMeAppContext context)
+        private readonly SportMeContext _context;
+        public Utility(SportMeContext context)
         {
             _context = context;
         }

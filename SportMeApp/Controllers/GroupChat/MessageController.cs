@@ -12,10 +12,10 @@ namespace SportMeApp.Controllers
     [Route("api/Message/")]
     public class MessageController : ControllerBase
     {
-        private readonly SportMeAppContext _context;
+        private readonly SportMeContext _context;
         private readonly Pusher _pusher;
 
-        public MessageController(Pusher pusher, SportMeAppContext context)
+        public MessageController(Pusher pusher, SportMeContext context)
         {
             _context = context;
             _pusher = pusher;

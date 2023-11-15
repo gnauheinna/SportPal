@@ -10,8 +10,8 @@ namespace SportMeApp.Controllers
     [Route("api/Group/")]
     public class GroupController : ControllerBase
     {
-        private readonly SportMeAppContext _context;
-        public GroupController(SportMeAppContext context)
+        private readonly SportMeContext _context;
+        public GroupController(SportMeContext context)
         {
             _context = context;
         }

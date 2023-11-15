@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace SportMeApp.Migrations
 {
-    [DbContext(typeof(SportMeAppContext))]
+    [DbContext(typeof(SportMeContext))]
     [Migration("20231115000155_init")]
     partial class init
     {

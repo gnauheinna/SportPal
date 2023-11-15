@@ -11,9 +11,9 @@ namespace SportMeApp.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly SportMeAppContext _context;
+        private readonly SportMeContext _context;
 
-        public UserController(SportMeAppContext context)
+        public UserController(SportMeContext context)
         {
             _context = context;
         }
