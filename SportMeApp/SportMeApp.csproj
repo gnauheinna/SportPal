@@ -28,4 +28,8 @@
     <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+
 </Project>
