@@ -1,5 +1,5 @@
 
-**About database**
+**About database** \\
 **1. declaring models**
 1. define class in Model folder (right click Models -> add -> clss)
    models we have:
