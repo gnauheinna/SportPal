@@ -1,5 +1,35 @@
 
-# About database
+
+## how to use dbContext in our codes?
+1. giving the controller access for dbContext
+    ```csharp
+   private readonly SportMeContext _context;
+   public ChangeThisToTheNameOfYourController(SportMeContext context)
+   {
+       _context = context;
+   }
+3. example of way to write things to the database
+    ```csharp
+      public async Task<IActionResult> SendMessage([FromBody] CreateMessage Partialmessage)
+      // declare the function as async to make sure db operations are done before continuing with subsequent code.
+      {
+          var message = new Message
+          {
+              Text = Partialmessage.Text,
+              Timestamp = DateTime.UtcNow,
+              UserId = Partialmessage.UserId,
+              EventId = Partialmessage.GroupId
+      
+          };
+      
+          // save messages to db 
+          _context.Message.Add(message); // add message to Message table
+          await _context.SaveChangesAsync(); // save changes
+          return Ok(message); //  return the message as confirmation
+      }
+
+
+# Configuring database
 - prerequisite: need to install  Microsoft.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Tools
 ## Set Up Step 1: Declaring Models**
 ### Define class in Model folder (right click Models -> add -> class)
@@ -45,3 +75,26 @@ you can drop database!! remember that all the data entries will be gone
 3. Package manager console: Add-migration init
 4. Package manager console: update-database
 
+## how to use dbContext in our codes?
+1. giving the controller access for dbContext
+   ```csharp
+   private readonly SportMeContext _context;
+public **ChangeThisToTheNameOfYourController**(SportMeContext context)
+{
+    _context = context;
+}
+3. example of way to write things to the database
+
+            var message = new Message
+            {
+                Text = Partialmessage.Text,
+                Timestamp = DateTime.UtcNow,
+                UserId = Partialmessage.UserId,
+                EventId = Partialmessage.GroupId
+
+            };
+
+            // save messages to db
+            _context.Message.Add(message); // add message to Message table
+            await _context.SaveChangesAsync(); // save changes
+4. example of utilizing userEvent table 
