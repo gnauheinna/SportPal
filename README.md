@@ -31,7 +31,7 @@
 
 # Configuring database
 - prerequisite: need to install  Microsoft.EntityFrameworkCore, Microsoft.EntityFrameworkCore.Tools
-## Set Up Step 1: Declaring Models**
+## Step 1: Declaring Models
 ### Define class in Model folder (right click Models -> add -> class)
    models we have:
    - **Event**: contains list of Message, foreign key for Location+Sport, and event detail
@@ -47,14 +47,14 @@
 ### Register dbContext in program.cs
 
 
-## Set Up Step 2: Applying changes to database**
+## Step 2: Applying changes to database**
 navbar => Tools => Nuget Packet Manager => Package Manager Console
 1. add-migration <name your migration>
    - this is just like git commit
 2. update-database
    - this is just like git push'
 
-## Set Up Step 3: Manually change the entry for each tables**
+## Step 3: Manually change the entry for each tables**
 navbar => View => SQL Server Object Explorer
 1. Locate the database and expand it
 2. Expand table, right click (for example) dbo.Event
@@ -74,27 +74,3 @@ you can drop database!! remember that all the data entries will be gone
 2. Package manager console: drop-database
 3. Package manager console: Add-migration init
 4. Package manager console: update-database
-
-## how to use dbContext in our codes?
-1. giving the controller access for dbContext
-   ```csharp
-   private readonly SportMeContext _context;
-public **ChangeThisToTheNameOfYourController**(SportMeContext context)
-{
-    _context = context;
-}
-3. example of way to write things to the database
-
-            var message = new Message
-            {
-                Text = Partialmessage.Text,
-                Timestamp = DateTime.UtcNow,
-                UserId = Partialmessage.UserId,
-                EventId = Partialmessage.GroupId
-
-            };
-
-            // save messages to db
-            _context.Message.Add(message); // add message to Message table
-            await _context.SaveChangesAsync(); // save changes
-4. example of utilizing userEvent table 
