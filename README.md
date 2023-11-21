@@ -10,7 +10,7 @@
    }
 3. example of way to write things to the database
     ```csharp
-      public async Task<IActionResult> SendMessage([FromBody] CreateMessage Partialmessage)
+      public async Task<IActionResult> SaveMessageToDb([FromBody] CreateMessage Partialmessage)
       // declare the function as async to make sure db operations are done before continuing with subsequent code.
       {
           var message = new Message
