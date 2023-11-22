@@ -2,7 +2,7 @@
 // sendMessage
 
 //
-var rooturl = "/api/group"
+var rootUrl = "/api/group"
 // find user id using username
 async function GetUserByName(username) {
     try {
@@ -15,6 +15,20 @@ async function GetUserByName(username) {
         }
     } catch (error) {
         console.error('Error fetching user ID:', error);
+        throw error;
+    }
+}
+async function GetUserById(userId) {
+    try {
+        const response = await fetch(`${rootUrl}/${userId}/GetUserById`);
+        if (response.ok) {
+            const user = await response.json();
+            return user;
+        } else {
+            throw new Error('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user Name:', error);
         throw error;
     }
 }
@@ -51,13 +65,13 @@ async function getUserGroups(user){
 }
 
 // return the number of users within a group
-async function getUsersInGroup(group) {
+async function getUsersInGroup(event) {
     try {
-        const response = await fetch(`${rootUrl}/${group.groupId}/UsersInGroup`);
+        const response = await fetch(`${rootUrl}/${event.eventId}/UsersInGroup`);
         if (response.ok) {
             const UserNum = await response.json();
-            console.log("Users: " + UserNum);
-            console.log(UserNum.length)
+            //console.log("Users: " + UserNum);
+            //console.log(UserNum.length)
             return UserNum;
         } else {
             throw new Error('Error fetching user groups');
@@ -70,15 +84,16 @@ async function getUsersInGroup(group) {
 
 
 // send messages
-async function SendMessageHelper(message,UserId,GroupId) {
+async function SendMessageHelper(message, UserId, EventId) {
 
     const messageData = {
         Text: message,
         UserId: UserId,
-        GroupId: GroupId
+        EventId: EventId
     }
+   // console.log("SendMessageHelper: " + JSON.stringify(messageData));
 
-    fetch('/api/message/SendMessage', {
+    fetch(`${rootUrl}/SendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(messageData)
@@ -91,7 +106,7 @@ async function SendMessageHelper(message,UserId,GroupId) {
             return response.json();
         })
         .then(data => {
-            console.log('Message sent:', data);
+            //console.log('Message sent:', data);
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
@@ -99,11 +114,11 @@ async function SendMessageHelper(message,UserId,GroupId) {
 
 }
 
-async function GetAllMessages(group, user) {
+async function GetAllMessages(event, user) {
     try {
-        const response = await fetch(`/api/Message/${group.groupId}/GetMessages`);
+        const response = await fetch(`${rootUrl}/${event.eventId}/GetMessages`);
         const messages = await response.json();
-        console.log("getAllMessages:", messages);
+        //console.log("getAllMessages:", messages);
         return messages;
     } catch (error) {
         console.error('Error fetching messages:', error);

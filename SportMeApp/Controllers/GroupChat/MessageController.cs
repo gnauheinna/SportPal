@@ -5,11 +5,12 @@ using SportMeApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using PusherServer;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.EntityFrameworkCore;
 
 namespace SportMeApp.Controllers
 {
     [ApiController]
-    [Route("api/Message/")]
+    [Route("api/group/")]
     public class MessageController : ControllerBase
     {
         private readonly SportMeContext _context;
@@ -44,11 +45,25 @@ namespace SportMeApp.Controllers
             _context.Message.Add(message); // add message to database
             await _context.SaveChangesAsync(); // save changes
 
+    
+            
+            var message_detail = await _context.Message
+                .Include(m => m.User) // Load the User navigation property
+                .Where(m => m.MessageId == message.MessageId) // Filter by the newly added message
+                .Select(m => new
+                {
+                    MessageId = m.MessageId,
+                    UserId = m.UserId,
+                    UserName = m.User != null ? m.User.Username : null, // Check for null before accessing Username
+                    Timestamp = m.Timestamp,
+                    Text = m.Text
+                })
+                .FirstOrDefaultAsync();
+
             // Notify other clients using Pusher
             string channelId = "group_chat_" + message.EventId.ToString();
-            await _pusher.TriggerAsync(channelId, "new_message", message);
-
-            return Ok(message); // It might be useful to return the message as confirmation
+            await _pusher.TriggerAsync(channelId, "new_message", message_detail);
+            return Ok(message_detail);
         }
 
         [HttpGet("{EventId}/GetMessages")]
@@ -56,6 +71,15 @@ namespace SportMeApp.Controllers
         {
             var messages = _context.Message
                 .Where(m => m.EventId == EventId)
+                .Select(m => new
+                {
+                    MessageId = m.MessageId,
+                    UserId = m.UserId,
+                    UserName = m.User.Username,
+                    Timestamp = m.Timestamp,
+                    Text = m.Text
+
+                })
                 .ToList();
 
             return Ok(messages);

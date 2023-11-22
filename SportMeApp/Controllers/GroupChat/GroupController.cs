@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SportMeApp.Controllers
 {
     [ApiController]
-    [Route("api/Group/")]
+    [Route("api/group/")]
     public class GroupController : ControllerBase
     {
         private readonly SportMeContext _context;

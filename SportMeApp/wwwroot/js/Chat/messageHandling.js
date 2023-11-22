@@ -3,37 +3,33 @@
 let currentGroup = null;
 let currentUser = null;
 let currentSubscription = null;
-function loadAndDisplayChat(group, user) {
+function loadAndDisplayChat(event, user) {
     // unsubscribe from previous pusher group
     unsubscribeFromGroup();
-    Chatclearfield(group, user);
+    Chatclearfield(event, user);
 
 
-    currentGroup = group;
+    currentGroup = event;
     currentUser = user;
     
-    subscribeToGroup(group, user);
-    groupChatDisplay(group, user);
-    loadAllMessages(group, user);
+    subscribeToGroup(event, user);
+
+   
+    groupChatDisplay(event, user);
+    loadAllMessages(event, user);
 }
 
 
 //display group chat
-async function groupChatDisplay(group, user) {
+async function groupChatDisplay(event, user) {
     const namebox = document.getElementById('info-name');
-    namebox.textContent = group.groupName;
+    namebox.textContent = event.eventName;
     const currentPlayer = document.getElementById('currentPlayer');
-    try {
-        const usersInGroup = await getUsersInGroup(group); 
-        currentPlayer.textContent = "Current Player: " + usersInGroup.length;
-    } catch (error) {
-        console.error('Error fetching users in group:', error);
-        // Handle the error appropriately
-    }
+    currentPlayer.textContent = "Current Player: " + event.usersInGroup.length;
     const sportdisplay = document.getElementById('sport');
-    sportdisplay.textContent = "Sport: " + group.sport;
+    sportdisplay.textContent = "Sport: " + event.sport.sportName;
     const feedisplay = document.getElementById('fee');
-    feedisplay.textContent = "Fee: $" + group.fee;
+    feedisplay.textContent = "Fee: $" + event.eventFee;
 
     const sendButton = document.getElementById('btnSend');
 
@@ -45,16 +41,16 @@ async function groupChatDisplay(group, user) {
 
     // Now add the new event listener
     freshSendButton.addEventListener('click', function () {
-        sendMessage(group, user);
+        sendMessage(event, user);
     });
 }
 
 
 // Send Message
-function sendMessage(group, user) {
+function sendMessage(event, user) {
     var messageContent = document.getElementById('message-input').value;
-    console.log(user.userId + " " + group.EventId)
-    const messageInfo = SendMessageHelper(messageContent, user.userId, group.EventId);
+    console.log(user.userId + " " + event.eventId)
+    const messageInfo = SendMessageHelper(messageContent, user.userId, event.eventId);
     console.log("here is the message: " + JSON.stringify(messageInfo));
 
     // Clear the message input box
@@ -62,14 +58,14 @@ function sendMessage(group, user) {
 }
 
 // subscribe to pusher
-function subscribeToGroup(group, user) {
+function subscribeToGroup(event, user) {
 
     var pusher = new Pusher('c4df39e68bc1efd69e69', {
         cluster: 'us2'
     });
 
     // subscribe to the chat channel
-    var channel = pusher.subscribe('group_chat_' + group.EventId);
+    var channel = pusher.subscribe('group_chat_' + event.eventId);
 
     // Keep track of the current channel subscription
     currentSubscription = channel;
@@ -77,9 +73,10 @@ function subscribeToGroup(group, user) {
     // display incomming messages
     console.log("current user information: " + JSON.stringify(user));
     channel.bind('new_message', function (data) {
+        console.log("pusher data: " + JSON.stringify(data));
         displayMessage(data, user.userId);
     })
-    console.log("user succefully subscribed to this channel: "+group.EventId);
+    console.log("user succefully subscribed to this channel: " + event.EventId);
 }
 function unsubscribeFromGroup() {
     // call when user leaves a groupaht or logs out
@@ -89,9 +86,9 @@ function unsubscribeFromGroup() {
         currentSubscription = null;
     }
 }
-async function loadAllMessages(group, user){
+async function loadAllMessages(event, user){
     try {
-        var messages = await GetAllMessages(group, user);
+        var messages = await GetAllMessages(event, user);
         console.log(messages);
         messages.forEach(async message => {
             await displayMessage(message, user.userId); 
@@ -107,6 +104,7 @@ async function displayMessage(message, userId_current) {
     var messageUserId = message.UserId || message.userId;
     var messageTxt = message.text || message.Text;
     var timestamp = message.timestamp || message.Timestamp;
+    var userName = message.userName || message.UserName;
     // called from subscriveToGroup
     //message is the model we defined
 
@@ -116,16 +114,15 @@ async function displayMessage(message, userId_current) {
     console.log("message's user id: " + messageUserId);
     console.log("current user id: " + userId_current);
     // If it's the current user's message, give it a class for styling
-    if (userId_current === messageUserId) {
+    if (userId_current === userName) {
         msgDiv.className = 'userMessage';
     }
-    try {
-        const Messageuser = await GetUserById(messageUserId); 
+    try { 
 
         msgDiv.innerHTML = `
         <div class="message-container">
             <div class=name-timestamp>
-                <div class="name">${Messageuser.username}</div>
+                <div class="name">${userName}</div>
                 <div class="timestamp">${formatTimestamp(timestamp)}</div>
             </div>
         

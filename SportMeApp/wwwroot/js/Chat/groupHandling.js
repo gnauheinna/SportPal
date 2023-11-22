@@ -4,9 +4,10 @@
 
 $(document).ready(function () {
     $('#BtnUser').click(function () {
-        console.log('Button clicked');
+        //console.log('Button clicked');
         handleUserLogin();
     });
+
     $("#BtnCreateGroup").click(function () {
         handleCreateGroup();
     });
@@ -39,41 +40,45 @@ function loadAndDisplayGroups(username) {
     try {
         (async () => {
             const user = await GetUserByName(username);
-            console.log('User ', user);
+            //console.log('User ', user);
 
-            const groups = await getUserGroups(user);
-            console.log('User Groups: ', groups);
-
-            displayGroups(groups, user);
+            //const groups = await getUserGroups(user);
+            //console.log('User Groups: ', groups);
+            const Userinfo = await GetUserInfo(user.userId);
+            console.log("Userinfo", JSON.stringify(Userinfo));
+            displayGroups(Userinfo);
         })();
     } catch (error) {
         console.error('Error in finding userid or getting groups', error);
     }
 
+
 }
 
 // 
-async function displayGroups(groups, user) {
+async function displayGroups(Userinfo) {
     const container = document.querySelector('#registeredEvent');
 
-    groups.forEach(group => {
-        console.log("displaying group: " + JSON.stringify(group));
+    Userinfo.events.forEach(event => {
+
+        console.log("displaying event: " + JSON.stringify(event));
         const GroupEvent = document.createElement('div');
         GroupEvent.className = 'event-display';
-        GroupEvent.id = group.groupId;
+        GroupEvent.id = event.eventId;
         GroupEvent.innerHTML = `
 <div class="event-group">
     
-     <div class="event-name">${group.groupName}</div>
+     <div class="event-name">${event.eventName}</div>
      <div class="event-line"></div>
      <div class="event-infoframe">
-        <div class="event-time">${group.eventTime}</div>
-        <div class="event-location">${group.location}</div>
+        <div class="event-time">${event.formattedTime}</div>
+        <div class="event-location">${event.location.address}</div>
    </div>
 </div>
 `;
+
         GroupEvent.addEventListener('click', function () {
-            loadAndDisplayChat(group, user);
+            loadAndDisplayChat(event, Userinfo.user);
         });
         container.appendChild(GroupEvent);
     });

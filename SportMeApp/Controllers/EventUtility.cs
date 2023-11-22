@@ -34,15 +34,28 @@ namespace SportMeApp.Controllers
                 Email = user.Email
             };
 
+        
+
             // Project events data for the specific user
             var eventsData = await _context.UserEvent
                 .Where(ue => ue.UserId == UserId)
-                .Select(ue => new {
+                .Select(  ue => new {
                     EventId = ue.Event.EventId,
                     EventName = ue.Event.EventName,
-                    //StartTime = ue.StartTime,
-                    //EndTime = ue.EndTime,
+                    StartTime = ue.Event.StartTime,
+                    EndTime = ue.Event.EndTime,
+                    FormattedTime = ue.Event.StartTime.Date == ue.Event.EndTime.Date ?
+                                   ue.Event.StartTime.ToString("yyyy/MM/dd h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
+                                    ue.Event.EndTime.ToString("h") + ue.Event.EndTime.ToString("tt").ToLower() :
+                                    ue.Event.StartTime.ToString("M/d h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
+                                    ue.Event.EndTime.ToString("M/d h") + ue.Event.EndTime.ToString("tt").ToLower() + " " +
+                                    ue.Event.EndTime.ToString("yyyy"),
                     EventFee = ue.Event.Fee,
+                    UsersInGroup = _context.UserEvent
+                        .Where(ug => ug.EventId == ue.Event.EventId)
+                        .Select(ug => ug.User.Username)
+                        .Distinct()
+                        .ToList(),
                     Sport = new
                     {
                         SportId = ue.Event.Sport.SportId,
@@ -72,6 +85,10 @@ namespace SportMeApp.Controllers
 
             return Ok(result);
         }
+
+
+
+      
 
     }
 }

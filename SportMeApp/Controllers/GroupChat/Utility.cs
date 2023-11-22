@@ -44,6 +44,8 @@ namespace SportMeApp.Controllers
             return NotFound("User not found.");
         }
 
+
+  
         [HttpGet("{userId}/GetUserById")]
         public async Task<IActionResult> GetUserById(int userId)
         {
@@ -56,32 +58,13 @@ namespace SportMeApp.Controllers
             return NotFound("User not found.");
         }
 
-        // Endpoint to get groups for a specific user
-        [HttpGet("{userId}/GetUserGroups")]
-        public async Task<IActionResult> GetUserGroups(int userId)
-        {
-            // Check if the user exists
-            var userExists = await _context.User.AnyAsync(u => u.UserId == userId);
-            if (!userExists)
-            {
-                return NotFound("User not found.");
-            }
+        
 
-            // Retrieve all groups associated with the specified user
-            var userGroups = await _context.UserEvent
-                .Where(ug => ug.UserId == userId)
-                .Include(ug => ug.Event)
-                .Select(ug => ug.Event)
-                .ToListAsync();
-
-            return Ok(userGroups);
-        }
-
-        [HttpGet("{GroupId}/UsersInGroup")]
-        public async Task<IActionResult> UsersInGroup(int GroupId)
+        [HttpGet("{EventId}/UsersInGroup")]
+        public async Task<IActionResult> UsersInGroup(int EventId)
         {
             // Check if the group exists
-            var groupExists = await _context.Event.AnyAsync(g => g.EventId == GroupId);
+            var groupExists = await _context.Event.AnyAsync(g => g.EventId == EventId);
             if (!groupExists)
             {
                 return NotFound("Group not found.");
@@ -89,7 +72,7 @@ namespace SportMeApp.Controllers
 
             // Count the number of users in the specified group
             var UsersInGroup = await _context.UserEvent
-                .Where(ug => ug.EventId == GroupId)
+                .Where(ug => ug.EventId == EventId)
                 .Select(ug => ug.User.Username)
                 .Distinct()
                 .ToListAsync();
