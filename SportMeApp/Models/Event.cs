@@ -9,8 +9,9 @@ namespace SportMeApp.Models
         [Key]
         public int EventId { get; set; }
         public string EventName { get; set; }
-      
-        public string EventTime { get; set; }
+
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public double Fee { get; set; }
 
         // Foreign key 

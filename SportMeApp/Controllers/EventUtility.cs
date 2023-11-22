@@ -40,7 +40,8 @@ namespace SportMeApp.Controllers
                 .Select(ue => new {
                     EventId = ue.Event.EventId,
                     EventName = ue.Event.EventName,
-                    EventTime = ue.Event.EventTime,
+                    //StartTime = ue.StartTime,
+                    //EndTime = ue.EndTime,
                     EventFee = ue.Event.Fee,
                     Sport = new
                     {
