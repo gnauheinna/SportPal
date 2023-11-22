@@ -26,7 +26,7 @@ namespace SportMeApp.Controllers
         {
 
 
-            if (Partialmessage == null || Partialmessage.UserId == 0 || Partialmessage.GroupId == 0 || string.IsNullOrEmpty(Partialmessage.Text))
+            if (Partialmessage == null || Partialmessage.UserId == 0 || Partialmessage.EventId == 0 || string.IsNullOrEmpty(Partialmessage.Text))
             {
                 return BadRequest("Invalid message data");
             }
@@ -36,26 +36,26 @@ namespace SportMeApp.Controllers
                 Text = Partialmessage.Text,
                 Timestamp = DateTime.UtcNow,
                 UserId = Partialmessage.UserId,
-                GroupId = Partialmessage.GroupId
+                EventId = Partialmessage.EventId
 
             };
 
-            // save messages to db and call pusher to send message to users that subscribed to the group chat
+            // save messages to db and call pusher to send message to users that subscribed to the Event chat
             _context.Message.Add(message); // add message to database
             await _context.SaveChangesAsync(); // save changes
 
             // Notify other clients using Pusher
-            string channelId = "group_chat_" + message.GroupId.ToString();
+            string channelId = "group_chat_" + message.EventId.ToString();
             await _pusher.TriggerAsync(channelId, "new_message", message);
 
             return Ok(message); // It might be useful to return the message as confirmation
         }
 
-        [HttpGet("{GroupId}/GetMessages")]
-        public IActionResult GetMessages(int GroupId)
+        [HttpGet("{EventId}/GetMessages")]
+        public IActionResult GetMessages(int EventId)
         {
             var messages = _context.Message
-                .Where(m => m.GroupId == GroupId)
+                .Where(m => m.EventId == EventId)
                 .ToList();
 
             return Ok(messages);

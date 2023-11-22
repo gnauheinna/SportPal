@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace SportMeApp.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/group/")]
     public class Utility : ControllerBase
     {
         private readonly SportMeContext _context;
@@ -19,11 +19,11 @@ namespace SportMeApp.Controllers
         public async Task<IActionResult> GetGroupName([FromRoute] int groupId)
         {
             // Retrieve the group from the database using the provided groupId
-            var group = await _context.Group.FindAsync(groupId);
+            var group = await _context.Event.FindAsync(groupId);
 
             if (group != null)
             {
-                return Ok(group.GroupName);
+                return Ok(group.EventName);
             }
             else
             {
@@ -68,10 +68,10 @@ namespace SportMeApp.Controllers
             }
 
             // Retrieve all groups associated with the specified user
-            var userGroups = await _context.UserGroup
+            var userGroups = await _context.UserEvent
                 .Where(ug => ug.UserId == userId)
-                .Include(ug => ug.Group)
-                .Select(ug => ug.Group)
+                .Include(ug => ug.Event)
+                .Select(ug => ug.Event)
                 .ToListAsync();
 
             return Ok(userGroups);
@@ -81,20 +81,21 @@ namespace SportMeApp.Controllers
         public async Task<IActionResult> UsersInGroup(int GroupId)
         {
             // Check if the group exists
-            var groupExists = await _context.Group.AnyAsync(g => g.GroupId == GroupId);
+            var groupExists = await _context.Event.AnyAsync(g => g.EventId == GroupId);
             if (!groupExists)
             {
                 return NotFound("Group not found.");
             }
 
             // Count the number of users in the specified group
-            var UsersInGroup = await _context.UserGroup
-                .Where(ug => ug.GroupId == GroupId)
+            var UsersInGroup = await _context.UserEvent
+                .Where(ug => ug.EventId == GroupId)
                 .Select(ug => ug.User.Username)
                 .Distinct()
                 .ToListAsync();
 
             return Ok(UsersInGroup);
         }
+        
     }
 }

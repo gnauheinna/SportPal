@@ -1,5 +1,5 @@
 ﻿// loadAndDisplayChat(group, userId), subscribeToGroup(group, userId),
-// sendMessage(groupId, userId_current), displayMessage(message, userId_current)
+// sendMessage(EventId, userId_current), displayMessage(message, userId_current)
 let currentGroup = null;
 let currentUser = null;
 let currentSubscription = null;
@@ -53,8 +53,8 @@ async function groupChatDisplay(group, user) {
 // Send Message
 function sendMessage(group, user) {
     var messageContent = document.getElementById('message-input').value;
-    console.log(user.userId + " " + group.groupId)
-    const messageInfo = SendMessageHelper(messageContent, user.userId, group.groupId);
+    console.log(user.userId + " " + group.EventId)
+    const messageInfo = SendMessageHelper(messageContent, user.userId, group.EventId);
     console.log("here is the message: " + JSON.stringify(messageInfo));
 
     // Clear the message input box
@@ -69,7 +69,7 @@ function subscribeToGroup(group, user) {
     });
 
     // subscribe to the chat channel
-    var channel = pusher.subscribe('group_chat_' + group.groupId);
+    var channel = pusher.subscribe('group_chat_' + group.EventId);
 
     // Keep track of the current channel subscription
     currentSubscription = channel;
@@ -79,7 +79,7 @@ function subscribeToGroup(group, user) {
     channel.bind('new_message', function (data) {
         displayMessage(data, user.userId);
     })
-    console.log("user succefully subscribed to this channel: "+group.groupId);
+    console.log("user succefully subscribed to this channel: "+group.EventId);
 }
 function unsubscribeFromGroup() {
     // call when user leaves a groupaht or logs out

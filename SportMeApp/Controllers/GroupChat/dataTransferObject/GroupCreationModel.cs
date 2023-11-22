@@ -2,7 +2,7 @@
 {
     public class GroupCreationModel
     {
-        public string GroupName { get; set; }
+        public string EventName { get; set; }
         public List<string> SelectedUsers { get; set; }
     }
 }

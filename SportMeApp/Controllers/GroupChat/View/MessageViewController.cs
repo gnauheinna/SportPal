@@ -21,7 +21,7 @@ namespace SportMeApp.Controllers.GroupChat.View
         // GET: MessageView
         public async Task<IActionResult> Index()
         {
-            var sportMeAppContext = _context.Message.Include(m => m.Group).Include(m => m.User);
+            var sportMeAppContext = _context.Message.Include(m => m.Event).Include(m => m.User);
             return View(await sportMeAppContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace SportMeApp.Controllers.GroupChat.View
             }
 
             var message = await _context.Message
-                .Include(m => m.Group)
+                .Include(m => m.Event)
                 .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.MessageId == id);
             if (message == null)
@@ -48,7 +48,7 @@ namespace SportMeApp.Controllers.GroupChat.View
         // GET: MessageView/Create
         public IActionResult Create()
         {
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId");
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId");
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId");
             return View();
         }
@@ -66,7 +66,7 @@ namespace SportMeApp.Controllers.GroupChat.View
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", message.GroupId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", message.EventId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", message.UserId);
             return View(message);
         }
@@ -84,7 +84,7 @@ namespace SportMeApp.Controllers.GroupChat.View
             {
                 return NotFound();
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", message.GroupId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", message.EventId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", message.UserId);
             return View(message);
         }
@@ -94,7 +94,7 @@ namespace SportMeApp.Controllers.GroupChat.View
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MessageId,Text,Timestamp,UserId,GroupId")] Message message)
+        public async Task<IActionResult> Edit(int id, [Bind("MessageId,Text,Timestamp,UserId,EventId")] Message message)
         {
             if (id != message.MessageId)
             {
@@ -121,7 +121,7 @@ namespace SportMeApp.Controllers.GroupChat.View
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", message.GroupId);
+            ViewData["EventId"] = new SelectList(_context.Event, "EventId", "EventId", message.EventId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserId", message.UserId);
             return View(message);
         }
@@ -135,7 +135,7 @@ namespace SportMeApp.Controllers.GroupChat.View
             }
 
             var message = await _context.Message
-                .Include(m => m.Group)
+                .Include(m => m.Event)
                 .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.MessageId == id);
             if (message == null)

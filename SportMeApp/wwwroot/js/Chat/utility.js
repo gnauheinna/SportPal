@@ -2,11 +2,11 @@
 // sendMessage
 
 //
-
+var rooturl = "/api/group"
 // find user id using username
 async function GetUserByName(username) {
     try {
-        const response = await fetch(`/api/${username}/GetUserByName`);
+        const response = await fetch(`${rootUrl}/${username}/GetUserByName`);
         if (response.ok) {
             const user = await response.json();
             return user;
@@ -19,24 +19,10 @@ async function GetUserByName(username) {
     }
 }
 
-async function GetUserById(userId) {
-    try {
-        const response = await fetch(`/api/${userId}/GetUserById`);
-        if (response.ok) {
-            const user = await response.json();
-            return user;
-        } else {
-            throw new Error('User not found');
-        }
-    } catch (error) {
-        console.error('Error fetching user Name:', error);
-        throw error;
-    }
-}
 // find groupname using groupid
 async function getGroupName(groupId) {
     try {
-        const response = await fetch(`/api/${groupId}/GetGroupName`);
+        const response = await fetch(`${rootUrl}/${groupId}/GetGroupName`);
         if (response.ok) {
             const groupName = await response.text();
             return groupName;
@@ -51,7 +37,7 @@ async function getGroupName(groupId) {
 // return the groups that user joined
 async function getUserGroups(user){
     try {
-        const response = await fetch(`/api/${user.userId}/GetUserGroups`);
+        const response = await fetch(`${rootUrl}/${user.userId}/GetUserGroups`);
         if (response.ok) {
             const groups = await response.json();
             return groups;
@@ -67,7 +53,7 @@ async function getUserGroups(user){
 // return the number of users within a group
 async function getUsersInGroup(group) {
     try {
-        const response = await fetch(`/api/${group.groupId}/UsersInGroup`);
+        const response = await fetch(`${rootUrl}/${group.groupId}/UsersInGroup`);
         if (response.ok) {
             const UserNum = await response.json();
             console.log("Users: " + UserNum);

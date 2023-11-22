@@ -34,7 +34,7 @@ namespace SportMeApp.Controllers
             }
             else
             {
-                var newUser = new User { Username = userName };
+                var newUser = new User { Username = userName, Email="hi"};
                 _context.User.Add(newUser);
                 _context.SaveChanges();
                 return Ok("User added succesfully");
