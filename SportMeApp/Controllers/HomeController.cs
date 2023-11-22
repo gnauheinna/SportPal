@@ -22,6 +22,10 @@ namespace SportMeApp.Controllers
         {
             return View();
         }
+        public IActionResult HomePage()
+        {
+            return View();
+        }
         public ActionResult OauthRedirect()
         {
             var client_id = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com";
