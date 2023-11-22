@@ -37,7 +37,7 @@ async function GetEventByLocation(SportId) {
 }
 function main() {
     // login 
-    var UserId = 2;
+    var UserId = 3;
     GetUserInfo(UserId);
 }
 main()
