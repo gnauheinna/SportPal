@@ -3,7 +3,7 @@
 ###################
 *.com
 *.class
-*.dll
+
 *.exe
 *.pdb
 *.dll.config
@@ -74,9 +74,7 @@ _[Ss]cripts
 *.ncrunchsolution
 *.dot[Cc]over
 # mdf database
-*.mdf
-/SportMeApp/App_Data/SportPalDB.mdf
-/SportMeApp/App_Data/SportPalDB_log.ldf
+
 *.vsidx
 /.vs/SportMeApp/FileContentIndex/02ff1f07-db79-4589-b299-4649db69419f.vsidx
 /.vs/SportMeApp/FileContentIndex/4595380c-0898-483a-95a7-7867ba0c89f7.vsidx
