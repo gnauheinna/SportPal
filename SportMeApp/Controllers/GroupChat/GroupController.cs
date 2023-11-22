@@ -19,13 +19,13 @@ namespace SportMeApp.Controllers
         [HttpPost("CreateGroup")]
         public async Task<IActionResult> CreateGroup([FromBody] GroupCreationModel groupData)
         {
-            if (string.IsNullOrEmpty(groupData.GroupName))
+            if (string.IsNullOrEmpty(groupData.EventName))
             {
                 return BadRequest("Group name cannot be empty.");
             }
 
-            var group = new Models.Group { GroupName = groupData.GroupName };
-            _context.Group.Add(group);
+            var group = new Models.Event { EventName = groupData.EventName };
+            _context.Event.Add(group);
 
             if (groupData.SelectedUsers != null && groupData.SelectedUsers.Count > 0)
             {
@@ -34,25 +34,25 @@ namespace SportMeApp.Controllers
                 {
                     if (group != null && user != null)
                     {
-                        if (group.UserGroups == null)
+                        if (group.UserEvents == null)
                         {
-                            group.UserGroups = new List<UserGroup>();
+                            group.UserEvents = new List<UserEvent>();
                         }
 
-                        group.UserGroups.Add(new UserGroup { User = user, Group = group });
+                        group.UserEvents.Add(new UserEvent { User = user, Event = group });
                     }
                 }
             }
 
             await _context.SaveChangesAsync();
-            return Ok("Group added: " + group.GroupName);
+            return Ok("Group added: " + group.EventName);
         }
 
         [HttpPost("AddUserToGroup")]
-        public async Task<IActionResult> AddUserToGroup([FromBody] int userId, int groupId)
+        public async Task<IActionResult> AddUserToGroup([FromBody] int userId, int EventId)
         {
-            var userGroup = new UserGroup { UserId = userId, GroupId = groupId };
-            _context.UserGroup.Add(userGroup);
+            var userGroup = new UserEvent { UserId = userId, EventId = EventId };
+            _context.UserEvent.Add(userGroup);
             await _context.SaveChangesAsync();
             return Ok("User added to group: " + userGroup);
         }

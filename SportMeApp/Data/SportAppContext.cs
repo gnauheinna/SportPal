@@ -13,7 +13,11 @@ using SportMeApp.Models;
         }
 
         public DbSet<SportMeApp.Models.Message> Message { get; set; } = default!;
-        public DbSet<SportMeApp.Models.Group> Group { get; set; } = default!;
+        public DbSet<SportMeApp.Models.Event> Event { get; set; } = default!;
         public DbSet<SportMeApp.Models.User> User { get; set; } = default!;
-        public DbSet<SportMeApp.Models.UserGroup> UserGroup { get; set; } = default!;
+        public DbSet<SportMeApp.Models.UserEvent> UserEvent { get; set; } = default!;
+
+        public DbSet<SportMeApp.Models.Location> Location { get; set; } = default!;
+        public DbSet<SportMeApp.Models.Sport> Sport { get; set; } = default!;
+
 }

@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// consider the db from App_Data
 AppDomain.CurrentDomain.SetData("DataDirectory", Path.Combine(builder.Environment.ContentRootPath, "App_Data"));
+
 // add mdf database service
 builder.Services.AddDbContext<SportMeContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportMeContext") ?? throw new InvalidOperationException("Connection string 'SportMeContext' not found.")));

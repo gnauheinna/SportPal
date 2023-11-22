@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cs5EMr5DF5NixJI67F8fGpqjg9Ln+2ZPkbMhbiQCA8qWnSxLRB88PLxbM+0PXXebJcHxNm66YrkN/8PMxhMWKQ==",
+  "dgSpecHash": "gvAdz4uW5Es6ffGhXtC1XV5oa3BhQZ89LGA41c+A54UVK+3VtKXBEr/mwu/f0NlQt+5mybIp5iNlP50RNEimLw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mic\\Desktop\\SportPal\\SportMeApp\\SportMeApp.csproj",
+  "projectFilePath": "C:\\Users\\Mic\\source\\repos\\SportMe\\SportMeApp\\SportMeApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mic\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Mic\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
