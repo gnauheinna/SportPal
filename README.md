@@ -1,8 +1,8 @@
-### first step after cloning
+# First step after cloning
 1. top navbar => tools => Nuget Package Manager => Package Manager Console
 2. inside Package Manager Console: add-migration init
 3. update-database
-   **both step 2 and step 3 should return build success, if not, call Michelle rn!!!
+   ## both step 2 and step 3 should return build success, if not, call Michelle rn!!!
 
 ## how to use dbContext in our codes?
 1. giving the controller access for dbContext
