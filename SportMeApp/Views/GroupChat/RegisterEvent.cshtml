@@ -8,6 +8,14 @@
     <link rel="stylesheet" type="text/css" href="~/css/groupchat.css">
 </head>
 <body>
+    <div id="userContainer">
+        <input type="text" id="Username" placeholder="Enter your name" required />
+        <button type="button" id="BtnUser">Login</button>
+        <div id="displayName"></div>
+    </div>
+
+
+
     <div class="registerevent">
         <div class="event-section">
             <div id="registeredEvent" class="registeredEvent"></div>
@@ -18,15 +26,15 @@
         <div class="chat-section">
             <div class="chat-backgroud">
                 <div class="info-section">
-                    <div id="info-name">Name</div>
+                    <div id="info-name"></div>
                     <div id="info-detail">
                         <div id="currentPlayer"></div>
-                        <div id="sport">"</div>
+                        <div id="sport"></div>
                         <div id="fee"></div>
                     </div>
                 </div>
                 <div class="horizontal-line"></div>
-                <div id="chatHistory" class="chatHistory"></div>
+                <div id="chatHistory" class="chatHistory"><div class="notice">Please Select An Event</div></div>
                 <div id="send-message">
                     <input type="text" id="message-input"/>
                     <button id="btnSend">Send</button>
