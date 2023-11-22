@@ -1,4 +1,5 @@
-
+api
+/api/${UserId}/GetUserInfo
 
 ## how to use dbContext in our codes?
 1. giving the controller access for dbContext
