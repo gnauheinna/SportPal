@@ -1,6 +1,7 @@
 ﻿
 using NuGet.Protocol.Core.Types;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportMeApp.Models
 {
@@ -15,9 +16,11 @@ namespace SportMeApp.Models
         public double Fee { get; set; }
 
         // Foreign key 
+        [ForeignKey("Locations")]
         public int LocationId { get; set; }
         public Locations Locations { get; set; }
 
+        [ForeignKey("Sport")]
         public int SportId { get; set; }
         public Sport Sport { get; set; }
 

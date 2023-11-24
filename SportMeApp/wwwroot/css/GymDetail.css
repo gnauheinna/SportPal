@@ -2,6 +2,7 @@
     font-family: Arial, sans-serif;
     display: flex;
     margin: 10px;
+    font-family: 'Inter', sans-serif;
 }
 
 .fitness-center-container {
@@ -11,11 +12,16 @@
 }
 
 .fitness-center-image {
-    height: 200px;
     background-size: cover;
     background-position: center;
 }
 
+.gym-pic{
+    width:100%;
+    margin-bottom:10px;
+    border-radius: 23px;
+
+}
 .fitness-center-details {
     display: flex;
     flex-direction: column;
@@ -24,6 +30,8 @@
     border-style: solid;
     margin: 10px;
     border-color: #442828;
+    margin-right:10px;
+    flex:60%;
 }
 
 .center-general-info {
@@ -43,18 +51,18 @@
     margin: 0 5px 0 5px;
     line-height: 25px;
 }
-  
+
 .sport-icon {
     flex: 20%;
     margin-left: auto;
-    display:flex;
-    justify-content:flex-end;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
-img {
+.icon {
     width: 45px;
-    margin-top:5px;
-    margin-right:5px;
 }
     
 .detailed-info {
@@ -130,8 +138,84 @@ img {
     border-left: 1px solid #ddd;
     margin-bottom: 10px;
     padding: 10px;
-    flex: 60%;
+    flex: 40%;
 }
 
 .event-details {
+    overflow-y: auto;
+    /*max-height:300px;*/
 }
+
+.event-group {
+    border-radius: 23px;
+    border-width: 1px;
+    border-style: solid;
+    display: flex;
+    margin: 5px;
+    align-items: center;
+}
+
+.event-info{
+    margin:10px;
+}
+
+.event-name {
+    color: #e67e00;
+    font-weight:900;
+    font-size:18px;
+}
+
+.event-detail {
+    margin-top:5px;
+    font-weight:800;
+    font-size:14px;
+}
+
+.event-time{
+
+}
+.event-fee{
+
+}
+
+.event-other {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    margin-right: 0px;
+    align-items: flex-end;
+}
+
+.event-icon {
+
+    margin-left: auto;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+
+.btnPayToJoin {
+    background-color: #e67e00;
+    border:solid;
+    border-color:black;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-style:italic;
+    font-weight:600;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition-duration: 0.4s;
+    margin-right:10px;
+}
+
+    .button:hover {
+        background-color: #ff7f50;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }

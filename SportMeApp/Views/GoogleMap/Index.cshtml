@@ -128,6 +128,7 @@
             for (int i = 0; i < displayCount; i++)
             {
                 var place = ViewBag.Places[i];
+                
                 <button class="info-box">
                     <h4>@place.Name</h4>
                     <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
