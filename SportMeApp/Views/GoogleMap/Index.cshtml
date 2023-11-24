@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -51,39 +51,104 @@
         /* CSS for the information box container */
         .info-box-container {
             display: flex;
+            flex-wrap: row;
             overflow-x: auto;
-            width: 100%;
+            width: 600%;
             padding: 10px 0;
+            max-height: 300px;
         }
 
-        /* CSS for the information boxes as buttons */
+        /* CSS for each information box (location button) */
         .info-box {
-            background-color: black;
+            background-color: #333; /* Dark background color */
             color: white;
-            margin-right: 15px;
-            border-radius: 5px;
-            flex: 0 0 auto;
-            cursor: pointer;
-            text-align: center;
-            padding: 20px;
-            min-width: 200px;
+            border-radius: 10px; /* Rounded corners */
+            display: flex; /* Flexbox layout */
+            flex-direction: column; /* Stack children vertically */
+            align-items: flex-start; /* Align children to the start of the flex container */
+            justify-content: space-between; /* Space between items */
+            padding: 10px; /* Smaller padding inside the box */
+            width: 100%; /* Take full width of the container */
+            max-width: 400px; /* Reduced maximum width */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Box shadow for depth */
+            transition: background-color 0.3s; /* Smooth background color transition on hover */
+            text-align: left; /* Align text to the left */
+            position: relative; /* Position relative for absolute positioning of children */
+            margin-bottom: 15px; /* Space between the boxes */
         }
 
-            .info-box:hover {
-                background-color: orange;
-                color: black;
+
+        .info-box-content h4 {
+            font-size: 20px; /* Smaller font size for the name */
+            color: #FFD700; /* Yellow color for the name */
+            margin: 0; /* Reset margin for h4 */
+        }
+
+        .info-box-content > p {
+            margin: 5px 0; /* Uniform margin for all paragraphs */
+            font-size: 14px; /* Smaller font size for details */
+        }
+
+            .info-box-content > p:not(.hours) {
+                font-weight: normal; /* Normal font weight */
             }
+
+        .info-box-content p:not(.hours) {
+            font-size: 12px; /* Smaller font size */
+        }
+
+        .info-box-content p:last-child,
+        .info-box-content .hours {
+            position: absolute;
+            bottom: 10px; /* Reduced space at the bottom */
+            font-size: 14px; /* Smaller font size */
+        }
+
+        .info-box p {
+            font-size: 1em; /* Standard font size for details */
+            margin: 0.5em 0; /* Vertical space between details */
+        }
+
+        .info-box-content p:last-child {
+            right: 10px; /* Reduced space on the right for rating */
+        }
+
+        .info-box-content .hours {
+            left: 10px; /* Reduced space on the left for hours */
+        }
+
+        .info-box:hover {
+            font-size: 1.2em; /* Slightly larger font size for the name on hover */
+            color: #FFD700; /* Yellow color for the name */
+            margin-bottom: 0.5em; /* Reduced space below the name on hover */
+            font-weight: bold; /* Bold font weight on hover */
+        }
+
+        .info-box p {
+            font-size: 1em; /* Standard font size for details */
+            margin: 0.5em 0; /* Vertical space between details */
+        }
 
         /* CSS for the map */
         .map-container {
             float: right;
-            width: 100%;
+            width: 100%; /* Made the map wider */
         }
 
         .map {
             width: 100%;
             height: 450px;
             border: 0;
+        }
+
+        /* CSS for the hours */
+        .hours {
+            font-size: 10px; /* Smaller font size for hours */
+        }
+
+        /* CSS for the AM and PM */
+        .am-pm {
+            font-size: 8px; /* Smaller font size for AM and PM */
         }
     </style>
 </head>
@@ -94,7 +159,7 @@
         <a href="/Home/RegisteredEvent" class="nav-button">Registered Event</a>
         <div class="user-greeting">Welcome User</div>
         <div class="search-form">
-            <form method="post" action="/GoogleMap/Search">
+            <form method="post" action="/Home/Search">
                 <select name="courtType">
                     <option value="tennis">Tennis Court</option>
                     <option value="basketball">Basketball Court</option>
@@ -121,34 +186,36 @@
 
     <!-- Information boxes -->
     <div class="info-box-container">
-        <p class="no-courts-message" style="display: none;">No courts found.</p>
         @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
         {
             var displayCount = Math.Min(15, ViewBag.Places.Count);
             for (int i = 0; i < displayCount; i++)
             {
                 var place = ViewBag.Places[i];
-                
                 <button class="info-box">
-                    <h4>@place.Name</h4>
-                    <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
-                    <p><strong>Phone Number:</strong> @(!string.IsNullOrEmpty(place.FormattedPhoneNumber) ? place.FormattedPhoneNumber : "None")</p>
-                    <p><strong>Opening Hours:</strong></p>
-                    @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
-                    {
-                        <p>@DisplayGroupedHours(place.OpeningHours.weekday_text)</p>
-                    }
-                    else
-                    {
-                        <p>Hours not available.</p>
-                    }
-                    <p><strong>Rating:</strong> @place.Rating</p>
+                    <div class="info-box-content">
+                        <h4>@place.Name</h4>
+                        <p><strong>Address:</strong> @place.FormattedAddress</p>
+                        <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                        <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
+                        <p class="hours">
+                            @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                            {
+                            <p>@DisplayGroupedHours(place.OpeningHours.weekday_text)</p>
+                            }
+                            else
+                            {
+                            <p>Hours not available.</p>
+                            }
+                        </p>
+                        <p><strong>Rating:</strong> @place.Rating</p>
+                    </div>
                 </button>
             }
         }
         else
         {
-            <p>No courts found.</p>
+            <!-- Hide "No courts found" when the page loads -->
         }
     </div>
 
@@ -210,7 +277,6 @@
             }
         });
     </script>
-
 
 
 
