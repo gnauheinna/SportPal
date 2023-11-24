@@ -2,7 +2,7 @@
 using SportMeApp.Models;
 
 
-namespace SportMeApp.Controllers.Calendar
+namespace SportMeApp.Controllers.CreateEvent1
 {
     [Route("Event")]
     public class EventController : Controller
@@ -55,7 +55,7 @@ namespace SportMeApp.Controllers.Calendar
     
           
 
-    public IActionResult Index()
+    public IActionResult CreateEvent()
         {
             return View();
         }
