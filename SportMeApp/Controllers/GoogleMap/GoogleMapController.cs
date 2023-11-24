@@ -246,61 +246,57 @@ namespace SportMeApp.Controllers.GoogleMap
 
 
         private async Task<List<Location>> GetPlacesNearby(Location center, string query, int distance)
-        {
-            List<Location> locations = new List<Location>();
+ {
+     List<Location> locations = new List<Location>();
 
-            using (HttpClient client = new HttpClient())
-            {
-                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
-                string placesRequest = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={center.lat},{center.lng}&radius={distance * 1609.34}&keyword={query}&key={apiKey}";
-                string response = await client.GetStringAsync(placesRequest);
-                var placesResponse = JsonConvert.DeserializeObject<PlacesApiQueryResponse>(response);
+     using (HttpClient client = new HttpClient())
+     {
+         string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
+         string placesRequest = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={center.lat},{center.lng}&radius={distance * 1609.34}&keyword={query}&key={apiKey}";
+         string response = await client.GetStringAsync(placesRequest);
+         var placesResponse = JsonConvert.DeserializeObject<PlacesApiQueryResponse>(response);
 
-                foreach (var result in placesResponse.results)
-                {
-                    var placeDetails = await GetPlaceDetails(result.place_id, apiKey);
-                    var location = new Location
-                    {
-                        lat = result.geometry.location.lat,
-                        lng = result.geometry.location.lng,
-                        Name = result.name,
-                        PlaceId = result.place_id,
-                        FormattedPhoneNumber = placeDetails?.formatted_phone_number,
-                        Rating = placeDetails?.rating ?? 0,
-                        OpeningHours = placeDetails?.opening_hours,
-                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null,
-                        Address = placeDetails?.FormattedAddress // Set the address here
-                    };
+         foreach (var result in placesResponse.results)
+         {
+             var placeDetails = await GetPlaceDetails(result.place_id, apiKey);
+             var location = new Location
+             {
+                 lat = result.geometry.location.lat,
+                 lng = result.geometry.location.lng,
+                 Name = result.name,
+                 PlaceId = result.place_id,
+                 FormattedAddress = placeDetails?.formatted_address,
+                 FormattedPhoneNumber = placeDetails?.formatted_phone_number,
+                 Rating = placeDetails?.rating ?? 0,
+                 OpeningHours = placeDetails?.opening_hours,
+                 ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
+             };
 
-                    _logger.LogInformation("LOG: Location: {Lat}, {Lng}, {Name}, {PlaceId}, {PhoneNumber}, {Rating}, {OpeningHours}, {ImageUrl}, {Address}",
-     location.lat, location.lng, location.Name, location.PlaceId, location.FormattedPhoneNumber, location.Rating, location.OpeningHours, location.ImageUrl, location.Address);
-                    locations.Add(location);
-                    //add to the databse 
-                }
-            }
+             locations.Add(location);
+             //add to the databse 
+         }
+     }
 
-            return locations;
-        }
+     return locations;
+ }
 
-
-        private async Task<Result> GetPlaceDetails(string placeId, string apiKey)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos,formatted_address&key={apiKey}";
-                string response = await client.GetStringAsync(placeDetailsRequest);
-                var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
-                if (placeDetailsResponse.status == "OK")
-                {
-                    return placeDetailsResponse.result;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
+         private async Task<Result> GetPlaceDetails(string placeId, string apiKey)
+ {
+     using (HttpClient client = new HttpClient())
+     {
+         string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_address,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
+         string response = await client.GetStringAsync(placeDetailsRequest);
+         var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
+         if (placeDetailsResponse.status == "OK")
+         {
+             return placeDetailsResponse.result;
+         }
+         else
+         {
+             return null;
+         }
+     }
+ }
 
         public string GetPhotoUrl(string photoReference, string apiKey)
         {
@@ -363,6 +359,7 @@ namespace SportMeApp.Controllers.GoogleMap
         {
             public Geometry geometry { get; set; }
             public string name { get; set; }
+            public string formatted_address { get; set; }
             public string formatted_phone_number { get; set; }
             public string OpeningHours { get; set; }
             public double rating { get; set; }
@@ -379,6 +376,7 @@ namespace SportMeApp.Controllers.GoogleMap
             public double lng { get; set; }
             public double Distance { get; set; }
             public string PlaceId { get; set; }
+            public string FormattedAddress { get; set; }
             public string FormattedPhoneNumber { get; set; }
             public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
