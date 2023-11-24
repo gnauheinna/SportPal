@@ -1,7 +1,3 @@
-@{
-    ViewBag.Title = "Home";
-}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +14,18 @@
             align-items: center;
         }
 
-        .user-greeting {
+        .user-greeting, .nav-button {
             color: white;
+            margin-right: 10px;
+            text-decoration: none;
+            background-color: #333;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button {
+            border-radius: 5px; /* Optional for rounded corners */
         }
 
         .search-form {
@@ -42,28 +48,36 @@
                 height: 30px; /* Adjust the height as needed */
             }
 
-        /* CSS for the information box */
+        /* CSS for the information box container */
         .info-box-container {
-            float: right;
-            width: 70%;
+            display: flex;
+            overflow-x: auto;
+            width: 100%;
+            padding: 10px 0;
         }
 
+        /* CSS for the information boxes as buttons */
         .info-box {
             background-color: black;
-            color: orange;
-            padding: 10px;
-            margin-bottom: 10px;
+            color: white;
+            margin-right: 15px;
             border-radius: 5px;
+            flex: 0 0 auto;
+            cursor: pointer;
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
         }
 
-            .info-box h4 {
-                margin: 0;
+            .info-box:hover {
+                background-color: orange;
+                color: black;
             }
 
         /* CSS for the map */
         .map-container {
             float: right;
-            width: 70%;
+            width: 100%;
         }
 
         .map {
@@ -72,13 +86,12 @@
             border: 0;
         }
     </style>
-    <script>
-        // Your JavaScript functions here...
-    </script>
 </head>
 <body>
     <!-- Top bar -->
     <div class="top-bar">
+        <a href="/Home/Index" class="nav-button">Home</a>
+        <a href="/Home/RegisteredEvent" class="nav-button">Registered Event</a>
         <div class="user-greeting">Welcome User</div>
         <div class="search-form">
             <form method="post" action="/Home/Search">
@@ -108,33 +121,28 @@
 
     <!-- Information boxes -->
     <div class="info-box-container">
+        <p class="no-courts-message" style="display: none;">No courts found.</p>
         @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
         {
-            var placesToDisplay = ((List<GoogleMapss.Controllers.HomeController.Location>)ViewBag.Places).Take(5); // Take the first 5 places
-
-            foreach (var place in placesToDisplay)
+            var displayCount = Math.Min(15, ViewBag.Places.Count);
+            for (int i = 0; i < displayCount; i++)
             {
-                <div class="info-box">
+                var place = ViewBag.Places[i];
+                <button class="info-box">
                     <h4>@place.Name</h4>
                     <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
-                    <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
-                    <p>
-                        <strong>Opening Hours:</strong> @if (place.OpeningHours != null)
-                        {
-                            if (place.OpeningHours.open_now)
-                            {
-                                <span class="open">Open Now</span>
-                                ;
-                            }
-                            else
-                            {
-                                <span class="closed">Closed</span>
-                                ;
-                            }
-                        }
-                    </p>
+                    <p><strong>Phone Number:</strong> @(!string.IsNullOrEmpty(place.FormattedPhoneNumber) ? place.FormattedPhoneNumber : "None")</p>
+                    <p><strong>Opening Hours:</strong></p>
+                    @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                    {
+                        <p>@DisplayGroupedHours(place.OpeningHours.weekday_text)</p>
+                    }
+                    else
+                    {
+                        <p>Hours not available.</p>
+                    }
                     <p><strong>Rating:</strong> @place.Rating</p>
-                </div>
+                </button>
             }
         }
         else
@@ -142,5 +150,68 @@
             <p>No courts found.</p>
         }
     </div>
+
+    @functions {
+@functions {
+    private string DisplayGroupedHours(List<string> weekdayHours)
+    {
+        var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+        var hoursByDay = weekdayHours.Select(dayHour => dayHour.Split(new[] { ": " }, StringSplitOptions.None))
+                                     .ToDictionary(split => split[0], split => split[1]);
+
+        string currentGroupStartDay = null, lastHours = null;
+        var groupedHours = new List<string>();
+
+        foreach (var day in daysOfWeek)
+        {
+            hoursByDay.TryGetValue(day, out var currentHours);
+            if (currentHours == lastHours)
+            {
+                continue;
+            }
+
+            if (currentGroupStartDay != null)
+            {
+                var previousDayIndex = daysOfWeek.IndexOf(day) - 1;
+                var groupEndDay = daysOfWeek[previousDayIndex];
+                var formattedHours = currentGroupStartDay == groupEndDay ? 
+                                     $"{currentGroupStartDay}: {lastHours}" : 
+                                     $"{currentGroupStartDay}-{groupEndDay}: {lastHours}";
+                groupedHours.Add(formattedHours);
+            }
+
+            currentGroupStartDay = day;
+            lastHours = currentHours;
+        }
+
+        // Handle the last group
+        if (currentGroupStartDay != null && lastHours != null)
+        {
+            var formattedHours = currentGroupStartDay == daysOfWeek.Last() ? 
+                                 $"{currentGroupStartDay}: {lastHours}" : 
+                                 $"{currentGroupStartDay}-{daysOfWeek.Last()}: {lastHours}";
+            groupedHours.Add(formattedHours);
+        }
+
+        return string.Join("\n", groupedHours);
+    }
+}
+
+
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var places = @Html.Raw(Json.Serialize(ViewBag.Places));
+            var noCourtsMessage = document.querySelector(".no-courts-message");
+
+            if (!Array.isArray(places) || places.length === 0) {
+                noCourtsMessage.style.display = "block";
+            }
+        });
+    </script>
+
+
+
+
 </body>
 </html>
