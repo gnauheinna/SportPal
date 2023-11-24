@@ -16,14 +16,14 @@ namespace SportMeApp.Models
 
         // Foreign key 
         public int LocationId { get; set; }
-        public Location Location { get; set; }
+        //public Location Location { get; set; }
 
         public int SportId { get; set; }
-        public Sport Sport { get; set; }
+        //public Sport Sport { get; set; }
 
         // indicating many-to-many relationship between events and users
-        public List<UserEvent> UserEvents { get; set; }
-        public List<Message> Messages { get; set; }
+        //public List<UserEvent> UserEvents { get; set; }
+       // public List<Message> Messages { get; set; }
 
     }
 }

@@ -30,6 +30,8 @@
 
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\CreateEvent\" />
   </ItemGroup>
 
 </Project>
