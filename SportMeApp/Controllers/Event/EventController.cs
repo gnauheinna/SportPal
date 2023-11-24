@@ -52,7 +52,7 @@ namespace SportMeApp.Controllers.Calendar
             }
         }
     
-
+          
 
     public IActionResult Index()
         {
