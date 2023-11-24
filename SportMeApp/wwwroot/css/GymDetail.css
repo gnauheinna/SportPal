@@ -1,100 +1,137 @@
-﻿.browser {
+﻿.web-browser {
     font-family: Arial, sans-serif;
-    display:flex;
-    //justify-content:space-between;
+    display: flex;
+    margin: 10px;
 }
 
-.gym-container {
-    border: 1px solid #ddd;
+.fitness-center-container {
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #f9f9f9;
-    flex:40%;
+    flex: 40%;
 }
 
-.gym-picture {
+.fitness-center-image {
     height: 200px;
     background-size: cover;
     background-position: center;
 }
 
-.gym-detail {
+.fitness-center-details {
     display: flex;
     flex-direction: column;
     border-radius: 23px;
     border-width: 1px;
     border-style: solid;
-    margin:5px;
-    border-color:#442828;
+    margin: 10px;
+    border-color: #442828;
 }
 
-.gym-info {
+.center-general-info {
     display: flex;
-    
-    align-items: center;
-    margin-top: 10px;
+    margin-left: 6px;
+    margin-top: 5px;
+    justify-content: space-between;
+    align-items:flex-start;
 }
 
-.gym-name {
+.center-name {
     font-size: 24px;
     color: #e67e00;
-    font-family: 'Inter',sans-serif;
-    font-weight:900;
-    flex:80%;
-  
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    flex: 60%;
+    margin: 0 5px 0 5px;
+    line-height: 25px;
 }
 
-.gym-sport {
-    
+.sport-icon {
+    flex: 20%;
+    margin-left: auto;
+    display:flex;
+    justify-content:flex-end;
 }
 
-.gym-address {
-    color: #666;
-    font-size: 14px;
+img {
+    width: 45px;
+    margin-top:5px;
+    margin-right:5px;
 }
 
-.gym-detail-date {
+.detailed-info {
     display: flex;
+    margin-bottom: 10px;
+}
+
+.address-block {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.center-address {
+    margin-top:10px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.operating-hours {
     flex-wrap: wrap;
     margin-top: 10px;
-    color: #ff8c00;
+    margin-left: 10px;
+    flex: 50%;
 }
 
-.gym-detail-date-day {
+.day-hours {
     margin-right: 15px;
-    font-size: 14px;
+    line-height: 18px;
     color: #333;
 }
 
-.monday {
-    font-weight: bold;
+.day-name {
+    color: #e79c00;
+    font-weight: 800;
 }
 
-.gym-phonenumber {
+.contact-info {
+    flex: 50%;
+    margin-inline: 2px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 10px;
 }
 
-.gym-openstatus {
-    color: #4CAF50;
+.phone-number {
 }
 
-.gym-openstatus-time {
+.status {
+    color: #e79c00;
+    font-weight: 900;
+}
+
+.closing-time {
+    color: black;
+    font-weight: 100;
+}
+
+.rating {
+    font-weight: 900;
+}
+
+.distance {
     font-style: italic;
+    font-weight: 900;
 }
 
-.gym-rating {
-}
-
-.gym-distance {
-    color: #FFA500;
-}
-
-.event-container {
-    border: 1px solid #ddd;
+.upcoming-events-container {
+    border-left: 1px solid #ddd;
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #f9f9f9;
-    flex:60%;
+    flex: 60%;
 }
 
-.event-detail {
+.event-details {
 }

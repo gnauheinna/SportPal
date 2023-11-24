@@ -12,11 +12,40 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
 }
 
-body {
-  margin-bottom: 60px;
+.container {
+    padding-top: 56px;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+}
+
+
+.navbar.navbar-expand-sm.navbar-dark.bg-dark.border-bottom.box-shadow.mb-3 {
+    background-color: #313131;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+.navbar-dark .navbar-nav .nav-item .nav-link {
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3"
+.navbar-dark .navbar-nav .nav-item .nav-link {
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+.navbar-dark .navbar-nav .nav-item .nav-link:hover,
+.navbar-dark .navbar-nav .nav-item .nav-link:focus,
+.navbar-dark .navbar-nav .nav-item .nav-link.active {
+    color: #dddddd !important;
+    text-decoration: underline;
 }
