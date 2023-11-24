@@ -30,7 +30,8 @@ namespace SportMeApp.Controllers.Calendar
                         EndTime = eventData.EndTime,
                         Fee = eventData.Fee,
                         LocationId = eventData.LocationId,
-                        SportId = eventData.SportId
+                        SportId = eventData.SportId,
+                         PaypalAccount = "account abc"
                     };
 
                     _context.Event.Add(newEvent);
