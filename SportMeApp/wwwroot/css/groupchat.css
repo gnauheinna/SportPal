@@ -32,13 +32,13 @@
 }
 
 .event-name {
-  color: #FF9900;
-  font-size:20px;
-  padding: 5px 10px;
-  border-top-left-radius: 18px; 
-  border-top-right-radius: 18px; 
-  font-weight: bold;
-  text-align: center;
+    color: #e67e00;
+    font-size: 20px;
+    padding: 5px 10px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    font-weight: bold;
+    text-align: center;
 }
 
 .event-line {

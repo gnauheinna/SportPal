@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SportMeApp.Migrations
 {
     [DbContext(typeof(SportMeContext))]
-    [Migration("20231122033237_init")]
+    [Migration("20231124015037_init")]
     partial class init
     {
         /// <inheritdoc />
