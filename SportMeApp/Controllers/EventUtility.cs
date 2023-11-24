@@ -64,14 +64,18 @@ namespace SportMeApp.Controllers
                     },
                     Location = new
                     {
-                        //LocationId = ue.Event.Locations.LocationId,
-                       // LocationName = ue.Event.Location.LocationName,
-                        //Coordinates = ue.Event.Location.Coordinates,
-                        //Address = ue.Event.Location.Address,
-                        //isTennis = ue.Event.Location.IsTennis,
-                       // isVolleyball = ue.Event.Location.IsVolleyball,
-                        //isBasketball = ue.Event.Location.IsBasketball,
-                        //ImageData = ue.Event.Location.ImageData
+                        LocationId = ue.Event.Locations.LocationId,
+                        Name = ue.Event.Locations.Name,
+                        PlaceId = ue.Event.Locations.PlaceId,
+                        lat = ue.Event.Locations.lat,
+                        lng = ue.Event.Locations.lng,
+                        Address = ue.Event.Locations.Address,
+                        isTennis = ue.Event.Locations.IsTennis,
+                        isVolleyball = ue.Event.Locations.IsVolleyball,
+                        isBasketball = ue.Event.Locations.IsBasketball,
+                        IsBaseball = ue.Event.Locations.IsBaseball,
+                        IsSoccer = ue.Event.Locations.IsSoccer,
+                        ImageData = ue.Event.Locations.ImageUrl
                     }
                     
                 })
