@@ -3,7 +3,7 @@
 }
 
 <head>
-    <link rel="stylesheet" href="~/css/login.css" />
+    <link rel="stylesheet" href="~/css/styles.css" />
 </head>
 <body>
     <div class="login-page">
@@ -11,17 +11,17 @@
             <p class="text-wrapper">Play Hard, Team Up Easily</p>
             <img class="sport-pal" src="@Url.Content("~/Img/sport-pal.png")" alt="My Image" />
 
-            
-
-                    <div>
-                        @{
-                            Html.RenderPartial("CreateEvent");
-                        }
+            <div class="login">
+                <div class="overlap">
+                    <p class="join-to-score-your">Join&nbsp;&nbsp;to Score Your First Event!</p>
+                    <div class="submit-button">
+                        <div class="overlap-group">
+                            <div class="btn-submit"></div>
+                            <div class="text-wrapper-2" onclick="location.href = '@Url.Action("OauthRedirect", "Home")'"> Sign In>Login With Google</div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-</body>
-
-
-<script src="~/js/EventUtility.js" asp-append-version="true"></script>
+        </div>
+    </div>
+</body>C:\Users\annie\Desktop\PC\dev\
