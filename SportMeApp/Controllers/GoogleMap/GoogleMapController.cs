@@ -1,19 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SportMeApp.Models;
+using System.Reflection.Emit;
 
-namespace GoogleMapss.Controllers
+namespace SportMeApp.Controllers.GoogleMap
 {
-    public class HomeController : Controller
+    public class GoogleMapController : Controller
     {
+        private readonly SportMeContext _context;
+        private readonly ILogger<GoogleMapController> _logger;
+        public GoogleMapController(SportMeContext context, ILogger<GoogleMapController> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
         public async Task<IActionResult> Index()
         {
             ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=40.730610,-73.935242"; // Replace with your API key
             ViewBag.Distance = 5;
+            
             return View();
         }
 
@@ -30,6 +41,7 @@ namespace GoogleMapss.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string courtType, string zipcode)
         {
+            _logger.LogInformation("LOG:Starting search method. CourtType:({courtType},ZipCode: {zipcode})", courtType, zipcode);
             var location = await GetLocationFromZipcode(zipcode);
             if (location == null)
             {
@@ -95,46 +107,74 @@ namespace GoogleMapss.Controllers
 
         private async Task SaveLocationsAsync(List<Location> locations)
         {
+            _logger.LogInformation("LOG: check locations: {locations}", locations);
             foreach (var location in locations)
             {
                 // Check for an existing location. Here, I'm using PlaceId as an example.
                 // You might use Coordinates, Name, or a combination of properties,
                 // depending on how you define uniqueness in your application.
                 var existingLocation = await _context.Locations
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(l => l.PlaceId == location.PlaceId);
-
+                
+                // if we have stored this location before
                 if (existingLocation != null)
                 {
                     // Update existing location's properties
                     UpdateLocation(existingLocation, location);
+                    _context.Update(existingLocation);
                 }
                 else
                 {
                     // New location, add it to the context
-                    _context.Locations.Add(location);
+                    await addLocation(location);
+                   
                 }
             }
             await _context.SaveChangesAsync();
         }
 
-        private void UpdateLocation(Location existingLocation, Location newLocation)
+        private void UpdateLocation(Locations existingLocation, Location newLocation)
         {
             // Update general properties
             existingLocation.Name = newLocation.Name;
             existingLocation.lat = newLocation.lat;
             existingLocation.lng = newLocation.lng;
-            existingLocation.Distance = newLocation.Distance;
+            //existingLocation.Distance = newLocation.Distance;
             existingLocation.FormattedPhoneNumber = newLocation.FormattedPhoneNumber;
             existingLocation.Rating = newLocation.Rating;
             existingLocation.ImageUrl = newLocation.ImageUrl;
 
-          
+
             existingLocation.IsTennis |= newLocation.IsTennis;
             existingLocation.IsBaseball |= newLocation.IsBaseball;
             existingLocation.IsBasketball |= newLocation.IsBasketball;
             existingLocation.IsVolleyball |= newLocation.IsVolleyball;
             existingLocation.IsSoccer |= newLocation.IsSoccer;
-         
+
+        }
+        private async Task addLocation(Location newLocation)
+        {
+            var location = new Locations
+            {
+                Name = newLocation.Name,
+                lat = newLocation.lat,
+                lng = newLocation.lng,
+                FormattedPhoneNumber = newLocation.FormattedPhoneNumber,
+                Rating = newLocation.Rating,
+                ImageUrl = newLocation.ImageUrl,
+                IsTennis = newLocation.IsTennis,
+                IsBaseball = newLocation.IsBaseball,
+                IsBasketball = newLocation.IsBasketball,
+                IsVolleyball = newLocation.IsVolleyball,
+                IsSoccer = newLocation.IsSoccer,
+                Address = newLocation.Address,
+                PlaceId= newLocation.PlaceId
+            };
+
+            _context.Locations.Add(location);
+            await _context.SaveChangesAsync();
+
         }
 
 
@@ -172,24 +212,34 @@ namespace GoogleMapss.Controllers
 
         private async Task<Location> GetLocationFromZipcode(string zipcode)
         {
-            using (HttpClient client = new HttpClient())
+            try
             {
-                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; // Replace with your Google Maps API key
-                string requestUrl = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&components=postal_code:{zipcode}";
-                var response = await client.GetStringAsync(requestUrl);
-                var geocodeResponse = JsonConvert.DeserializeObject<GeocodeResponse>(response);
-                if (geocodeResponse.status == "OK" && geocodeResponse.results.Any())
+                using (HttpClient client = new HttpClient())
                 {
-                    return new Location
+                    string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; // Replace with your Google Maps API key
+                    string requestUrl = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&components=postal_code:{zipcode}";
+                    var response = await client.GetStringAsync(requestUrl);
+                    var geocodeResponse = JsonConvert.DeserializeObject<GeocodeResponse>(response);
+                    if (geocodeResponse.status == "OK" && geocodeResponse.results.Any())
                     {
-                        lat = geocodeResponse.results[0].geometry.location.lat,
-                        lng = geocodeResponse.results[0].geometry.location.lng
-                    };
+                        _logger.LogInformation("LOG:geocodeResponse.status: {status}", geocodeResponse.results);
+                        return new Location
+                        {
+                            lat = geocodeResponse.results[0].geometry.location.lat,
+                            lng = geocodeResponse.results[0].geometry.location.lng
+                        };
+                    }
+                    else
+                    {
+                        _logger.LogError("LOG:Geocode response status not OK or no results, Status:{Status}, zipcode: {zipcode}", geocodeResponse.status, zipcode);
+                        return null;
+                    }
                 }
-                else
-                {
-                    return null;
-                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "LOG:error getting location from zip code: {zipcode}", zipcode);
+                return null;
             }
         }
 
@@ -218,9 +268,12 @@ namespace GoogleMapss.Controllers
                         FormattedPhoneNumber = placeDetails?.formatted_phone_number,
                         Rating = placeDetails?.rating ?? 0,
                         OpeningHours = placeDetails?.opening_hours,
-                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
+                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null,
+                        Address = placeDetails?.FormattedAddress // Set the address here
                     };
 
+                    _logger.LogInformation("LOG: Location: {Lat}, {Lng}, {Name}, {PlaceId}, {PhoneNumber}, {Rating}, {OpeningHours}, {ImageUrl}, {Address}",
+     location.lat, location.lng, location.Name, location.PlaceId, location.FormattedPhoneNumber, location.Rating, location.OpeningHours, location.ImageUrl, location.Address);
                     locations.Add(location);
                     //add to the databse 
                 }
@@ -234,7 +287,7 @@ namespace GoogleMapss.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
+                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos,formatted_address&key={apiKey}";
                 string response = await client.GetStringAsync(placeDetailsRequest);
                 var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
                 if (placeDetailsResponse.status == "OK")
@@ -247,6 +300,7 @@ namespace GoogleMapss.Controllers
                 }
             }
         }
+
 
         public string GetPhotoUrl(string photoReference, string apiKey)
         {
@@ -315,6 +369,7 @@ namespace GoogleMapss.Controllers
             public string place_id { get; set; }
             public GooglePlaceApiOpeningHours opening_hours { get; set; }
             public List<Photo> photos { get; set; }
+            public string FormattedAddress { get; set; }
         }
 
         public class Location
@@ -327,11 +382,15 @@ namespace GoogleMapss.Controllers
             public string FormattedPhoneNumber { get; set; }
             public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
-
             public List<DailyHours> DailyOpeningHours { get; set; }
-
-
             public string ImageUrl { get; set; }
+            public string Address { get; set; }
+            public bool IsVolleyball { get; set; }
+            public bool IsTennis { get; set; }
+            public bool IsBasketball { get; set; }
+            public bool IsSoccer { get; set; }
+            public bool IsBaseball { get; set; }
+
         }
 
         public class OpenCloseResultModel

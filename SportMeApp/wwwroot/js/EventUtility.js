@@ -19,10 +19,28 @@ async function GetUserInfo(UserId){
     }
 }
 
+async function GetEventsByLocation(locationId, sportId) {
+
+   
+    try {
+        const response = await fetch(`/api/${locationId}/${sportId}/GetEventsByLocation`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${ response.status }`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+        // Handle the error appropriately in your UI
+    }
+}
 
 function main() {
     // login 
     var UserId = 3;
     GetUserInfo(UserId);
+    var locationId = 1;
+    var sportId = 3;
+        GetEventsByLocation(locationId, sportId);
 }
 main()

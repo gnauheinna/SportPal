@@ -79,3 +79,6 @@ _[Ss]cripts
 *.vsidx
 /SportMeApp/App_Data/SportPalDB.mdf
 /SportMeApp/App_Data/SportPalDB_log.ldf
+/SportMeApp/obj/Debug/net7.0/project.razor.vs.json
+/SportMeApp/Controllers/GoogleMap~HEAD
+/SportMeApp/Migrations

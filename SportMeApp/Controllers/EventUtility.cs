@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PusherServer;
+using SportMeApp.Controllers.Calendar;
 using System.Reflection;
+
 
 namespace SportMeApp.Controllers
 {
@@ -9,9 +12,11 @@ namespace SportMeApp.Controllers
     public class EventUtility : ControllerBase
     {
         private readonly SportMeContext _context;
-        public EventUtility(SportMeContext context)
+        private readonly ILogger<EventController> _logger;
+        public EventUtility(SportMeContext context, ILogger<EventController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("{UserId}/GetUserInfo")]
@@ -34,8 +39,7 @@ namespace SportMeApp.Controllers
                 Email = user.Email
             };
 
-        
-
+            _logger.LogInformation("LOG:{userData}",userData.UserId);
             // Project events data for the specific user
             var eventsData = await _context.UserEvent
                 .Where(ue => ue.UserId == UserId)
@@ -44,13 +48,16 @@ namespace SportMeApp.Controllers
                     EventName = ue.Event.EventName,
                     StartTime = ue.Event.StartTime,
                     EndTime = ue.Event.EndTime,
+                    // FormattedTime = ue.Event.StartTime.Date == ue.Event.EndTime.Date ?
+                    //                 ue.Event.StartTime.ToString("yyyy/MM/dd h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
+                    //                 ue.Event.EndTime.ToString("h") + ue.Event.EndTime.ToString("tt").ToLower() :
+                    //                 ue.Event.StartTime.ToString("M/d h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
+                    //                  ue.Event.EndTime.ToString("M/d h") + ue.Event.EndTime.ToString("tt").ToLower() + " " +
+                    //                  ue.Event.EndTime.ToString("yyyy"),
                     FormattedTime = ue.Event.StartTime.Date == ue.Event.EndTime.Date ?
-                                   ue.Event.StartTime.ToString("yyyy/MM/dd h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
-                                    ue.Event.EndTime.ToString("h") + ue.Event.EndTime.ToString("tt").ToLower() :
-                                    ue.Event.StartTime.ToString("M/d h") + ue.Event.StartTime.ToString("tt").ToLower() + " - " +
-                                    ue.Event.EndTime.ToString("M/d h") + ue.Event.EndTime.ToString("tt").ToLower() + " " +
-                                    ue.Event.EndTime.ToString("yyyy"),
-                    EventFee = ue.Event.Fee,
+                $"{ue.Event.StartTime:yyyy/MM/dd h tt} - {ue.Event.EndTime:h tt}".ToLower() :
+                $"{ue.Event.StartTime:M/d h tt} - {ue.Event.EndTime:M/d h tt yyyy}".ToLower(),
+            EventFee = ue.Event.Fee,
                     UsersInGroup = _context.UserEvent
                         .Where(ug => ug.EventId == ue.Event.EventId)
                         .Select(ug => ug.User.Username)
@@ -63,14 +70,20 @@ namespace SportMeApp.Controllers
                     },
                     Location = new
                     {
-                        LocationId = ue.Event.Location.LocationId,
-                        LocationName = ue.Event.Location.LocationName,
-                        Coordinates = ue.Event.Location.Coordinates,
-                        Address = ue.Event.Location.Address,
-                        isTennis = ue.Event.Location.IsTennis,
-                        isVolleyball = ue.Event.Location.IsVolleyball,
-                        isBasketball = ue.Event.Location.IsBasketball,
-                        ImageData = ue.Event.Location.ImageData
+                        LocationId = ue.Event.Locations.LocationId,
+                        Name = ue.Event.Locations.Name,
+                        PlaceId = ue.Event.Locations.PlaceId,
+                        lat = ue.Event.Locations.lat,
+                        lng = ue.Event.Locations.lng,
+                        rating = ue.Event.Locations.Rating,
+                        Address = ue.Event.Locations.Address,
+                        isTennis = ue.Event.Locations.IsTennis,
+                        isVolleyball = ue.Event.Locations.IsVolleyball,
+                        isBasketball = ue.Event.Locations.IsBasketball,
+                        IsBaseball = ue.Event.Locations.IsBaseball,
+                        IsSoccer = ue.Event.Locations.IsSoccer,
+                        ImageUrl = ue.Event.Locations.ImageUrl,
+                        FormattedPhoneNumber = ue.Event.Locations.FormattedPhoneNumber
                     }
                     
                 })
@@ -80,15 +93,80 @@ namespace SportMeApp.Controllers
             var result = new
             {
                 User = userData,
-                Events = eventsData
+                events = eventsData
             };
 
             return Ok(result);
         }
 
+        [HttpGet("{locationId}/{sportId}/GetEventsByLocation")]
+        public async Task<IActionResult> GetEventsByLocationAndSport(int locationId,int sportId)
+        {
+            _logger.LogInformation("LOG trying to get events by location");
+            try
+            {
+                var events = await _context.Event
+                    .Include(e => e.Sport)
+                    .Where(e => e.LocationId == locationId && e.SportId == sportId)
+                    .Select(e => new
+                    {
+                        EventId = e.EventId,
+                        EventName = e.EventName,
+                        StartTime = e.StartTime,
+                        EndTime = e.EndTime,
+              
+                        FormattedTime = e.StartTime.Date == e.EndTime.Date ?
+                $"{e.StartTime:yyyy/MM/dd h tt} - {e.EndTime:h tt}".ToLower() :
+                $"{e.StartTime:M/d h tt} - {e.EndTime:M/d h tt yyyy}".ToLower(),
+                        EventFee = e.Fee,
+                        Sport =e.Sport.SportName,
+                        UsersInGroup = _context.UserEvent
+                            .Where(u => u.EventId == e.EventId)
+                            .Select(u => u.User.Username)
+                            .Distinct()
+                            .ToList(),
+                        
+
+                    })
+                    .ToListAsync();
+               
+                if (events == null || events.Count == 0)
+                {
+                    return NotFound($"No events found for LocationId {locationId}.");
+                }
+
+                var location = await _context.Locations
+                    .Where(ue => ue.LocationId == locationId)
+                    .Select(ue => new
+                    {
+                        LocationId = ue.LocationId,
+                        Name = ue.Name,
+                        PlaceId = ue.PlaceId,
+                        lat = ue.lat,
+                        lng = ue.lng,
+                        rating = ue.Rating,
+                        Address = ue.Address,
+                        ImageUrl = ue.ImageUrl,
+                        FormattedPhoneNumber = ue.FormattedPhoneNumber
+                    })
+                    .ToListAsync();
+                var result = new
+                {
+                    events = events,
+                    location = location
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                _logger.LogError(ex, "LOG: An error occurred while fetching events by location.");
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
 
 
-      
 
     }
 }
