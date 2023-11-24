@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace GoogleMapss.Controllers
 {
@@ -14,7 +12,7 @@ namespace GoogleMapss.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=40.730610,-73.935242";
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=40.730610,-73.935242"; // Replace with your API key
             ViewBag.Distance = 5;
             return View();
         }
@@ -38,7 +36,7 @@ namespace GoogleMapss.Controllers
                 location = new Location { lat = 40.730610, lng = -73.935242 };
             }
 
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}";
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}"; // Replace with your API key
             string queryString = courtType switch
             {
                 "tennis" => "Tennis Court",
@@ -56,10 +54,90 @@ namespace GoogleMapss.Controllers
 
             // Order places by distance
             places = places.OrderBy(loc => loc.Distance).ToList();
+            foreach (var place in places)
+            {
+                SetCourtTypeFlags(place, courtType);
+            }
+
+
+            await SaveLocationsAsync(places);
 
             ViewBag.Places = places;
             return View("Index");
         }
+
+
+
+        private void SetCourtTypeFlags(Location location, string courtType)
+        {
+            // Assuming courtType is a string like "tennis", "baseball", etc.
+            // Reset all court type properties to false
+            location.IsTennis = false;
+            location.IsBasketball = false;
+            location.IsVolleyball = false;
+            // Include other court types as necessary
+
+            // Set the appropriate property to true based on the courtType
+            switch (courtType.ToLower())
+            {
+                case "tennis":
+                    location.IsTennis = true;
+                    break;
+                case "basketball":
+                    location.IsBasketball = true;
+                    break;
+                case "volleyball":
+                    location.IsVolleyball = true;
+                    break;
+                    // Add additional cases as necessary for other court types
+            }
+        }
+
+        private async Task SaveLocationsAsync(List<Location> locations)
+        {
+            foreach (var location in locations)
+            {
+                // Check for an existing location. Here, I'm using PlaceId as an example.
+                // You might use Coordinates, Name, or a combination of properties,
+                // depending on how you define uniqueness in your application.
+                var existingLocation = await _context.Locations
+                    .FirstOrDefaultAsync(l => l.PlaceId == location.PlaceId);
+
+                if (existingLocation != null)
+                {
+                    // Update existing location's properties
+                    UpdateLocation(existingLocation, location);
+                }
+                else
+                {
+                    // New location, add it to the context
+                    _context.Locations.Add(location);
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        private void UpdateLocation(Location existingLocation, Location newLocation)
+        {
+            // Update general properties
+            existingLocation.Name = newLocation.Name;
+            existingLocation.lat = newLocation.lat;
+            existingLocation.lng = newLocation.lng;
+            existingLocation.Distance = newLocation.Distance;
+            existingLocation.FormattedPhoneNumber = newLocation.FormattedPhoneNumber;
+            existingLocation.Rating = newLocation.Rating;
+            existingLocation.ImageUrl = newLocation.ImageUrl;
+
+          
+            existingLocation.IsTennis |= newLocation.IsTennis;
+            existingLocation.IsBaseball |= newLocation.IsBaseball;
+            existingLocation.IsBasketball |= newLocation.IsBasketball;
+            existingLocation.IsVolleyball |= newLocation.IsVolleyball;
+            existingLocation.IsSoccer |= newLocation.IsSoccer;
+         
+        }
+
+
 
         private List<Location> CalculateDistances(Location origin, List<Location> locations)
         {
@@ -88,7 +166,7 @@ namespace GoogleMapss.Controllers
             int distance = 5;
             var places = await GetPlacesNearby(new Location { lat = lat, lng = lng }, queryString, distance);
             ViewBag.Places = places;
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={lat},{lng}";
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={lat},{lng}"; // Replace with your API key
             return View("Index");
         }
 
@@ -96,10 +174,10 @@ namespace GoogleMapss.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
+                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; // Replace with your Google Maps API key
                 string requestUrl = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&components=postal_code:{zipcode}";
                 var response = await client.GetStringAsync(requestUrl);
-                var geocodeResponse = JsonSerializer.Deserialize<GeocodeResponse>(response);
+                var geocodeResponse = JsonConvert.DeserializeObject<GeocodeResponse>(response);
                 if (geocodeResponse.status == "OK" && geocodeResponse.results.Any())
                 {
                     return new Location
@@ -115,39 +193,36 @@ namespace GoogleMapss.Controllers
             }
         }
 
+
+
         private async Task<List<Location>> GetPlacesNearby(Location center, string query, int distance)
         {
             List<Location> locations = new List<Location>();
 
             using (HttpClient client = new HttpClient())
             {
-                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; // Replace with your Google Places API key
+                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
                 string placesRequest = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={center.lat},{center.lng}&radius={distance * 1609.34}&keyword={query}&key={apiKey}";
                 string response = await client.GetStringAsync(placesRequest);
                 var placesResponse = JsonConvert.DeserializeObject<PlacesApiQueryResponse>(response);
 
-                // Your existing code to add locations
                 foreach (var result in placesResponse.results)
                 {
-                    locations.Add(new Location
+                    var placeDetails = await GetPlaceDetails(result.place_id, apiKey);
+                    var location = new Location
                     {
                         lat = result.geometry.location.lat,
                         lng = result.geometry.location.lng,
                         Name = result.name,
-                        PlaceId = result.place_id
-                    });
-                }
+                        PlaceId = result.place_id,
+                        FormattedPhoneNumber = placeDetails?.formatted_phone_number,
+                        Rating = placeDetails?.rating ?? 0,
+                        OpeningHours = placeDetails?.opening_hours,
+                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
+                    };
 
-                // Fetch additional details (phone number, hours, rating) for each location
-                foreach (var location in locations)
-                {
-                    var placeDetails = await GetPlaceDetails(location.PlaceId, apiKey);
-                    if (placeDetails != null)
-                    {
-                        location.FormattedPhoneNumber = placeDetails.formatted_phone_number;
-                        location.OpeningHours = placeDetails.opening_hours;
-                        location.Rating = placeDetails.rating;
-                    }
+                    locations.Add(location);
+                    //add to the databse 
                 }
             }
 
@@ -159,9 +234,9 @@ namespace GoogleMapss.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating&key={apiKey}";
+                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
                 string response = await client.GetStringAsync(placeDetailsRequest);
-                var placeDetailsResponse = JsonSerializer.Deserialize<PlaceDetailsResponse>(response);
+                var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
                 if (placeDetailsResponse.status == "OK")
                 {
                     return placeDetailsResponse.result;
@@ -172,6 +247,23 @@ namespace GoogleMapss.Controllers
                 }
             }
         }
+
+        public string GetPhotoUrl(string photoReference, string apiKey)
+        {
+            return $"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photoReference}&key={apiKey}";
+        }
+
+
+
+
+
+        public class DailyHours
+        {
+            public string DayOfWeek { get; set; }
+            public string OpenTime { get; set; }
+            public string CloseTime { get; set; }
+        }
+
 
         class GeocodeResponse
         {
@@ -201,6 +293,7 @@ namespace GoogleMapss.Controllers
             public string status { get; set; }
             public Result result { get; set; }
         }
+
         public class Geometry
         {
             public Location location { get; set; }
@@ -217,9 +310,11 @@ namespace GoogleMapss.Controllers
             public Geometry geometry { get; set; }
             public string name { get; set; }
             public string formatted_phone_number { get; set; }
-            public OpeningHours opening_hours { get; set; }
+            public string OpeningHours { get; set; }
             public double rating { get; set; }
             public string place_id { get; set; }
+            public GooglePlaceApiOpeningHours opening_hours { get; set; }
+            public List<Photo> photos { get; set; }
         }
 
         public class Location
@@ -230,8 +325,45 @@ namespace GoogleMapss.Controllers
             public double Distance { get; set; }
             public string PlaceId { get; set; }
             public string FormattedPhoneNumber { get; set; }
-            public OpeningHours OpeningHours { get; set; }
+            public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
+
+            public List<DailyHours> DailyOpeningHours { get; set; }
+
+
+            public string ImageUrl { get; set; }
+        }
+
+        public class OpenCloseResultModel
+        {
+            public string start { get; set; }
+            public string end { get; set; }
+        }
+
+        public class GooglePlaceApiPeriod
+        {
+            public GooglePlaceApiDayTime open { get; set; }
+            public GooglePlaceApiDayTime close { get; set; }
+        }
+
+        public class GooglePlaceApiDayTime
+        {
+            public int day { get; set; }
+            public string time { get; set; }
+        }
+
+        public class OpenCloseDaysModel
+        {
+            public int day { get; set; }
+            public bool is_open { get; set; }
+            public List<OpenCloseResultModel> range { get; set; }
+        }
+
+        public class GooglePlaceApiOpeningHours
+        {
+            public bool open_now { get; set; }
+            public List<GooglePlaceApiPeriod> periods { get; set; }
+            public List<string> weekday_text { get; set; } // Moved here
         }
 
         public class PlacesApiQueryResponse
@@ -241,7 +373,9 @@ namespace GoogleMapss.Controllers
             public string status { get; set; }
         }
 
-
-
+        public class Photo
+        {
+            public string photo_reference { get; set; }
+        }
     }
 }
