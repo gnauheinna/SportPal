@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\CreateEvent\**" />
+    <Content Remove="Views\CreateEvent\**" />
+    <EmbeddedResource Remove="Views\CreateEvent\**" />
+    <None Remove="Views\CreateEvent\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\css\login.css" />
     <None Include="wwwroot\Img\sport-pal.png" />
   </ItemGroup>
@@ -31,7 +38,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\CreateEvent\" />
   </ItemGroup>
 
 </Project>
