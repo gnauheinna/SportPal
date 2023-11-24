@@ -43,7 +43,7 @@
     margin: 0 5px 0 5px;
     line-height: 25px;
 }
-
+  
 .sport-icon {
     flex: 20%;
     margin-left: auto;
@@ -56,7 +56,7 @@ img {
     margin-top:5px;
     margin-right:5px;
 }
-
+    
 .detailed-info {
     display: flex;
     margin-bottom: 10px;
