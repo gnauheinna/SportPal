@@ -14,6 +14,7 @@ namespace SportMeApp.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public double Fee { get; set; }
+        public string? PaypalAccount { get; set; }
 
         // Foreign key 
         [ForeignKey("Locations")]
