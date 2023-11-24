@@ -1,15 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using SportMeApp.Models;
 
-namespace GoogleMapss.Controllers
+namespace SportMeApp.Controllers.GoogleMap
 {
-    public class HomeController : Controller
+    public class GoogleMapController : Controller
     {
+        private readonly SportMeContext _context;
+        public GoogleMapController(SportMeContext context)
+        {
+            _context = context;
+        }
         public async Task<IActionResult> Index()
         {
             ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=40.730610,-73.935242"; // Replace with your API key
@@ -101,40 +108,66 @@ namespace GoogleMapss.Controllers
                 // You might use Coordinates, Name, or a combination of properties,
                 // depending on how you define uniqueness in your application.
                 var existingLocation = await _context.Locations
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(l => l.PlaceId == location.PlaceId);
 
+                // if we have stored this location before
                 if (existingLocation != null)
                 {
                     // Update existing location's properties
                     UpdateLocation(existingLocation, location);
+                    _context.Update(existingLocation);
                 }
                 else
                 {
                     // New location, add it to the context
-                    _context.Locations.Add(location);
+                    await addLocation(location);
+                   
                 }
             }
             await _context.SaveChangesAsync();
         }
 
-        private void UpdateLocation(Location existingLocation, Location newLocation)
+        private void UpdateLocation(Locations existingLocation, Location newLocation)
         {
             // Update general properties
             existingLocation.Name = newLocation.Name;
             existingLocation.lat = newLocation.lat;
             existingLocation.lng = newLocation.lng;
-            existingLocation.Distance = newLocation.Distance;
+            //existingLocation.Distance = newLocation.Distance;
             existingLocation.FormattedPhoneNumber = newLocation.FormattedPhoneNumber;
             existingLocation.Rating = newLocation.Rating;
             existingLocation.ImageUrl = newLocation.ImageUrl;
 
-          
+
             existingLocation.IsTennis |= newLocation.IsTennis;
             existingLocation.IsBaseball |= newLocation.IsBaseball;
             existingLocation.IsBasketball |= newLocation.IsBasketball;
             existingLocation.IsVolleyball |= newLocation.IsVolleyball;
             existingLocation.IsSoccer |= newLocation.IsSoccer;
-         
+
+        }
+        private async Task addLocation(Location newLocation)
+        {
+            var location = new Locations
+            {
+                Name = newLocation.Name,
+                lat = newLocation.lat,
+                lng = newLocation.lng,
+                FormattedPhoneNumber = newLocation.FormattedPhoneNumber,
+                Rating = newLocation.Rating,
+                ImageUrl = newLocation.ImageUrl,
+                IsTennis = newLocation.IsTennis,
+                IsBaseball = newLocation.IsBaseball,
+                IsBasketball = newLocation.IsBasketball,
+                IsVolleyball = newLocation.IsVolleyball,
+                IsSoccer = newLocation.IsSoccer,
+                Address = newLocation.Address
+            };
+
+            _context.Locations.Add(location);
+            await _context.SaveChangesAsync();
+
         }
 
 
@@ -218,7 +251,8 @@ namespace GoogleMapss.Controllers
                         FormattedPhoneNumber = placeDetails?.formatted_phone_number,
                         Rating = placeDetails?.rating ?? 0,
                         OpeningHours = placeDetails?.opening_hours,
-                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
+                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null,
+                        Address = placeDetails?.FormattedAddress // Set the address here
                     };
 
                     locations.Add(location);
@@ -234,7 +268,7 @@ namespace GoogleMapss.Controllers
         {
             using (HttpClient client = new HttpClient())
             {
-                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
+                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_phone_number,opening_hours,rating,photos,formatted_address&key={apiKey}";
                 string response = await client.GetStringAsync(placeDetailsRequest);
                 var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
                 if (placeDetailsResponse.status == "OK")
@@ -247,6 +281,7 @@ namespace GoogleMapss.Controllers
                 }
             }
         }
+
 
         public string GetPhotoUrl(string photoReference, string apiKey)
         {
@@ -315,6 +350,7 @@ namespace GoogleMapss.Controllers
             public string place_id { get; set; }
             public GooglePlaceApiOpeningHours opening_hours { get; set; }
             public List<Photo> photos { get; set; }
+            public string FormattedAddress { get; set; }
         }
 
         public class Location
@@ -327,11 +363,15 @@ namespace GoogleMapss.Controllers
             public string FormattedPhoneNumber { get; set; }
             public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
-
             public List<DailyHours> DailyOpeningHours { get; set; }
-
-
             public string ImageUrl { get; set; }
+            public string Address { get; set; }
+            public bool IsVolleyball { get; set; }
+            public bool IsTennis { get; set; }
+            public bool IsBasketball { get; set; }
+            public bool IsSoccer { get; set; }
+            public bool IsBaseball { get; set; }
+
         }
 
         public class OpenCloseResultModel
