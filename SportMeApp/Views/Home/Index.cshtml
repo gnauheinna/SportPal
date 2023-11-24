@@ -11,17 +11,12 @@
             <p class="text-wrapper">Play Hard, Team Up Easily</p>
             <img class="sport-pal" src="@Url.Content("~/Img/sport-pal.png")" alt="My Image" />
 
-            <div class="login">
-                <div class="overlap">
-                    <p class="join-to-score-your">Join&nbsp;&nbsp;to Score Your First Event!</p>
-                    <div class="submit-button">
-                        <div class="overlap-group">
-                            <div class="btn-submit"></div>
-                            <div class="text-wrapper-2" onclick="location.href = '@Url.Action("OauthRedirect", "Home")'"> Sign In>Login With Google</div>
-                        </div>
-                    </div>
-                </div>
+
+            <div>
+                @{
+                    Html.RenderPartial("CreateEvent");
+                }
             </div>
         </div>
     </div>
-</body>C:\Users\annie\Desktop\PC\dev\
+</body>
