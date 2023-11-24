@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SportMeApp.Migrations
 {
     [DbContext(typeof(SportMeContext))]
-    partial class SportMeContextModelSnapshot : ModelSnapshot
+    [Migration("20231124062632_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,12 +45,9 @@ namespace SportMeApp.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-<<<<<<< HEAD
-=======
                     b.Property<int>("LocationsLocationId")
                         .HasColumnType("int");
 
->>>>>>> Update for googlemap
                     b.Property<int>("SportId")
                         .HasColumnType("int");
 
@@ -56,22 +56,14 @@ namespace SportMeApp.Migrations
 
                     b.HasKey("EventId");
 
-<<<<<<< HEAD
-                    b.HasIndex("LocationId");
-=======
                     b.HasIndex("LocationsLocationId");
->>>>>>> Update for googlemap
 
                     b.HasIndex("SportId");
 
                     b.ToTable("Event");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("SportMeApp.Models.Location", b =>
-=======
             modelBuilder.Entity("SportMeApp.Models.Locations", b =>
->>>>>>> Update for googlemap
                 {
                     b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
@@ -80,17 +72,7 @@ namespace SportMeApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
 
                     b.Property<string>("Address")
-<<<<<<< HEAD
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Coordinates")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("varbinary(max)");
-=======
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormattedPhoneNumber")
@@ -103,32 +85,19 @@ namespace SportMeApp.Migrations
 
                     b.Property<bool>("IsBaseball")
                         .HasColumnType("bit");
->>>>>>> Update for googlemap
 
                     b.Property<bool>("IsBasketball")
                         .HasColumnType("bit");
 
-<<<<<<< HEAD
-=======
                     b.Property<bool>("IsSoccer")
                         .HasColumnType("bit");
 
->>>>>>> Update for googlemap
                     b.Property<bool>("IsTennis")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVolleyball")
                         .HasColumnType("bit");
 
-<<<<<<< HEAD
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LocationId");
-
-                    b.ToTable("Location");
-=======
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -149,7 +118,6 @@ namespace SportMeApp.Migrations
                     b.HasKey("LocationId");
 
                     b.ToTable("Locations");
->>>>>>> Update for googlemap
                 });
 
             modelBuilder.Entity("SportMeApp.Models.Message", b =>
@@ -245,15 +213,9 @@ namespace SportMeApp.Migrations
 
             modelBuilder.Entity("SportMeApp.Models.Event", b =>
                 {
-<<<<<<< HEAD
-                    b.HasOne("SportMeApp.Models.Location", "Location")
-                        .WithMany("Events")
-                        .HasForeignKey("LocationId")
-=======
                     b.HasOne("SportMeApp.Models.Locations", "Locations")
                         .WithMany("Events")
                         .HasForeignKey("LocationsLocationId")
->>>>>>> Update for googlemap
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -263,11 +225,7 @@ namespace SportMeApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-<<<<<<< HEAD
-                    b.Navigation("Location");
-=======
                     b.Navigation("Locations");
->>>>>>> Update for googlemap
 
                     b.Navigation("Sport");
                 });
@@ -317,11 +275,7 @@ namespace SportMeApp.Migrations
                     b.Navigation("UserEvents");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("SportMeApp.Models.Location", b =>
-=======
             modelBuilder.Entity("SportMeApp.Models.Locations", b =>
->>>>>>> Update for googlemap
                 {
                     b.Navigation("Events");
                 });

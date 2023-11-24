@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
+
 namespace SportMeApp.Controllers
 {
     [ApiController]
@@ -63,14 +64,14 @@ namespace SportMeApp.Controllers
                     },
                     Location = new
                     {
-                        LocationId = ue.Event.Location.LocationId,
-                        LocationName = ue.Event.Location.LocationName,
-                        Coordinates = ue.Event.Location.Coordinates,
-                        Address = ue.Event.Location.Address,
-                        isTennis = ue.Event.Location.IsTennis,
-                        isVolleyball = ue.Event.Location.IsVolleyball,
-                        isBasketball = ue.Event.Location.IsBasketball,
-                        ImageData = ue.Event.Location.ImageData
+                        //LocationId = ue.Event.Locations.LocationId,
+                       // LocationName = ue.Event.Location.LocationName,
+                        //Coordinates = ue.Event.Location.Coordinates,
+                        //Address = ue.Event.Location.Address,
+                        //isTennis = ue.Event.Location.IsTennis,
+                       // isVolleyball = ue.Event.Location.IsVolleyball,
+                        //isBasketball = ue.Event.Location.IsBasketball,
+                        //ImageData = ue.Event.Location.ImageData
                     }
                     
                 })

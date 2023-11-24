@@ -16,7 +16,11 @@ namespace SportMeApp.Models
 
         // Foreign key 
         public int LocationId { get; set; }
+<<<<<<< HEAD
         //public Location Location { get; set; }
+=======
+        public Locations Locations { get; set; }
+>>>>>>> Update for googlemap
 
         public int SportId { get; set; }
         //public Sport Sport { get; set; }

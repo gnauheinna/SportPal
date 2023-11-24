@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Map</title>
+    <style>
+        /* CSS for the top bar */
+        .top-bar {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-greeting, .nav-button {
+            color: white;
+            margin-right: 10px;
+            text-decoration: none;
+            background-color: #333;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-button {
+            border-radius: 5px; /* Optional for rounded corners */
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+        }
+
+            .search-form select, .search-form input[type="text"] {
+                margin-right: 10px;
+                padding: 5px;
+                height: 30px; /* Adjust the height as needed */
+            }
+
+            .search-form button {
+                background-color: #333;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                height: 30px; /* Adjust the height as needed */
+            }
+
+        /* CSS for the information box container */
+        .info-box-container {
+            display: flex;
+            overflow-x: auto;
+            width: 100%;
+            padding: 10px 0;
+        }
+
+        /* CSS for the information boxes as buttons */
+        .info-box {
+            background-color: black;
+            color: white;
+            margin-right: 15px;
+            border-radius: 5px;
+            flex: 0 0 auto;
+            cursor: pointer;
+            text-align: center;
+            padding: 20px;
+            min-width: 200px;
+        }
+
+            .info-box:hover {
+                background-color: orange;
+                color: black;
+            }
+
+        /* CSS for the map */
+        .map-container {
+            float: right;
+            width: 100%;
+        }
+
+        .map {
+            width: 100%;
+            height: 450px;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top bar -->
+    <div class="top-bar">
+        <a href="/Home/Index" class="nav-button">Home</a>
+        <a href="/Home/RegisteredEvent" class="nav-button">Registered Event</a>
+        <div class="user-greeting">Welcome User</div>
+        <div class="search-form">
+            <form method="post" action="/GoogleMap/Search">
+                <select name="courtType">
+                    <option value="tennis">Tennis Court</option>
+                    <option value="basketball">Basketball Court</option>
+                    <option value="volleyball">Volleyball Court</option>
+                    <option value="baseball">Baseball Field</option>
+                    <option value="soccer">Soccer Field</option>
+                </select>
+                <label for="zipcode">Zipcode:</label>
+                <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Map container -->
+    <div class="map-container">
+        <iframe class="map"
+                loading="lazy"
+                allowfullscreen
+                referrerpolicy="no-referrer-when-downgrade"
+                src="@ViewBag.MapUrl">
+        </iframe>
+    </div>
+
+    <!-- Information boxes -->
+    <div class="info-box-container">
+        <p class="no-courts-message" style="display: none;">No courts found.</p>
+        @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
+        {
+            var displayCount = Math.Min(15, ViewBag.Places.Count);
+            for (int i = 0; i < displayCount; i++)
+            {
+                var place = ViewBag.Places[i];
+                <button class="info-box">
+                    <h4>@place.Name</h4>
+                    <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                    <p><strong>Phone Number:</strong> @(!string.IsNullOrEmpty(place.FormattedPhoneNumber) ? place.FormattedPhoneNumber : "None")</p>
+                    <p><strong>Opening Hours:</strong></p>
+                    @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                    {
+                        <p>@DisplayGroupedHours(place.OpeningHours.weekday_text)</p>
+                    }
+                    else
+                    {
+                        <p>Hours not available.</p>
+                    }
+                    <p><strong>Rating:</strong> @place.Rating</p>
+                </button>
+            }
+        }
+        else
+        {
+            <p>No courts found.</p>
+        }
+    </div>
+
+    @functions {
+        @functions {
+            private string DisplayGroupedHours(List<string> weekdayHours)
+            {
+                var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+                var hoursByDay = weekdayHours.Select(dayHour => dayHour.Split(new[] { ": " }, StringSplitOptions.None))
+                .ToDictionary(split => split[0], split => split[1]);
+
+                string currentGroupStartDay = null, lastHours = null;
+                var groupedHours = new List<string>();
+
+                foreach (var day in daysOfWeek)
+                {
+                    hoursByDay.TryGetValue(day, out var currentHours);
+                    if (currentHours == lastHours)
+                    {
+                        continue;
+                    }
+
+                    if (currentGroupStartDay != null)
+                    {
+                        var previousDayIndex = daysOfWeek.IndexOf(day) - 1;
+                        var groupEndDay = daysOfWeek[previousDayIndex];
+                        var formattedHours = currentGroupStartDay == groupEndDay ?
+                        $"{currentGroupStartDay}: {lastHours}" :
+                        $"{currentGroupStartDay}-{groupEndDay}: {lastHours}";
+                        groupedHours.Add(formattedHours);
+                    }
+
+                    currentGroupStartDay = day;
+                    lastHours = currentHours;
+                }
+
+                // Handle the last group
+                if (currentGroupStartDay != null && lastHours != null)
+                {
+                    var formattedHours = currentGroupStartDay == daysOfWeek.Last() ?
+                    $"{currentGroupStartDay}: {lastHours}" :
+                    $"{currentGroupStartDay}-{daysOfWeek.Last()}: {lastHours}";
+                    groupedHours.Add(formattedHours);
+                }
+
+                return string.Join("\n", groupedHours);
+            }
+        }
+
+
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var places = @Html.Raw(Json.Serialize(ViewBag.Places));
+            var noCourtsMessage = document.querySelector(".no-courts-message");
+
+            if (!Array.isArray(places) || places.length === 0) {
+                noCourtsMessage.style.display = "block";
+            }
+        });
+    </script>
+
+
+
+
+</body>
+</html>
