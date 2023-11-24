@@ -17,7 +17,7 @@ namespace SportMeApp.Controllers.Calendar
         
 
         [HttpPost ("CreateEvent")]
-        public async Task<IActionResult> CreateEvent(Event eventData)
+        public async Task<IActionResult> CreateEvent(CreateEvent eventData)
         {
             try
             {

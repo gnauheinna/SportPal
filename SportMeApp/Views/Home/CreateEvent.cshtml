@@ -26,17 +26,21 @@
 
 <script>
     function CreateEvent() {
-        var form = document.getElementById('eventForm');
-        form.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('eventForm');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                CreateEvent();
+            });
+        });
 
             var formData = {
-                eventName: document.getElementById('eventName').value,
-                startTime: document.getElementById('startTime').value,
-                endTime: document.getElementById('endTime').value,
-                fee: parseFloat(document.getElementById('fee').value),
-                locationId: parseInt(document.getElementById('locationId').value),
-                sportId: parseInt(document.getElementById('sportId').value),
+                EventName: document.getElementById('eventName').value,
+                StartTime: document.getElementById('startTime').value,
+                EndTime: document.getElementById('endTime').value,
+                Fee: parseFloat(document.getElementById('fee').value),
+                LocationId: parseInt(document.getElementById('locationId').value),
+                SportId: parseInt(document.getElementById('sportId').value),
             };
 
             // Assuming you have a function to send AJAX requests

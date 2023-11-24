@@ -15,6 +15,8 @@ namespace SportMeApp.Controllers
 
         public IActionResult Index()
         {
+            var userEmail = User.FindFirst(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+            ViewData["UserEmail"] = userEmail;
             return View();
         }
 
