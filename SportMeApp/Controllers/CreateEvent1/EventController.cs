@@ -31,7 +31,7 @@ namespace SportMeApp.Controllers.CreateEvent1
                         Fee = eventData.Fee,
                         LocationId = eventData.LocationId,
                         SportId = eventData.SportId,
-                         PaypalAccount = "account abc"
+                         PaypalAccount = eventData.PaypalAccount
                     };
 
                     _context.Event.Add(newEvent);

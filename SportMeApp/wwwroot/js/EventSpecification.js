@@ -8,6 +8,8 @@
 }
 
 async function displayGroups(EventLocationInfo) {
+
+
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
 
@@ -41,7 +43,7 @@ async function displayGroups(EventLocationInfo) {
     </div>
     <div class="event-other">
         <div class="event-icon"><img class="icon" src="/img/${event.sport}.png" alt="Basketball Image"><div>
-        <Button class="btnPayToJoin">Pay To Join</button>
+        <button class="btnPayToJoin id="btnPayToJoin">Pay To Join</button>
    </div>
 </div>
 `;

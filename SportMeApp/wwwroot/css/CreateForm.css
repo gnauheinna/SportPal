@@ -1,0 +1,77 @@
+.web-browser{
+    display:flex;
+    margin:0;
+
+}
+
+.calender-section{
+    flex:50%;
+}
+.Create-Event-section {
+    background: #FFFFFF;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: auto;
+    margin-top:20px;
+}
+
+.SubmissionForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.CreateEvent-info .EventHeader {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.EventInfo .sport, .EventInfo .gym {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.input {
+    margin-bottom: 10px;
+}
+
+    .input label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+button {
+    background-color: #e67e00;
+    border: solid;
+    border-color: black;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition-duration: 0.4s;
+    margin-right: 10px;
+}
+
+.button:hover {
+    background-color: #ff7f50;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}

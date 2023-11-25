@@ -8,7 +8,7 @@ async function GetUserInfo(UserId){
         const response = await fetch(`/api/${UserId}/GetUserInfo`);
         if (response.ok) {
             const info = await response.json();
-            //console.log(info);
+            //console.log(j);
             return info;
         } else {
             throw new Error('User info not found');
@@ -31,7 +31,6 @@ async function GetEventsByLocation(locationId, sportId) {
         return data;
     } catch (error) {
         console.error('Failed to fetch events:', error);
-        // Handle the error appropriately in your UI
     }
 }
 
@@ -39,7 +38,7 @@ function main() {
     // login 
     var UserId = 3;
     GetUserInfo(UserId);
-    var locationId = 1;
+    var locationId = 2;
     var sportId = 3;
         GetEventsByLocation(locationId, sportId);
 }

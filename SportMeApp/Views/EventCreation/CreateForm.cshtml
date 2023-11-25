@@ -1,0 +1,92 @@
+﻿
+<head>
+    <link rel="stylesheet" type="text/css" href="~/css/CreateForm.css">
+</head>
+
+<div class="web-browser">
+    <div class="calender-section">PLACE RESERVED FOR CALENDER
+
+    </div>
+
+
+
+    <div class="Create-Event-section">
+        <div class="SubmissionForm">
+            <div class="CreateEvent-info">
+                <div class="EventHeader"> Create A New Event</div>
+                <div class="EventInfo">
+                    <div class="sport">For Basketball</div>
+                    <div class="gym">At Fitrec</div>
+                </div>
+            </div>
+            <form id="eventForm" action="/Event/CreateEvent" method="post">
+                <div class="input">
+                    <label for="eventName">Event Name:</label>
+                    <input type="text" id="eventName" name="eventName" required>
+                </div>
+                <div class="input">
+                    <label for="startTime">Start Time:</label>
+                    <input type="datetime-local" id="startTime" name="startTime" required>
+                </div>
+                <div class="input">
+                    <label for="endTime">End Time:</label>
+                    <input type="datetime-local" id="endTime" name="endTime" required>
+                </div>
+                <div class="input">
+                    <label for="fee">Fee:</label>
+                    <input type="number" id="fee" name="fee" required>
+                </div>
+          
+               
+
+                <button type="submit">Create Event</button>
+            </form>
+        </div>
+       
+    </div>
+</div>
+
+<script>
+    function CreateEvent() {
+        document.addEventListener('DOMContentLoaded', function () {
+            var form = document.getElementById('eventForm');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+                CreateEvent();
+            });
+        });
+
+            var formData = {
+                EventName: document.getElementById('eventName').value,
+                StartTime: document.getElementById('startTime').value,
+                EndTime: document.getElementById('endTime').value,
+                Fee: parseFloat(document.getElementById('fee').value),
+                LocationId: parseInt(document.getElementById('locationId').value),
+                SportId: parseInt(document.getElementById('sportId').value)
+
+            };
+
+            // Assuming you have a function to send AJAX requests
+            sendAjaxRequest('/Event/CreateEvent', 'POST', JSON.stringify(formData));
+        });
+    }
+
+    function sendAjaxRequest(url, method, data) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // Handle success (e.g., show a success message)
+                console.log(xhr.responseText);
+            } else {
+                // Handle error (e.g., display validation errors)
+                console.error(xhr.responseText);
+            }
+        };
+
+        xhr.send(data);
+    }
+
+</script>
