@@ -35,7 +35,7 @@ namespace SportMeApp.Controllers
             request.AddQueryParameter("client_secret", client_secret);
             request.AddQueryParameter("code", code);
             request.AddQueryParameter("grant_type", "authorization_code");
-            request.AddQueryParameter("redirect_uri", "https://localhost:7203/");
+            request.AddQueryParameter("redirect_uri", "https://localhost:7203/oauth/callback");
 
             var response = restClient.Post(request);
 
