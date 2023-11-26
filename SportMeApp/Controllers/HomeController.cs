@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SportMeApp.Models;
+﻿using SportMeApp.Models;
+using Google.Apis.Auth.AspNetCore3;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Runtime.InteropServices.JavaScript;
+using System.Text.Json;
+
 
 namespace SportMeApp.Controllers
 {
@@ -15,19 +21,11 @@ namespace SportMeApp.Controllers
 
         public IActionResult Index()
         {
-            var userEmail = User.FindFirst(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-            ViewData["UserEmail"] = userEmail;
+            //var userEmail = User.FindFirst(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+           // ViewData["UserEmail"] = userEmail;
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-        public IActionResult HomePage()
-        {
-            return View();
-        }
         public ActionResult OauthRedirect()
         {
             var client_id = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com";
@@ -38,15 +36,17 @@ namespace SportMeApp.Controllers
                 "include_granted_scopes=true&" +
                 "response_type=code&" +
                 "state=there&" +
-                "redirect_uri=https://localhost:7292/oauth/callback&" +
+                "redirect_uri=https://localhost:7203/oauth/callback&" +
                 "client_id=" + client_id;
 
             return Redirect(redirectUrl);
         }
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult SignOut()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return SignOut(new AuthenticationProperties { RedirectUri = "/" },
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                GoogleOpenIdConnectDefaults.AuthenticationScheme);
         }
+
     }
 }

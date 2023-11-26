@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PusherServer;
+using Google.Apis.Auth.AspNetCore3;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SportMeApp.Models;
 
 
@@ -29,6 +31,23 @@ builder.Services.AddSingleton(new Pusher(
     builder.Configuration["Pusher:Key"],
     builder.Configuration["Pusher:Secret"],
     pusherOptions));
+
+// Add services to the container.
+builder.Services.AddAuthentication(o =>
+{
+    o.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+o.DefaultChallengeScheme = GoogleOpenIdConnectDefaults.AuthenticationScheme;
+})
+    .AddCookie()
+    .AddGoogleOpenIdConnect(options =>
+    {
+        options.ClientId = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com";
+        options.ClientSecret = "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";
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; // Set the SignInScheme explicitly
+    });
+
+builder.Services.AddControllersWithViews();
+
 
 
 var app = builder.Build();
