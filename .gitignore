@@ -83,3 +83,5 @@ _[Ss]cripts
 /SportMeApp/Controllers/GoogleMap~HEAD
 /SportMeApp/Migrations
 /.vs/SportMeApp/DesignTimeBuild/.dtbcache.v2
+/SportMeApp/files/tokens.json
+
