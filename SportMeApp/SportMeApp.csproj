@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\CreateEvent1\View\**" />
+    <Compile Remove="Controllers\EventCreation\View\**" />
     <Compile Remove="Views\CreateEvent\**" />
-    <Content Remove="Controllers\CreateEvent1\View\**" />
+    <Content Remove="Controllers\EventCreation\View\**" />
     <Content Remove="Views\CreateEvent\**" />
-    <EmbeddedResource Remove="Controllers\CreateEvent1\View\**" />
+    <EmbeddedResource Remove="Controllers\EventCreation\View\**" />
     <EmbeddedResource Remove="Views\CreateEvent\**" />
-    <None Remove="Controllers\CreateEvent1\View\**" />
+    <None Remove="Controllers\EventCreation\View\**" />
     <None Remove="Views\CreateEvent\**" />
   </ItemGroup>
 
@@ -44,7 +44,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Event\" />
-    <Folder Include="wwwroot\js\NewFolder\" />
   </ItemGroup>
 
 </Project>

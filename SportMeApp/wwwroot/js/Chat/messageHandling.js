@@ -13,8 +13,6 @@ function loadAndDisplayChat(event, user) {
     currentUser = user;
     
     subscribeToGroup(event, user);
-
-   
     groupChatDisplay(event, user);
     loadAllMessages(event, user);
 }

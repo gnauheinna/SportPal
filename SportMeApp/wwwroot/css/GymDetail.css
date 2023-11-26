@@ -3,6 +3,7 @@
     display: flex;
     margin: 10px;
     font-family: 'Inter', sans-serif;
+    overflow-y:hidden;
 }
 
 .fitness-center-container {
@@ -16,11 +17,12 @@
     background-position: center;
 }
 
-.gym-pic{
-    width:100%;
-    margin-bottom:10px;
+.gym-pic {
+    width: 100%;
+    margin-bottom: 10px;
     border-radius: 23px;
-
+    max-height: 250px;
+    object-fit: cover;
 }
 .fitness-center-details {
     display: flex;
@@ -139,11 +141,12 @@
     margin-bottom: 10px;
     padding: 10px;
     flex: 40%;
+    align-items:center;
 }
 
 .event-details {
     overflow-y: auto;
-    /*max-height:300px;*/
+    max-height:70vh;
 }
 
 .event-group {
@@ -216,7 +219,7 @@
 }
 
 #CreateBtn {
-    background-color: #e67e00;
+    background-color: #313131;
     border: solid;
     border-color: black;
     color: white;
@@ -227,14 +230,29 @@
     font-size: 14px;
     font-style: italic;
     font-weight: 600;
-    margin: 4px 2px;
     cursor: pointer;
     border-radius: 20px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition-duration: 0.4s;
-    margin-right: 10px;
+    margin:10px;
 }
 
+.create-content{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    height:100%;
+    width:100%;
+    margin-bottom:10px;
+
+}
+.create-instruction {
+    text-align: center;
+    color: Black;
+    font-weight:900;
+    margin:10px;
+}
 
     .button:hover {
         background-color: #ff7f50;

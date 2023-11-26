@@ -8,8 +8,9 @@ using SportMeApp.Services;
 
 
 
-namespace SportMeApp.Controllers.CreateEvent1
+namespace SportMeApp.Controllers.EventCreation
 {
+    [ApiController]
     [Route("Event")]
     public class EventController : Controller
     {
@@ -37,24 +38,26 @@ namespace SportMeApp.Controllers.CreateEvent1
                         Fee = eventData.Fee,
                         LocationId = eventData.LocationId,
                         SportId = eventData.SportId,
-                         PaypalAccount = eventData.PaypalAccount
+                        PaypalAccount = eventData.PaypalAccount
                     };
+                    _logger.LogInformation("LOG: New Event Details - EventName: {EventName}, StartTime: {StartTime}, EndTime: {EndTime}, Fee: {Fee}, LocationId: {LocationId}, SportId: {SportId}, PaypalAccount: {PaypalAccount}",
+    newEvent.EventName, newEvent.StartTime, newEvent.EndTime, newEvent.Fee, newEvent.LocationId, newEvent.SportId, newEvent.PaypalAccount);
 
                     _context.Event.Add(newEvent);
                     await _context.SaveChangesAsync();
 
-                    _logger.LogInformation("Event created successfully.");
+                    _logger.LogInformation("LOG:Event created successfully.");
 
                     return RedirectToAction("CreateGoogleCalendarEvent", " CreateGoogleCalendar");
                 }
 
-                _logger.LogError("Model validation failed.");
+                _logger.LogError("LOG:Model validation failed.");
                 // Model validation failed
                 return BadRequest(ModelState);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occurred: {ex.Message}");
+                _logger.LogError($"LOG: An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

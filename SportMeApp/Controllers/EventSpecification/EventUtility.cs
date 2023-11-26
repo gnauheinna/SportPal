@@ -12,11 +12,11 @@ namespace SportMeApp.Controllers.EventSpecification
     public class EventUtility : ControllerBase
     {
         private readonly SportMeContext _context;
-        private readonly ILogger<EventController> _logger;
-        public EventUtility(SportMeContext context, ILogger<EventController> logger)
+
+        public EventUtility(SportMeContext context)
         {
             _context = context;
-            _logger = logger;
+
         }
 
         [HttpGet("{UserId}/GetUserInfo")]
@@ -39,8 +39,7 @@ namespace SportMeApp.Controllers.EventSpecification
                 user.Email
             };
 
-            _logger.LogInformation("LOG:{userData}", userData.UserId);
-            // Project events data for the specific user
+            
             var eventsData = await _context.UserEvent
                 .Where(ue => ue.UserId == UserId)
                 .Select(ue => new
@@ -103,7 +102,7 @@ namespace SportMeApp.Controllers.EventSpecification
         [HttpGet("{locationId}/{sportId}/GetEventsByLocation")]
         public async Task<IActionResult> GetEventsByLocationAndSport(int locationId, int sportId)
         {
-            _logger.LogInformation("LOG trying to get events by location");
+
             try
             {
                 var events = await _context.Event
@@ -120,13 +119,17 @@ namespace SportMeApp.Controllers.EventSpecification
                 $"{e.StartTime:yyyy/MM/dd h tt} - {e.EndTime:h tt}".ToLower() :
                 $"{e.StartTime:M/d h tt} - {e.EndTime:M/d h tt yyyy}".ToLower(),
                         EventFee = e.Fee,
-                        Sport = e.Sport.SportName,
+                        Sport = new
+                        {
+                            SportId = e.Sport.SportId,
+                            SportName = e.Sport.SportName
+                        },
                         UsersInGroup = _context.UserEvent
                             .Where(u => u.EventId == e.EventId)
                             .Select(u => u.User.Username)
                             .Distinct()
                             .ToList(),
-                        PayPalAccount=e.PaypalAccount
+                        PayPalAccount = e.PaypalAccount
 
 
                     })
@@ -163,7 +166,7 @@ namespace SportMeApp.Controllers.EventSpecification
             catch (Exception ex)
             {
                 // Log the exception details
-                _logger.LogError(ex, "LOG: An error occurred while fetching events by location.");
+
                 return StatusCode(500, "Internal Server Error");
             }
         }

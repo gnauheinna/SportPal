@@ -22,7 +22,7 @@ namespace SportMeApp.Controllers
 
       
 
-        [HttpPost("AddUser")]
+        [HttpPost("{userName}/AddUser")]
         public IActionResult AddUser([FromBody] string userName)
         {
             // check if user exists
@@ -30,15 +30,28 @@ namespace SportMeApp.Controllers
 
             if (existingUser != null)
             {
-                return Ok("user already exists");
+                return Ok(existingUser);
             }
             else
             {
                 var newUser = new User { Username = userName, Email="hi"};
                 _context.User.Add(newUser);
                 _context.SaveChanges();
-                return Ok("User added succesfully");
+                return Ok(newUser);
             }
+        }
+
+        [HttpGet("{userName}/GetUserByName")]
+        public async Task<IActionResult> GetUserByName(string userName)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Username == userName);
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return NotFound("User not found.");
         }
 
         [HttpGet("GetUsers")]
