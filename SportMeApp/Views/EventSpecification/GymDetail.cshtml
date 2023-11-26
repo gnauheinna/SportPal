@@ -17,22 +17,22 @@
             </div>
             <div class="detailed-info">
                 <div class="operating-hours">
-                    <div class="day-hours"><span class="day-name">Monday</span> <span class="hours mon-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Tuesday</span> <span class="hours tue-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Wednesday</span> <span class="hours wed-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Thursday</span> <span class="hours thur-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Friday</span> <span class="hours fri-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Saturday</span> <span class="hours sat-hours">6-11pm</span></div>
-                    <div class="day-hours"><span class="day-name">Sunday</span> <span class="hours sun-hours">6-11pm</span></div>
+                    <div class="day-hours"><span class="day-name">Monday</span> <span class="hours mon-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Tuesday</span> <span class="hours tue-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Wednesday</span> <span class="hours wed-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Thursday</span> <span class="hours thur-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Friday</span> <span class="hours fri-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Saturday</span> <span class="hours sat-hours">[hours]</span></div>
+                    <div class="day-hours"><span class="day-name">Sunday</span> <span class="hours sun-hours">[hours]</span></div>
                     </div>
                 <div class="contact-info">
-                    <div class="phone-number">8572651830</div>
+                    <div class="phone-number">[phone number]</div>
                     <div class="status">
-                        Open
-                        <span class="closing-time">Closes 10PM</span>
+                        [status]
+                        <span class="closing-time">[closes times]</span>
                         </div>
-                    <div class="rating">4.5</div>
-                    <div class="distance">4 miles away</div>
+                    <div class="rating">[rating]</div>
+                    <div class="distance">[no] Miles Away</div>
              </div>
                             
                         </div>
@@ -40,16 +40,21 @@
                 </div>
     <div class="upcoming-events-container">
         <div class="createEvent">
-            <div class="event-group">
-                <div class="create-instruction">
-                    Doesn't match what you've expected?
-                </div>
-                <button type= class="CreateBtn" id="CreateBtn"> Create One!</button>
+            <div class="create-content">
+       
+                    <div class="create-instruction">
+                        Doesn't match what you've expected?
+                    </div>
+                    
+                    <a class="CreateBtn" asp-area="" asp-controller="EventCreation" asp-action="CreateForm">
+                        <div class="CreateBtn" id="CreateBtn"> Create One!</div>
+                    </a>
             </div>
         </div>
         <div class="event-details"></div>
             </div>
             </div>
+          
+<script src="~/js/EventUtility.js" asp-append-version="true"></script>
 
-    <script src="~/js/EventUtility.js" asp-append-version="true"></script>
-    <script src="~/js/EventSpecification.js" asp-append-version="true"></script>
+<script src="~/js/EventSpecification.js" asp-append-version="true"></script>

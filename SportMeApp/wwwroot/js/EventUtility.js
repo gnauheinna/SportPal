@@ -42,4 +42,4 @@ function main() {
     var sportId = 3;
         GetEventsByLocation(locationId, sportId);
 }
-main()
+//main()
