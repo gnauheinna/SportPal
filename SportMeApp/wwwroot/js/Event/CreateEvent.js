@@ -3,14 +3,15 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
-        
+
+        // get this info from local storage
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
         var form = document.getElementById('eventForm');
-        console.log(JSON.stringify(EventLocationInfo));
+     
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
-            console.log(JSON.stringify(EventLocationInfo));
+            
         });
     });
 
@@ -26,7 +27,6 @@ function sendEventInfo(EventLocationInfo) {
         SportId: EventLocationInfo.events[0].sport.sportId,
         
     };
-    console.log("hii",EventLocationInfo.location.locationId);
     console.log("formData", JSON.stringify(formData));
 
     sendFetchRequest('/Event/CreateEvent', 'POST', formData);
@@ -45,10 +45,6 @@ function sendFetchRequest(url, method, data) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             return response.json();
-        })
-        .then(data => {
-            // Handle success (e.g., show a success message)
-            console.log(data);
         })
         .catch(error => {
             // Handle error (e.g., display validation errors)

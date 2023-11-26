@@ -8,7 +8,7 @@ async function GetUserInfo(UserId){
         const response = await fetch(`/api/${UserId}/GetUserInfo`);
         if (response.ok) {
             const info = await response.json();
-            //console.log(j);
+            console.log("User Info: " ,JSON.stringify(info));
             return info;
         } else {
             throw new Error('User info not found');

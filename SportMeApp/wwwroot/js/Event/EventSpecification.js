@@ -11,6 +11,7 @@ async function displayGroups(EventLocationInfo) {
     var btnCreate = document.querySelector('.CreateBtn');
     // pass EventLocationInfo to createEvent Page
     btnCreate.addEventListener('click', function () {
+        // store information to local storage
         localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
         window.location.href = ('/EventCreation/CreateForm');
         console.log("Create Button clicked");

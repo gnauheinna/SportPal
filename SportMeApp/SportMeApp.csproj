@@ -43,7 +43,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Event\" />
-    <Folder Include="wwwroot\js\NewFolder\" />
   </ItemGroup>
 
 </Project>

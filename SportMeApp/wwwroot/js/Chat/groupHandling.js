@@ -1,49 +1,19 @@
 ﻿
 // load and display groups:
 
+document.addEventListener('DOMContentLoaded', function () {
 
-$(document).ready(function () {
-    $('#BtnUser').click(function () {
-        //console.log('Button clicked');
-        handleUserLogin();
-    });
-
-    $("#BtnCreateGroup").click(function () {
-        handleCreateGroup();
-    });
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    console.log("userInfo", userInfo);
+    groupClearField();
+    loadAndDisplayGroups(userInfo.user);
 });
-// handle user login
-function handleUserLogin() {
-    // handle user login
-    username = $("#Username").val();
-    $.ajax({
-        type: "POST",
-        url: '/api/user/AddUser',
-        data: JSON.stringify(username),
-        contentType: 'application/json',
-        success: function (data) {
-            console.log(data);
-            $("#displayName").text("Welcome! " + username);
-            groupClearField();
-            loadAndDisplayGroups(username);
-        },
-        error: function (error) {
-            console.error(error);
-        }
-    });
-    
-}
 
 // display all registered events for user
-function loadAndDisplayGroups(username) {
+function loadAndDisplayGroups(user) {
 
     try {
         (async () => {
-            const user = await GetUserByName(username);
-            //console.log('User ', user);
-
-            //const groups = await getUserGroups(user);
-            //console.log('User Groups: ', groups);
             const Userinfo = await GetUserInfo(user.userId);
             console.log("Userinfo", JSON.stringify(Userinfo));
             displayGroups(Userinfo);
