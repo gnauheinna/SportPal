@@ -32,7 +32,7 @@ namespace SportMeApp.Controllers
 
             var redirectUrl = "https://accounts.google.com/o/oauth2/v2/auth?" +
                 "scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/calendar.events" +
-                "&access_type=online&" +
+                "&access_type=offline&" +
                 "include_granted_scopes=true&" +
                 "response_type=code&" +
                 "state=there&" +

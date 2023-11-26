@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using SportMeApp.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
+using SportMeApp.Services;
+
 
 
 namespace SportMeApp.Controllers.CreateEvent1
@@ -39,7 +45,7 @@ namespace SportMeApp.Controllers.CreateEvent1
 
                     _logger.LogInformation("Event created successfully.");
 
-                    return Ok(newEvent);
+                    return RedirectToAction("CreateGoogleCalendarEvent", " CreateGoogleCalendar");
                 }
 
                 _logger.LogError("Model validation failed.");
@@ -52,10 +58,10 @@ namespace SportMeApp.Controllers.CreateEvent1
                 return StatusCode(500, "Internal server error");
             }
         }
-    
-          
 
-    public IActionResult CreateEvent()
+
+
+        public IActionResult CreateEvent()
         {
             return View();
         }

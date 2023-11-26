@@ -16,7 +16,7 @@ namespace SportMeApp.Models
         public double Fee { get; set; }
         public string PaypalAccount { get; set; }
         // Foreign key 
-        [ForeignKey("Locations")]
+        [ForeignKey("Locations")] 
         public int LocationId { get; set; }
       
 
