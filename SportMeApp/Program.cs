@@ -5,10 +5,9 @@ using PusherServer;
 using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using SportMeApp.Models;
-
+using SportMeApp.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -31,7 +30,13 @@ builder.Services.AddSingleton(new Pusher(
     builder.Configuration["Pusher:Key"],
     builder.Configuration["Pusher:Secret"],
     pusherOptions));
-
+builder.Services.AddSingleton(x =>
+    new PaypalClient(
+        builder.Configuration["PayPalOptions:ClientId"],
+        builder.Configuration["PayPalOptions:ClientSecret"],
+        builder.Configuration["PayPalOptions:Mode"]
+    )
+);
 // Add services to the container.
 builder.Services.AddAuthentication(o =>
 {
