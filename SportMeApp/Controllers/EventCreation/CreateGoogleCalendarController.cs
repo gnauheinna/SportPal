@@ -17,18 +17,18 @@ namespace SportMeApp.Controllers.CreateEvent1
             // Create an event.
             Event newEvent = new Event()
             {
-                Summary = "Google I/O 2023",
+                Summary = "Annie's Birthday BasketBall Game",
                 Location = "800 Howard St., San Francisco, CA 94103",
-                Description = "A chance to hear more about Google's developer products.",
+                Description = "A chance to play with annie and the folks.",
                 Start = new EventDateTime()
                 {
                     DateTime = DateTime.Parse("2023-11-28T09:00:00-07:00"),
-                    TimeZone = "America/Los_Angeles",
+                    TimeZone = "America/New_York",
                 },
                 End = new EventDateTime()
                 {
                     DateTime = DateTime.Parse("2023-11-28T17:00:00-07:00"),
-                    TimeZone = "America/Los_Angeles",
+                    TimeZone = "America/New_York",
                 },
                 Recurrence = new List<string> { "RRULE:FREQ=DAILY;COUNT=2" },
                 Attendees = new List<EventAttendee>
@@ -48,7 +48,7 @@ namespace SportMeApp.Controllers.CreateEvent1
             };
 
             // Insert the event into the user's primary calendar.
-            string calendarId = "bc7495931fde2bcd23662e0c4b828c317cd7667a38bd28caec5f45b33da3a313@group.calendar.google.com";
+            string calendarId = "dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039@group.calendar.google.com";
             EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
             Event createdEvent = request.Execute();
 

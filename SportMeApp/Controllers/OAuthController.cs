@@ -68,7 +68,7 @@ namespace SportMeApp.Controllers
         public ActionResult RefreshToken()
         {
 
-            var tokenFile = "C:\\Users\\Mic\\source\\repos\\SportMeApp\\SportMeApp\\files\\tokens.json";
+            var tokenFile = "C:\\Users\\annie\\Desktop\\PC\\SportMe\\SportMeApp\\files\\tokens.json";
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokenFile));
             var client_id = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com";
             var client_secret = "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";
@@ -96,7 +96,7 @@ namespace SportMeApp.Controllers
 
         public ActionResult RevokeToken()
         {
-            var tokenFile = "C:\\Users\\Mic\\source\\repos\\SportMeApp\\SportMeApp\\files\\tokens.json";
+            var tokenFile = "C:\\Users\\annie\\Desktop\\PC\\SportMe\\SportMeApp\\files\\tokens.json";
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokenFile));
 
             RestClient restClient = new RestClient("https://oauth2.googleapis.com/revoke");

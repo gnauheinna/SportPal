@@ -20,7 +20,7 @@ namespace SportMeApp.Services
         public static CalendarService GetCalendarService()
         {
 
-            var tokenFile = "|DataDirectory|files\\tokens.json";
+            var tokenFile = "C:\\Users\\annie\\Desktop\\PC\\SportMe\\SportMeApp\\files\\tokens.json";
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokenFile));
 
             var token = new TokenResponse

@@ -4,8 +4,8 @@
 </head>
 
 <div class="web-browser">
-    <div class="calender-section">PLACE RESERVED FOR CALENDER
-
+    <div class="calender-section">
+        <iframe src="https://calendar.google.com/calendar/embed?src=dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
 
 
@@ -19,8 +19,9 @@
                     <div class="gym">At Fitrec</div>
                 </div>
             </div>
+
             @model CreateEvent
-            <form id="eventForm">
+            <form id="eventForm" >
                 <div class="input">
                     <label for="eventName">Event Name:</label>
                     <input type="text" id="eventName" name="eventName" required>
@@ -44,10 +45,9 @@
           
                
 
-                <button type="submit">Create Event</button>
+                <button type="submit" onclick="location.href = '@Url.Action("CreateGoogleCalendarEvent","CreateGoogleCalendar")'">Create Event</button>
             </form>
         </div>
        
     </div>
 </div>
-<script src="~/js/Event/CreateEvent.js" asp-append-version="true"></script>
