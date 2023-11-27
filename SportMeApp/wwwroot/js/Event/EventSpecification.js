@@ -1,6 +1,6 @@
 ﻿async function fetchEventAndDisplay() {
-    var locationId = 1;
-    var sportId = 1;
+    var locationId = 2;
+    var sportId = 3;
     var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
 
     console.log(EventLocationInfo);
