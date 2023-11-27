@@ -6,6 +6,7 @@
 
         // get this info from local storage
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
+        console.log(EventLocationInfo);
         var form = document.getElementById('eventForm');
      
         form.addEventListener('submit', function (event) {
@@ -13,6 +14,11 @@
             sendEventInfo(EventLocationInfo);
             
         });
+
+        var sportDisplay = document.getElementById('sport');
+        sportDisplay.textContent = "For " + EventLocationInfo.events[0].sport.sportName;
+        var gymDisplay = document.getElementById('gym');
+        gymDisplay.textContent = "At "+EventLocationInfo.location[0].name;
     });
 
 function sendEventInfo(EventLocationInfo) {
