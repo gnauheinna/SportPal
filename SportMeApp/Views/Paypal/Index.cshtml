@@ -1,7 +1,7 @@
 ﻿﻿<div class="text-center">
     <div id="paypal-button-container"></div>
 </div>
-
+<script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
 @section Scripts {
     @*ViewBag.ClientId is our client id, we use it to access the javascrip SDK*@
     <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.ClientId"></script>
@@ -38,9 +38,35 @@
                         return response.json().then(error => { throw error; });
                     }
                     @*Success is our custom payment successful page*@
+
+                
                     window.location.href = "@Url.Action("Success")";
+
+                    handlePaymentSuccess();
                 }).catch(error => alert(error.message));
             }
         }).render('#paypal-button-container');
+
+        const handlePaymentSuccess = async () => {
+            try {
+                // add userEvent to db
+                var JoinedEventInfo = JSON.parse(localStorage.getItem('JoinedEventInfo'));
+                var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+                console.log(JoinedEventInfo);
+                console.log(userInfo);
+
+                // Call the asynchronous function addUserEvent
+                await addUserEvent(userInfo.user.userId, JoinedEventInfo.eventId);
+
+                // After the addUserEvent function is done, navigate to the Success page
+                window.location.href = "@Url.Action("Success")";
+            } catch (error) {
+                alert(error.message);
+            }
+        };
+
+
+        
     </script>
 }

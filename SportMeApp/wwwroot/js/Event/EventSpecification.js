@@ -1,8 +1,8 @@
 ﻿async function fetchEventAndDisplay() {
-    var locationId = 2;
-    var sportId = 3;
-    var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
-
+    //var locationId = 2;
+    //var sportId = 3;
+    //var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
+    var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
     console.log(EventLocationInfo);
     displayGroups(EventLocationInfo);
 }
@@ -12,7 +12,7 @@ async function displayGroups(EventLocationInfo) {
     // pass EventLocationInfo to createEvent Page
     btnCreate.addEventListener('click', function () {
         // store information to local storage
-        localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+        //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
         window.location.href = ('/EventCreation/CreateForm');
         console.log("Create Button clicked");
 
@@ -33,10 +33,12 @@ async function displayGroups(EventLocationInfo) {
     var gymRating = document.querySelector('.rating');
     gymRating.textContent = EventLocationInfo.location[0].rating;
 
+   
     const container = document.querySelector('.event-details');
 
     EventLocationInfo.events.forEach(event => {
-
+        var gymRating = document.querySelector('.icon');
+        gymRating.src = `/img/${event.sport.sportName}.png`;
         console.log("displaying event: " + JSON.stringify(event));
         const GroupEvent = document.createElement('div');
         GroupEvent.className = 'event-display';
@@ -61,6 +63,8 @@ async function displayGroups(EventLocationInfo) {
         const joinButton = GroupEvent.querySelector('.btnPayToJoin');
         joinButton.addEventListener('click', function () {
             console.log('Button clicked for event:', event);
+
+            localStorage.setItem('JoinedEventInfo', JSON.stringify(event));
             window.location.href = '/Paypal/Index';
         });
         container.appendChild(GroupEvent);

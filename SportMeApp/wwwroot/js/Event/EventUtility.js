@@ -34,6 +34,40 @@ async function GetEventsByLocation(locationId, sportId) {
     }
 }
 
+async function GetEventsByLocationName(locationName, sportId) {
+
+
+    try {
+        const response = await fetch(`/api/${locationId}/${sportId}/GetEventsByLocation`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+    }
+}
+async function addUserEvent(userId,eventId) {
+    try {
+        const response = await fetch(`/api/${userId}/${eventId}/addUserEvent`, {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+               
+            },
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+    }
+}
+
+
 function main() {
     // login 
     var UserId = 3;

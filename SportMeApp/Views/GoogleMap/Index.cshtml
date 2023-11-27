@@ -217,8 +217,8 @@
         <a href="/Home/RegisteredEvent" class="nav-button"><strong>Registered Event</strong></a>
         <div class="user-greeting"><strong>Welcome User</strong></div>
         <div class="search-form">
-            <form method="post" action="/Home/Search">
-                <select name="courtType">
+            <form method="post" action="/GoogleMap/Search">
+                <select id="courtType" name="courtType" onchange="updateSelectedInfo()">
                     <option value="tennis"><strong>Tennis Court</strong></option>
                     <option value="basketball"><strong>Basketball Court</strong></option>
                     <option value="volleyball"><strong>Volleyball Court</strong></option>
@@ -249,7 +249,7 @@
             for (int i = 0; i < displayCount; i++)
             {
                 var place = ViewBag.Places[i];
-                <button class="info-box">
+                <button class="info-box" id="@($"infoBoxButton_{i}")">
                     <div class="info-box-content">
                         <h4>@place.Name</h4>
                         <p><strong>Address:</strong> @place.FormattedAddress</p>
@@ -280,8 +280,11 @@
         }
     </div>
 
+
+
+
     @functions {
-        @functions {
+                        @functions {
             private string DisplayGroupedHours(List<string> weekdayHours)
             {
                 var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -324,7 +327,7 @@
 
                 return string.Join("\n", groupedHours);
             }
-        }
+                        }
         public IHtmlContent RenderStarRating(double rating)
 {
     int fullStars = (int)Math.Floor(rating); // Number of full stars
@@ -353,19 +356,71 @@
 
 
     } 
-    }
+    
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var places = @Html.Raw(Json.Serialize(ViewBag.Places));
             var noCourtsMessage = document.querySelector(".no-courts-message");
 
-            if (!Array.isArray(places) || places.length === 0) {
-                noCourtsMessage.style.display = "block";
-            }
+
         });
+
     </script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Attach click event listeners to each info box button
+            @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
+            {
+                var displayCount = Math.Min(15, ViewBag.Places.Count);
+                for (int i = 0; i < displayCount; i++)
+                {
+                    <text>
+                            document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
+                                handleInfoBoxClick('@ViewBag.Places[i].Name');
+                            });
+                    </text>
+                }
+            }
+        });
+
+        var SportName = 'tennis';  // Initialize the variable
+
+        function updateSelectedInfo() {
+            var selectElement = document.getElementById('courtType');
+            SportName = selectElement.value;
+            console.log('SportName:', SportName);
+        }
+
+        async function handleInfoBoxClick(locationName) {
+            console.log('Info box clicked for place:', locationName);
+
+            // get the sportName
+            var EventLocationInfo = await GetEventsByLocationName(locationName, SportName);
+            // store information to local storage
+            localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+            window.location.href = ('/EventSpecification/GymDetail');
+            // send request to save location info
+
+        }
+
+        async function GetEventsByLocationName(locationName) {
+            try {
+                const response = await fetch(`/api/${locationName}/${SportName}/GetEventsByLocationName`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log("GET by using locationName", JSON.stringify(data));
+                return data;
+            } catch (error) {
+                console.error('Failed to fetch events:', error);
+            }
+        }
+
+      
+    </script>
 
 </body>
 </html>
