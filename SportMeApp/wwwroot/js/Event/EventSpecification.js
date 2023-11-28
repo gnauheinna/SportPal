@@ -1,6 +1,6 @@
 ﻿async function fetchEventAndDisplay() {
-    var locationId = 2;
-    var sportId = 3;
+    var locationId = 1;
+    var sportId = 1;
     var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
 
     console.log(EventLocationInfo);
@@ -61,6 +61,7 @@ async function displayGroups(EventLocationInfo) {
         const joinButton = GroupEvent.querySelector('.btnPayToJoin');
         joinButton.addEventListener('click', function () {
             console.log('Button clicked for event:', event);
+            window.location.href = '/Paypal/Index';
         });
         container.appendChild(GroupEvent);
     });

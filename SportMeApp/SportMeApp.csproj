@@ -7,17 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="App_Data\NewFolder\**" />
     <Compile Remove="Controllers\EventCreation\View\**" />
     <Compile Remove="Views\CreateEvent\**" />
+    <Content Remove="App_Data\NewFolder\**" />
     <Content Remove="Controllers\EventCreation\View\**" />
     <Content Remove="Views\CreateEvent\**" />
+    <EmbeddedResource Remove="App_Data\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\EventCreation\View\**" />
     <EmbeddedResource Remove="Views\CreateEvent\**" />
+    <None Remove="App_Data\NewFolder\**" />
     <None Remove="Controllers\EventCreation\View\**" />
     <None Remove="Views\CreateEvent\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Paypal\Index.cshtml" />
+    <None Include="Views\Paypal\Success.cshtml" />
     <None Include="wwwroot\Img\sport-pal.png" />
   </ItemGroup>
 

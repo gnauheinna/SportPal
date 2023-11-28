@@ -1,8 +1,13 @@
+@using System.Text;
+@using Microsoft.AspNetCore.Html;
+@using Microsoft.AspNetCore.Mvc.Razor;
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Map</title>
+
     <style>
         /* CSS for the top bar */
         .top-bar {
@@ -14,14 +19,19 @@
             align-items: center;
         }
 
+        /* Style the buttons without background color and borders */
         .user-greeting, .nav-button {
             color: white;
             margin-right: 10px;
             text-decoration: none;
-            background-color: #333;
             padding: 5px 10px;
-            border: none;
             cursor: pointer;
+        }
+
+
+
+        .rating-number {
+            margin-left: 5px; /* Add some space between stars and rating number */
         }
 
         .nav-button {
@@ -33,43 +43,82 @@
             align-items: center;
         }
 
-            .search-form select, .search-form input[type="text"] {
-                margin-right: 10px;
-                padding: 5px;
-                height: 30px; /* Adjust the height as needed */
+        /* CSS for the star rating */
+        .star-rating-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .star {
+            font-size: medium; /* Adjust the font size as needed */
+            width: auto; /* Remove fixed width */
+            margin-right: 0; /* Remove margin between stars */
+            display: inline-block; /* Display stars as blocks */
+            color: gray;
+        }
+
+            .star:last-child {
+                margin-right: 0; /* Ensure no margin after the last star */
             }
 
-            .search-form button {
-                background-color: #333;
-                color: white;
-                border: none;
-                padding: 5px 10px;
-                cursor: pointer;
-                height: 30px; /* Adjust the height as needed */
+            .star.on:before {
+                content: '\2605'; /* Use a filled star character for 'star on' class */
+                color: gold;
             }
+
+            .star.half:before {
+                content: '\2605'; /* Use a filled star character for 'star half' class */
+                color: gold;
+            }
+
+        .rating-number {
+            margin-left: 5px; /* Adjust the margin as needed */
+        }
+
+
+        .search-form select, .search-form input[type="text"] {
+            margin-right: 10px;
+            padding: 5px;
+            height: 30px; /* Adjust the height as needed */
+        }
+
+        .search-form button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            height: 30px; /* Adjust the height as needed */
+        }
+
+        
 
         /* CSS for the information box container */
         .info-box-container {
             display: flex;
-            flex-wrap: row;
-            overflow-x: auto;
-            width: 600%;
-            padding: 10px 0;
-            max-height: 300px;
+            flex-direction: row; /* Arrange children in a row */
+            overflow-x: auto; /* Enable horizontal scrolling */
+            overflow-y: hidden; /* Disable vertical scrolling */
+            white-space: nowrap; /* Prevent elements from wrapping to the next line */
+            width: 100%; /* Container takes up full width of its parent */
+            max-height: 700px; /* Adjust this as needed */
         }
 
         /* CSS for each information box (location button) */
         .info-box {
+            display: inline-flex; /* Inline flex to display horizontally */
+            flex-direction: column; /* Content of the box is arranged vertically */
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 10px;
+            min-width: 500px; /* Minimum width of each box */
+            margin-right: 10px; /* Space between the boxes */
+            height: 180px;
             background-color: #333; /* Dark background color */
             color: white;
             border-radius: 10px; /* Rounded corners */
-            display: flex; /* Flexbox layout */
-            flex-direction: column; /* Stack children vertically */
-            align-items: flex-start; /* Align children to the start of the flex container */
-            justify-content: space-between; /* Space between items */
             padding: 10px; /* Smaller padding inside the box */
             width: 100%; /* Take full width of the container */
-            max-width: 400px; /* Reduced maximum width */
             box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Box shadow for depth */
             transition: background-color 0.3s; /* Smooth background color transition on hover */
             text-align: left; /* Align text to the left */
@@ -150,30 +199,38 @@
         .am-pm {
             font-size: 8px; /* Smaller font size for AM and PM */
         }
+
+        .info-box-content p.hours {
+            margin-bottom: 0; /* Remove bottom margin for hours */
+            font-size: 12px; /* Adjust font size for hours */
+        }
+
+        .info-box-content p.phone-number {
+            margin-top: -5px; /* Reduce top margin for phone number */
+        }
     </style>
 </head>
 <body>
     <!-- Top bar -->
     <div class="top-bar">
-        <a href="/Home/Index" class="nav-button">Home</a>
-        <a href="/Home/RegisteredEvent" class="nav-button">Registered Event</a>
-        <div class="user-greeting">Welcome User</div>
+        <a href="/Home/Index" class="nav-button"><strong>Home</strong></a>
+        <a href="/Home/RegisteredEvent" class="nav-button"><strong>Registered Event</strong></a>
+        <div class="user-greeting"><strong>Welcome User</strong></div>
         <div class="search-form">
             <form method="post" action="/Home/Search">
                 <select name="courtType">
-                    <option value="tennis">Tennis Court</option>
-                    <option value="basketball">Basketball Court</option>
-                    <option value="volleyball">Volleyball Court</option>
-                    <option value="baseball">Baseball Field</option>
-                    <option value="soccer">Soccer Field</option>
+                    <option value="tennis"><strong>Tennis Court</strong></option>
+                    <option value="basketball"><strong>Basketball Court</strong></option>
+                    <option value="volleyball"><strong>Volleyball Court</strong></option>
+                    <option value="baseball"><strong>Baseball Field</strong></option>
+                    <option value="soccer"><strong>Soccer Field</strong></option>
                 </select>
                 <label for="zipcode">Zipcode:</label>
                 <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
-                <button type="submit">Search</button>
+                <button type="submit"><strong>Search</strong></button>
             </form>
         </div>
     </div>
-
     <!-- Map container -->
     <div class="map-container">
         <iframe class="map"
@@ -198,17 +255,21 @@
                         <p><strong>Address:</strong> @place.FormattedAddress</p>
                         <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
                         <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
-                        <p class="hours">
-                            @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
-                            {
-                            <p>@DisplayGroupedHours(place.OpeningHours.weekday_text)</p>
-                            }
-                            else
-                            {
-                            <p>Hours not available.</p>
-                            }
-                        </p>
-                        <p><strong>Rating:</strong> @place.Rating</p>
+                        <div class="rating">
+                            @RenderStarRating(place.Rating)
+                        </div>
+                        @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                        {
+                            <p class="hours">
+                                @DisplayGroupedHours(place.OpeningHours.weekday_text)
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="hours">
+                                Hours not available.
+                            </p>
+                        }
                     </div>
                 </button>
             }
@@ -264,17 +325,43 @@
                 return string.Join("\n", groupedHours);
             }
         }
+        public IHtmlContent RenderStarRating(double rating)
+{
+    int fullStars = (int)Math.Floor(rating); // Number of full stars
+    double fractionalPart = rating - fullStars; // Fractional part of the rating
+
+    var stars = new StringBuilder();
+
+    for (int i = 0; i < fullStars; i++)
+    {
+        // Use a full star element with the 'star on' class
+        stars.Append("<span class=\"star on\"></span>");
+    }
+
+    if (fractionalPart >= 0.1)
+    {
+        // Use a half star element with the 'star half' class
+        stars.Append("<span class=\"star half\"></span>");
+    }
+
+    return new HtmlString(
+        $"<div class=\"star-rating-container\">{stars.ToString()}<span class=\"rating-number\">{rating}</span></div>"
+    );
+}
 
 
+
+
+    } 
     }
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var places = @Html.Raw(Json.Serialize(ViewBag.Places));
             var noCourtsMessage = document.querySelector(".no-courts-message");
 
-            if (!Array.isArray(places) || places.length === 0) {
-                noCourtsMessage.style.display = "block";
-            }
+        //    if (!Array.isArray(places) || places.length === 0) {
+          //      noCourtsMessage.style.display = "block";
+        //    }
         });
     </script>
 

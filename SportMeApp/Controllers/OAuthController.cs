@@ -48,13 +48,13 @@ namespace SportMeApp.Controllers
                 request.AddQueryParameter("client_secret", client_secret);
                 request.AddQueryParameter("code", code);
                 request.AddQueryParameter("grant_type", "authorization_code");
-                request.AddQueryParameter("redirect_uri", "https://localhost:7203/oauth/callback");
+                request.AddQueryParameter("redirect_uri", "https://localhost:7203");
 
                 var response = restClient.Post(request);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     System.IO.File.WriteAllText(tokensFile, response.Content);
-                    return RedirectToAction("Index", "Home");
+                    return View();
                 }
 
             }
