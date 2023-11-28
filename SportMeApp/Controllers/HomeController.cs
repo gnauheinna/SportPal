@@ -36,7 +36,7 @@ namespace SportMeApp.Controllers
                 "include_granted_scopes=true&" +
                 "response_type=code&" +
                 "state=there&" +
-                "redirect_uri=https://localhost:7203/&" +
+                "redirect_uri=https://localhost:7203/oauth/callback&" +
                 "client_id=" + client_id;
 
             return Redirect(redirectUrl);

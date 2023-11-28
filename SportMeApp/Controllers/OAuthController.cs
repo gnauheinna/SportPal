@@ -22,11 +22,20 @@ namespace SportMeApp.Controllers
             return View();
         }
 
-        public void Callback(string code, string error, string state)
+        public ActionResult Callback(string code, string error, string state)
         {
             if (string.IsNullOrWhiteSpace(error))
             {
+                // Process the authorization code
                 this.GetTokens(code);
+
+                // Redirect to the "Index" action
+                return RedirectToAction("Index","Home");
+            }
+            else
+            {
+                // Handle the case where an error is present
+                return View("Error");
             }
         }
 
@@ -48,13 +57,14 @@ namespace SportMeApp.Controllers
                 request.AddQueryParameter("client_secret", client_secret);
                 request.AddQueryParameter("code", code);
                 request.AddQueryParameter("grant_type", "authorization_code");
-                request.AddQueryParameter("redirect_uri", "https://localhost:7203");
+                request.AddQueryParameter("redirect_uri", "https://localhost:7203/oauth/callback");
 
                 var response = restClient.Post(request);
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     System.IO.File.WriteAllText(tokensFile, response.Content);
-                    return View();
+                    return RedirectToAction("Index");
                 }
 
             }

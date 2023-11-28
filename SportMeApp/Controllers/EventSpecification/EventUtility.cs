@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PusherServer;
 using SportMeApp.Controllers.CreateEvent1;
+using SportMeApp.Models;
 using System.Reflection;
 
 
@@ -39,7 +41,7 @@ namespace SportMeApp.Controllers.EventSpecification
                 user.Email
             };
 
-            
+
             var eventsData = await _context.UserEvent
                 .Where(ue => ue.UserId == UserId)
                 .Select(ue => new
@@ -173,5 +175,92 @@ namespace SportMeApp.Controllers.EventSpecification
 
 
 
+        [HttpGet("{locationName}/{SportName}/GetEventsByLocationName")]
+        public async Task<IActionResult> GetEventsByLocationName(string locationName, string SportName)
+        {
+
+            try
+            {
+                var events = await _context.Event
+                    .Include(e => e.Sport)
+                    .Where(e => e.Locations.Name == locationName && e.Sport.SportName == SportName)
+                    .Select(e => new
+                    {
+                        e.EventId,
+                        e.EventName,
+                        e.StartTime,
+                        e.EndTime,
+
+                        FormattedTime = e.StartTime.Date == e.EndTime.Date ?
+                $"{e.StartTime:yyyy/MM/dd h tt} - {e.EndTime:h tt}".ToLower() :
+                $"{e.StartTime:M/d h tt} - {e.EndTime:M/d h tt yyyy}".ToLower(),
+                        EventFee = e.Fee,
+                        Sport = new
+                        {
+                            SportId = e.Sport.SportId,
+                            SportName = e.Sport.SportName
+                        },
+                        UsersInGroup = _context.UserEvent
+                            .Where(u => u.EventId == e.EventId)
+                            .Select(u => u.User.Username)
+                            .Distinct()
+                            .ToList(),
+                        PayPalAccount = e.PaypalAccount
+
+
+                    })
+                    .ToListAsync();
+
+                var sport = await _context.Sport
+                    .FirstOrDefaultAsync(ue => ue.SportName == SportName);
+
+                var location = await _context.Locations
+                    .Where(ue => ue.Name == locationName)
+                    .Select(ue => new
+                    {
+                        ue.LocationId,
+                        ue.Name,
+                        ue.PlaceId,
+                        ue.lat,
+                        ue.lng,
+                        rating = ue.Rating,
+                        ue.Address,
+                        ue.ImageUrl,
+                        ue.FormattedPhoneNumber
+                    })
+                    .ToListAsync();
+                var result = new
+                {
+                    events,
+                    sport,
+                    location
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [HttpPost("{userId}/{eventId}/addUserEvent")]
+        public async Task<IActionResult> addUserEvent(int userId, int eventId)
+        {
+            var userEvent = new UserEvent
+            {
+                UserId = userId,
+                EventId= eventId
+
+            };
+
+            // save messages to db and call pusher to send message to users that subscribed to the Event chat
+            _context.UserEvent.Add(userEvent); // add message to database
+            await _context.SaveChangesAsync(); // save changes
+            return Ok(userEvent);
+
+        }
     }
 }

@@ -26,8 +26,9 @@ async function handleUserLogin(userName) {
     let data = await response.json();
     $("#displayName").text("Welcome! " + userName);
 
+    // set localstorage
     let userInfo = await GetUserInfo(data.userId);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
-
+    window.location.href = '/GoogleMap/Index';
     return data;
 }

@@ -6,6 +6,7 @@
 
         // get this info from local storage
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
+        console.log(EventLocationInfo);
         var form = document.getElementById('eventForm');
      
         form.addEventListener('submit', function (event) {
@@ -13,9 +14,14 @@
             sendEventInfo(EventLocationInfo);
             
         });
+
+        var sportDisplay = document.getElementById('sport');
+        sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
+        var gymDisplay = document.getElementById('gym');
+        gymDisplay.textContent = "At "+EventLocationInfo.location[0].name;
     });
 
-function sendEventInfo(EventLocationInfo) {
+async function sendEventInfo(EventLocationInfo) {
     console.log("CreateEvent", EventLocationInfo);
     var formData = {
         EventName: document.getElementById('eventName').value,
@@ -24,30 +30,48 @@ function sendEventInfo(EventLocationInfo) {
         Fee: parseFloat(document.getElementById('fee').value),
         PaypalAccount: document.getElementById('payPalAccount').value,
         LocationId: EventLocationInfo.location[0].locationId,
-        SportId: EventLocationInfo.events[0].sport.sportId,
+        SportId: EventLocationInfo.sport.sportId,
         
     };
     console.log("formData", JSON.stringify(formData));
+    var LocationId = EventLocationInfo.location[0].locationId;
+    var SportId = EventLocationInfo.sport.sportId;
+    // send request to add event
+    var event = await sendFetchRequest('/Event/CreateEvent', 'POST', formData);
+    console.log("new event:" + JSON.stringify(event)); 
 
-    sendFetchRequest('/Event/CreateEvent', 'POST', formData);
+    // bind userId with EventId
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
+
+
+    // Update the EventLocationInfo
+    var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
+    // Store information in local storage
+    localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+    window.location.href = '/EventSpecification/GymDetail';
+
 }
 
-function sendFetchRequest(url, method, data) {
-    fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            // Handle error (e.g., display validation errors)
-            console.error(error);
+async function sendFetchRequest(url, method, data) {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    } catch (error) {
+        // Handle error (e.g., display validation errors)
+        console.error(error);
+    }
 }
+
+

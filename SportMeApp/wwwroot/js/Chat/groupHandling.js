@@ -42,7 +42,7 @@ async function displayGroups(Userinfo) {
      <div class="event-line"></div>
      <div class="event-infoframe">
         <div class="event-time">${event.formattedTime}</div>
-        <div class="event-location">${event.location.name}</div>
+        <div class="event-location">${event.location.address}</div>
    </div>
 </div>
 `;

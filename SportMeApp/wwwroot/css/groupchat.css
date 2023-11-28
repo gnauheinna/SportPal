@@ -5,14 +5,20 @@
     padding: 20px;
     box-sizing: border-box;
     height: 100vh;
+
 }
 
 /* Style the event section */
 .event-section {
     flex: 30%;
     margin-right: 5px; 
+   
 }
 
+.registeredEvent {
+    max-height: 100vh;
+    overflow-y: auto;
+}
 /* Style for individual event displays */
 .event-display {
     

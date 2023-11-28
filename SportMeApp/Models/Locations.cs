@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportMeApp.Models
 {
@@ -13,6 +14,8 @@ namespace SportMeApp.Models
         public double lng { get; set; }
         public double? Rating { get; set; }
         public string? Address { get; set; }
+        [NotMapped]
+        public List<String> WeekdayText { get; set; }
         public Boolean IsTennis { get; set; }
         public Boolean IsVolleyball { get; set; }
         public Boolean IsBasketball { get; set; }
@@ -25,4 +28,6 @@ namespace SportMeApp.Models
         public List<Event> Events { get; set; }
 
     }
+
+   
 }

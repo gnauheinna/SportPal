@@ -144,7 +144,8 @@ namespace SportMeApp.Controllers.GoogleMap
             existingLocation.FormattedPhoneNumber = newLocation.FormattedPhoneNumber;
             existingLocation.Rating = newLocation.Rating;
             existingLocation.ImageUrl = newLocation.ImageUrl;
-
+            existingLocation.Address = newLocation.FormattedAddress;
+            existingLocation.WeekdayText = newLocation.OpeningHours?.weekday_text;
 
             existingLocation.IsTennis |= newLocation.IsTennis;
             existingLocation.IsBaseball |= newLocation.IsBaseball;
@@ -168,8 +169,9 @@ namespace SportMeApp.Controllers.GoogleMap
                 IsBasketball = newLocation.IsBasketball,
                 IsVolleyball = newLocation.IsVolleyball,
                 IsSoccer = newLocation.IsSoccer,
-                Address = newLocation.Address,
-                PlaceId= newLocation.PlaceId
+                Address = newLocation.FormattedAddress,
+                PlaceId= newLocation.PlaceId,
+                WeekdayText = newLocation.OpeningHours?.weekday_text
             };
 
             _context.Locations.Add(location);
@@ -205,6 +207,7 @@ namespace SportMeApp.Controllers.GoogleMap
             string queryString = "Tennis Court";
             int distance = 5;
             var places = await GetPlacesNearby(new Location { lat = lat, lng = lng }, queryString, distance);
+            _logger.LogInformation("LOG: fetch places: {places}", places);
             ViewBag.Places = places;
             ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={lat},{lng}"; // Replace with your API key
             return View("Index");
@@ -388,6 +391,7 @@ namespace SportMeApp.Controllers.GoogleMap
             public bool IsBasketball { get; set; }
             public bool IsSoccer { get; set; }
             public bool IsBaseball { get; set; }
+            public List<string> WeekdayText { get; set; }
 
         }
 

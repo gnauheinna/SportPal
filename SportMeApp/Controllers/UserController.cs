@@ -18,9 +18,13 @@ namespace SportMeApp.Controllers
             _context = context;
         }
 
-        
 
-      
+
+        [HttpPost("{userId}/{EventId}/addUserToEvent")]
+        public IActionResult addUserToEvent([FromBody] int userId,int EventId)
+        {
+            return Ok();
+        }
 
         [HttpPost("{userName}/AddUser")]
         public IActionResult AddUser([FromBody] string userName)
