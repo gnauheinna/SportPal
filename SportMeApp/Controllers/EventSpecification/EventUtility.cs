@@ -157,9 +157,15 @@ namespace SportMeApp.Controllers.EventSpecification
                         ue.FormattedPhoneNumber
                     })
                     .ToListAsync();
+
+                var sport = await _context.Sport
+               .FirstOrDefaultAsync(ue => ue.SportId == sportId);
+
+
                 var result = new
                 {
                     events,
+                    sport,
                     location
                 };
 
@@ -175,15 +181,15 @@ namespace SportMeApp.Controllers.EventSpecification
 
 
 
-        [HttpGet("{locationAddress}/{SportName}/GetEventsByLocationName")]
-        public async Task<IActionResult> GetEventsByLocationName(string locationAddress, string SportName)
+        [HttpGet("{PlaceId}/{SportName}/GetEventsByLocationName")]
+        public async Task<IActionResult> GetEventsByLocationName(string PlaceId, string SportName)
         {
 
             try
             {
                 var events = await _context.Event
                     .Include(e => e.Sport)
-                    .Where(e => e.Locations.Address == locationAddress && e.Sport.SportName == SportName)
+                    .Where(e => e.Locations.PlaceId == PlaceId && e.Sport.SportName == SportName)
                     .Select(e => new
                     {
                         e.EventId,
@@ -215,7 +221,7 @@ namespace SportMeApp.Controllers.EventSpecification
                     .FirstOrDefaultAsync(ue => ue.SportName == SportName);
 
                 var location = await _context.Locations
-                    .Where(ue => ue.Address == locationAddress)
+                    .Where(ue => ue.PlaceId == PlaceId)
                     .Select(ue => new
                     {
                         ue.LocationId,

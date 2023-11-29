@@ -12,6 +12,7 @@
     
         .browser{
             overflow-y:auto;
+            max-height:100vh;
         }
 
         .rating-number {
@@ -21,12 +22,12 @@
         .nav-button {
             border-radius: 5px; /* Optional for rounded corners */
         }
-.search-form {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
+        .search-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+    }
 
     .search-form select, .search-form input[type="text"], .search-form button {
         margin-right: 10px;
@@ -211,7 +212,7 @@ label {
     <!-- Top bar -->
         <div class="search-form">
             <form method="post" action="/GoogleMap/Search">
-                <select id="courtType" name="courtType" onchange="updateSelectedInfo()">
+                <select id="courtType" name="courtType" >
                     <option value="tennis"><strong>Tennis Court</strong></option>
                     <option value="basketball"><strong>Basketball Court</strong></option>
                     <option value="volleyball"><strong>Volleyball Court</strong></option>
@@ -223,58 +224,57 @@ label {
                 <button type="submit"><strong>Search</strong></button>
             </form>
         </div>
-    </div>
+    
+
     <div class="browser">
-    <!-- Map container -->
-    <div class="map-container">
-        <iframe class="map"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="@ViewBag.MapUrl">
-        </iframe>
-    </div>
+        <!-- Map container -->
+        <div class="map-container">
+            <iframe class="map"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="@ViewBag.MapUrl">
+            </iframe>
+        </div>
 
-    <!-- Information boxes -->
-    <div class="info-box-container">
-        @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
-        {
-            var displayCount = Math.Min(15, ViewBag.Places.Count);
-            for (int i = 0; i < displayCount; i++)
+        <!-- Information boxes -->
+        <div class="info-box-container">
+            @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
             {
-                var place = ViewBag.Places[i];
-                <button class="info-box" id="@($"infoBoxButton_{i}")">
-                    <div class="info-box-content">
-                        <h4>@place.Name</h4>
-                        <p><strong>Address:</strong> @place.FormattedAddress</p>
-                        <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
-                        <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
-                        <div class="rating">
-                            @RenderStarRating(place.Rating)
+                var displayCount = Math.Min(15, ViewBag.Places.Count);
+                for (int i = 0; i < displayCount; i++)
+                {
+                    var place = ViewBag.Places[i];
+                    <button class="info-box" id="@($"infoBoxButton_{i}")">
+                        <div class="info-box-content">
+                            <h4>@place.Name</h4>
+                            <p><strong>Address:</strong> @place.FormattedAddress</p>
+                            <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                            <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
+                            <div class="rating">
+                                @RenderStarRating(place.Rating)
+                            </div>
+                            @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                            {
+                                <p class="hours">
+                                    @DisplayGroupedHours(place.OpeningHours.weekday_text)
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="hours">
+                                    Hours not available.
+                                </p>
+                            }
                         </div>
-                        @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
-                        {
-                            <p class="hours">
-                                @DisplayGroupedHours(place.OpeningHours.weekday_text)
-                            </p>
-                        }
-                        else
-                        {
-                            <p class="hours">
-                                Hours not available.
-                            </p>
-                        }
-                    </div>
-                </button>
+                    </button>
+                }
             }
-        }
-        else
-        {
-            <!-- Hide "No courts found" when the page loads -->
-        }
-    </div>
-
-
+            else
+            {
+                <!-- Hide "No courts found" when the page loads -->
+            }
+        </div>
     </div>
 
     @functions {
@@ -373,35 +373,28 @@ label {
                 {
                     <text>
                             document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
-                            handleInfoBoxClick('@ViewBag.Places[i].FormattedAddress');
+                            handleInfoBoxClick('@ViewBag.Places[i].PlaceId', '@ViewData["CourtType"]');
                             });
                     </text>
                 }
             }
         });
 
-        var SportName = 'tennis';  // Initialize the variable
 
-        function updateSelectedInfo() {
-            var selectElement = document.getElementById('courtType');
-            SportName = selectElement.value;
-            console.log('SportName:', SportName);
-        }
-
-        async function handleInfoBoxClick(locationAddress) {
+        async function handleInfoBoxClick(locationAddress, courtType) {
             console.log('Info box clicked for place:', locationAddress);
-            console.log('SportName', SportName);
+            console.log('SportName', courtType);
             // get the sportName
-            var EventLocationInfo = await GetEventsByLocationName(locationAddress, SportName);
+            var EventLocationInfo = await GetEventsByLocationName(locationAddress, courtType);
             console.log(JSON.stringify(EventLocationInfo));
             // store information to local storage
             localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
             //window.location.href = ('/EventSpecification/GymDetail');
         }
 
-        async function GetEventsByLocationName(locationAddress) {
+        async function GetEventsByLocationName(PlaceId, SportName) {
             try {
-                const response = await fetch(`/api/${locationAddress}/${SportName}/GetEventsByLocationName`);
+                const response = await fetch(`/api/${PlaceId}/${SportName}/GetEventsByLocationName`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

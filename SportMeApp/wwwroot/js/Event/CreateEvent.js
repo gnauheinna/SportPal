@@ -6,7 +6,7 @@
 
         // get this info from local storage
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-        console.log(EventLocationInfo);
+        console.log("EventLocationInfo",EventLocationInfo);
         var form = document.getElementById('eventForm');
      
         form.addEventListener('submit', function (event) {
@@ -48,9 +48,10 @@ async function sendEventInfo(EventLocationInfo) {
 
     // Update the EventLocationInfo
     var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
+    console.log("EventLocationinfo updated",JSON.stringify(EventLocationInfo));
     // Store information in local storage
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-    window.location.href = '/EventSpecification/GymDetail';
+   // window.location.href = '/EventSpecification/GymDetail';
 
 }
 

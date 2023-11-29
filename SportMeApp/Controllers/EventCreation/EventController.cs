@@ -48,7 +48,7 @@ namespace SportMeApp.Controllers.EventCreation
 
                     _logger.LogInformation("LOG:Event created successfully.");
 
-                    return RedirectToAction("CreateGoogleCalendarEvent", " CreateGoogleCalendar");
+                    return Ok(newEvent);
                 }
 
                 _logger.LogError("LOG:Model validation failed.");

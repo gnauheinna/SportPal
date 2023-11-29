@@ -34,11 +34,11 @@ async function GetEventsByLocation(locationId, sportId) {
     }
 }
 
-async function GetEventsByLocationName(locationName, sportId) {
+async function GetEventsByLocationName(PlaceId, sportId) {
 
 
     try {
-        const response = await fetch(`/api/${locationId}/${sportId}/GetEventsByLocation`);
+        const response = await fetch(`/api/${PlaceId}/${sportId}/GetEventsByLocation`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

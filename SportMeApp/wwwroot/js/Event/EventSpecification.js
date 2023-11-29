@@ -1,9 +1,13 @@
-﻿async function fetchEventAndDisplay() {
+﻿//document.addEventListener('DOMContentLoaded', async function () {
+//    await fetchEventAndDisplay();
+//});
+
+async function fetchEventAndDisplay() {
     //var locationId = 2;
     //var sportId = 3;
     //var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
     var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-    console.log(EventLocationInfo);
+    //console.log("EventInfo",EventLocationInfo);
     displayGroups(EventLocationInfo);
 }
 
@@ -33,6 +37,8 @@ async function displayGroups(EventLocationInfo) {
     var gymRating = document.querySelector('.rating');
     gymRating.textContent = EventLocationInfo.location[0].rating;
 
+    var gymSport = document.querySelector('.icon');
+    gymSport.src = `/Img/${EventLocationInfo.sport.sportName}.png`;
    
     const container = document.querySelector('.event-details');
 
@@ -54,7 +60,7 @@ async function displayGroups(EventLocationInfo) {
         </div>
     </div>
     <div class="event-other">
-        <div class="event-icon"><img class="icon" src="/img/${event.sport.sportName}.png" alt="${event.sport.SportName} Image"><div>
+        <div class="event-icon"><img class="icon" src="/Img/${event.sport.sportName}.png" alt="${event.sport.SportName} Image"><div>
         <button class="btnPayToJoin id="btnPayToJoin">Pay To Join</button>
    </div>
 </div>
