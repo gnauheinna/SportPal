@@ -31,6 +31,6 @@ async function handleUserLogin(userName) {
     let userInfo = await GetUserInfo(data.userId);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
     console.log(JSON.stringify(userInfo));
-   // window.location.href = '/GoogleMap/Index';
+    window.location.href = '/GoogleMap/Index';
     return data;
 }

@@ -51,7 +51,7 @@ async function sendEventInfo(EventLocationInfo) {
     console.log("EventLocationinfo updated",JSON.stringify(EventLocationInfo));
     // Store information in local storage
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-   // window.location.href = '/EventSpecification/GymDetail';
+    window.location.href = '/GroupChat/RegisterEvent';
 
 }
 

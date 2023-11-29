@@ -8,5 +8,9 @@ namespace SportMeApp.Controllers.CreateEvent1
         {
             return View();
         }
+        public IActionResult CreateConfirmation()
+        {
+            return View();
+        }
     }
 }
