@@ -10,7 +10,9 @@
 
     <style>
     
-
+        .browser{
+            overflow-y:auto;
+        }
 
         .rating-number {
             margin-left: 5px; /* Add some space between stars and rating number */
@@ -201,8 +203,11 @@ label {
             margin-top: -5px; /* Reduce top margin for phone number */
         }
     </style>
+
+  
 </head>
 <body>
+   
     <!-- Top bar -->
         <div class="search-form">
             <form method="post" action="/GoogleMap/Search">
@@ -219,6 +224,7 @@ label {
             </form>
         </div>
     </div>
+    <div class="browser">
     <!-- Map container -->
     <div class="map-container">
         <iframe class="map"
@@ -269,10 +275,10 @@ label {
     </div>
 
 
-
+    </div>
 
     @functions {
-                        @functions {
+                            @functions {
             private string DisplayGroupedHours(List<string> weekdayHours)
             {
                 var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -315,7 +321,7 @@ label {
 
                 return string.Join("\n", groupedHours);
             }
-                        }
+                            }
         public IHtmlContent RenderStarRating(double rating)
 {
     int fullStars = (int)Math.Floor(rating); // Number of full stars
@@ -342,8 +348,9 @@ label {
 
 
 
+    }
 
-    } 
+    <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
     
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -366,14 +373,14 @@ label {
                 {
                     <text>
                             document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
-                                handleInfoBoxClick('@ViewBag.Places[i].Name');
+                            handleInfoBoxClick('@ViewBag.Places[i].FormattedAddress');
                             });
                     </text>
                 }
             }
         });
 
-        var SportName = 'tennis';  // Initialize the variable
+        var SportName;  // Initialize the variable
 
         function updateSelectedInfo() {
             var selectElement = document.getElementById('courtType');
@@ -381,21 +388,20 @@ label {
             console.log('SportName:', SportName);
         }
 
-        async function handleInfoBoxClick(locationName) {
-            console.log('Info box clicked for place:', locationName);
-
+        async function handleInfoBoxClick(locationAddress) {
+            console.log('Info box clicked for place:', locationAddress);
+            console.log('SportName', SportName);
             // get the sportName
-            var EventLocationInfo = await GetEventsByLocationName(locationName, SportName);
+            var EventLocationInfo = await GetEventsByLocationName(locationAddress, SportName);
+            console.log(JSON.stringify(EventLocationInfo));
             // store information to local storage
             localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-            window.location.href = ('/EventSpecification/GymDetail');
-            // send request to save location info
-
+            //window.location.href = ('/EventSpecification/GymDetail');
         }
 
-        async function GetEventsByLocationName(locationName) {
+        async function GetEventsByLocationName(locationAddress) {
             try {
-                const response = await fetch(`/api/${locationName}/${SportName}/GetEventsByLocationName`);
+                const response = await fetch(`/api/${locationAddress}/${SportName}/GetEventsByLocationName`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -405,10 +411,11 @@ label {
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             }
+            var SportName = 'tennis';
         }
 
       
     </script>
-
+   
 </body>
 </html>

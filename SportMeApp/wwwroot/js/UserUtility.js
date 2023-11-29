@@ -1,6 +1,7 @@
 ﻿var rootUrl = "/api/user"
 
 document.addEventListener('DOMContentLoaded', function () {
+    localStorage.clear();
     var btnUser = document.getElementById('BtnUser');
 
     btnUser.addEventListener('click', function () {
