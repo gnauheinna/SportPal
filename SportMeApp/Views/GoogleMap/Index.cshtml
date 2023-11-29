@@ -9,25 +9,7 @@
     <title>Map</title>
 
     <style>
-        /* CSS for the top bar */
-        .top-bar {
-            background-color: black;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Style the buttons without background color and borders */
-        .user-greeting, .nav-button {
-            color: white;
-            margin-right: 10px;
-            text-decoration: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
+    
 
 
         .rating-number {
@@ -37,12 +19,35 @@
         .nav-button {
             border-radius: 5px; /* Optional for rounded corners */
         }
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
 
-        .search-form {
-            display: flex;
-            align-items: center;
-        }
+    .search-form select, .search-form input[type="text"], .search-form button {
+        margin-right: 10px;
+        padding: 10px;
+        font-size: 1em;
+        font-weight: normal;
+        height: 50px; /* Set a uniform height */
+        width: 200px; /* Set a uniform width */
+    }
 
+    .search-form button {
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+label {
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+       
         /* CSS for the star rating */
         .star-rating-container {
             display: flex;
@@ -76,20 +81,7 @@
         }
 
 
-        .search-form select, .search-form input[type="text"] {
-            margin-right: 10px;
-            padding: 5px;
-            height: 30px; /* Adjust the height as needed */
-        }
-
-        .search-form button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            height: 30px; /* Adjust the height as needed */
-        }
+       
 
         
 
@@ -212,10 +204,6 @@
 </head>
 <body>
     <!-- Top bar -->
-    <div class="top-bar">
-        <a href="/Home/Index" class="nav-button"><strong>Home</strong></a>
-        <a href="/Home/RegisteredEvent" class="nav-button"><strong>Registered Event</strong></a>
-        <div class="user-greeting"><strong>Welcome User</strong></div>
         <div class="search-form">
             <form method="post" action="/GoogleMap/Search">
                 <select id="courtType" name="courtType" onchange="updateSelectedInfo()">
