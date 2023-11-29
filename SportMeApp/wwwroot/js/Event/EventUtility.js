@@ -70,9 +70,9 @@ async function addUserEvent(userId,eventId) {
 
 function main() {
     // login 
-    var UserId = 3;
+    var UserId = 1;
     GetUserInfo(UserId);
-    var locationId = 2;
+    var locationId = 1;
     var sportId = 3;
         GetEventsByLocation(locationId, sportId);
 }

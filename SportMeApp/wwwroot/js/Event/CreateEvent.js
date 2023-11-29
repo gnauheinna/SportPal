@@ -11,14 +11,15 @@
      
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            sendEventInfo(EventLocationInfo);
+            //sendEventInfo(EventLocationInfo);
+            sendEventToGoogle(EventLocationInfo);
             
         });
 
         var sportDisplay = document.getElementById('sport');
-        sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
+        sportDisplay.textContent = "For A "; // + EventLocationInfo.sport.sportName;
         var gymDisplay = document.getElementById('gym');
-        gymDisplay.textContent = "At "+EventLocationInfo.location[0].name;
+        gymDisplay.textContent = "At A"//+EventLocationInfo.location[0].name;
     });
 
 async function sendEventInfo(EventLocationInfo) {
@@ -50,9 +51,33 @@ async function sendEventInfo(EventLocationInfo) {
     var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
     // Store information in local storage
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+
+}
+
+async function sendEventToGoogle(EventLocationInfo) {
+    console.log("CreateEvent", EventLocationInfo);
+    var formData = {
+        EventName: document.getElementById('eventName').value,
+        StartTime: document.getElementById('startTime').value,
+        EndTime: document.getElementById('endTime').value,
+        Fee: parseFloat(document.getElementById('fee').value),
+        PaypalAccount: document.getElementById('payPalAccount').value,
+        LocationId: EventLocationInfo.location[0].locationId,
+        SportId: EventLocationInfo.sport.sportId,
+
+    };
+    console.log("formData", JSON.stringify(formData));
+    var LocationId = EventLocationInfo.location[0].locationId;
+    var SportId = EventLocationInfo.sport.sportId;
+    // send request to add event
+    var event = await sendFetchRequest('/CreateGoogleCalendar/CreateGoogleCalendarEvent', 'POST', formData);
+    console.log("new event:" + JSON.stringify(event));
     window.location.href = '/EventSpecification/GymDetail';
 
 }
+
+
+
 
 async function sendFetchRequest(url, method, data) {
     try {

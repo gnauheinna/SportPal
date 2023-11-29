@@ -10,15 +10,19 @@
     <Compile Remove="App_Data\NewFolder\**" />
     <Compile Remove="Controllers\EventCreation\View\**" />
     <Compile Remove="Views\CreateEvent\**" />
+    <Compile Remove="Views\Event\**" />
     <Content Remove="App_Data\NewFolder\**" />
     <Content Remove="Controllers\EventCreation\View\**" />
     <Content Remove="Views\CreateEvent\**" />
+    <Content Remove="Views\Event\**" />
     <EmbeddedResource Remove="App_Data\NewFolder\**" />
     <EmbeddedResource Remove="Controllers\EventCreation\View\**" />
     <EmbeddedResource Remove="Views\CreateEvent\**" />
+    <EmbeddedResource Remove="Views\Event\**" />
     <None Remove="App_Data\NewFolder\**" />
     <None Remove="Controllers\EventCreation\View\**" />
     <None Remove="Views\CreateEvent\**" />
+    <None Remove="Views\Event\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,7 +53,6 @@
 
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Event\" />
   </ItemGroup>
 
 </Project>
