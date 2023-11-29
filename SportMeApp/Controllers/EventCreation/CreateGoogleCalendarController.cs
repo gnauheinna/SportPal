@@ -6,10 +6,11 @@ using SportMeApp.Models;
 
 namespace SportMeApp.Controllers.CreateEvent1
 {
+    [Route("CreateGoogleCalendar")]
     public class CreateGoogleCalendarController : Controller
     {
 
-        [HttpPost]
+        [HttpPost ("CreateGoogleCalendarEvent")]
         public ActionResult CreateGoogleCalendarEvent(CreateEvent eventData)
         {
             // Get the Google Calendar service.
@@ -52,7 +53,7 @@ namespace SportMeApp.Controllers.CreateEvent1
 
             ViewBag.HtmlLink = createdEvent.HtmlLink;
 
-            return RedirectToAction("Index", "Home");
+            return Ok(newEvent);
 
         }
         public IActionResult Index()
