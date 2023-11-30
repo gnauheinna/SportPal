@@ -5,8 +5,8 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         // get this info from local storage
-       // var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-        //console.log(EventLocationInfo);
+        var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
+        console.log("EventLocationInfo",EventLocationInfo);
         var form = document.getElementById('eventForm');
      
         form.addEventListener('submit', function (event) {
@@ -16,10 +16,10 @@
             
         });
 
-       //var sportDisplay = document.getElementById('sport');
-        sportDisplay.textContent = "For A "; // + EventLocationInfo.sport.sportName;
-        //var gymDisplay = document.getElementById('gym');
-        gymDisplay.textContent = "At A"//+EventLocationInfo.location[0].name;
+        var sportDisplay = document.getElementById('sport');
+        sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
+        var gymDisplay = document.getElementById('gym');
+        gymDisplay.textContent = "At "+EventLocationInfo.location[0].name;
     });
 
 async function sendEventInfo(EventLocationInfo) {
@@ -30,25 +30,26 @@ async function sendEventInfo(EventLocationInfo) {
         EndTime: document.getElementById('endTime').value,
         Fee: parseFloat(document.getElementById('fee').value),
         PaypalAccount: document.getElementById('payPalAccount').value,
-        LocationId: 5,
-        SportId: 1,
+        LocationId: EventLocationInfo.location[0].locationId,
+        SportId: EventLocationInfo.sport.sportId,
         
     };
     console.log("formData", JSON.stringify(formData));
-    var LocationId = 5;//EventLocationInfo.location[0].locationId;
-    var SportId = 1;//EventLocationInfo.sport.sportId;
+    var LocationId = EventLocationInfo.location[0].locationId;
+    var SportId = EventLocationInfo.sport.sportId;
     // send request to add event
     var event = await sendFetchRequest('/Event/CreateEvent', 'POST', formData);
     console.log("new event:" + JSON.stringify(event)); 
 
     // bind userId with EventId
-    //var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-   
-    //var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+    var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
 
 
     // Update the EventLocationInfo
-    //var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
+    var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
+    console.log("EventLocationinfo updated",JSON.stringify(EventLocationInfo));
     // Store information in local storage
     //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
 }

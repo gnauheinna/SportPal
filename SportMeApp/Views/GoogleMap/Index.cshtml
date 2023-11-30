@@ -9,26 +9,11 @@
     <title>Map</title>
 
     <style>
-        /* CSS for the top bar */
-        .top-bar {
-            background-color: black;
-            color: white;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+    
+        .browser{
+            overflow-y:auto;
+            max-height:100vh;
         }
-
-        /* Style the buttons without background color and borders */
-        .user-greeting, .nav-button {
-            color: white;
-            margin-right: 10px;
-            text-decoration: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-
 
         .rating-number {
             margin-left: 5px; /* Add some space between stars and rating number */
@@ -37,12 +22,35 @@
         .nav-button {
             border-radius: 5px; /* Optional for rounded corners */
         }
-
         .search-form {
             display: flex;
             align-items: center;
-        }
+            justify-content: center;
+            margin-top: 20px;
+    }
 
+    .search-form select, .search-form input[type="text"], .search-form button {
+        margin-right: 10px;
+        padding: 10px;
+        font-size: 1em;
+        font-weight: normal;
+        height: 50px; /* Set a uniform height */
+        width: 200px; /* Set a uniform width */
+    }
+
+    .search-form button {
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+label {
+    margin-right: 10px;
+    font-size: 1em;
+}
+
+       
         /* CSS for the star rating */
         .star-rating-container {
             display: flex;
@@ -76,20 +84,7 @@
         }
 
 
-        .search-form select, .search-form input[type="text"] {
-            margin-right: 10px;
-            padding: 5px;
-            height: 30px; /* Adjust the height as needed */
-        }
-
-        .search-form button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            height: 30px; /* Adjust the height as needed */
-        }
+       
 
         
 
@@ -209,16 +204,15 @@
             margin-top: -5px; /* Reduce top margin for phone number */
         }
     </style>
+
+  
 </head>
 <body>
+   
     <!-- Top bar -->
-    <div class="top-bar">
-        <a href="/Home/Index" class="nav-button"><strong>Home</strong></a>
-        <a href="/Home/RegisteredEvent" class="nav-button"><strong>Registered Event</strong></a>
-        <div class="user-greeting"><strong>Welcome User</strong></div>
         <div class="search-form">
             <form method="post" action="/GoogleMap/Search">
-                <select id="courtType" name="courtType" onchange="updateSelectedInfo()">
+                <select id="courtType" name="courtType" >
                     <option value="tennis"><strong>Tennis Court</strong></option>
                     <option value="basketball"><strong>Basketball Court</strong></option>
                     <option value="volleyball"><strong>Volleyball Court</strong></option>
@@ -230,61 +224,61 @@
                 <button type="submit"><strong>Search</strong></button>
             </form>
         </div>
-    </div>
-    <!-- Map container -->
-    <div class="map-container">
-        <iframe class="map"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="@ViewBag.MapUrl">
-        </iframe>
-    </div>
+    
 
-    <!-- Information boxes -->
-    <div class="info-box-container">
-        @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
-        {
-            var displayCount = Math.Min(15, ViewBag.Places.Count);
-            for (int i = 0; i < displayCount; i++)
+    <div class="browser">
+        <!-- Map container -->
+        <div class="map-container">
+            <iframe class="map"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="@ViewBag.MapUrl">
+            </iframe>
+        </div>
+
+        <!-- Information boxes -->
+        <div class="info-box-container">
+            @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
             {
-                var place = ViewBag.Places[i];
-                <button class="info-box" id="@($"infoBoxButton_{i}")">
-                    <div class="info-box-content">
-                        <h4>@place.Name</h4>
-                        <p><strong>Address:</strong> @place.FormattedAddress</p>
-                        <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
-                        <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
-                        <div class="rating">
-                            @RenderStarRating(place.Rating)
+                var displayCount = Math.Min(15, ViewBag.Places.Count);
+                for (int i = 0; i < displayCount; i++)
+                {
+                    var place = ViewBag.Places[i];
+                    <button class="info-box" id="@($"infoBoxButton_{i}")">
+                        <div class="info-box-content">
+                            <h4>@place.Name</h4>
+                            <p><strong>Address:</strong> @place.FormattedAddress</p>
+                            <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                            <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
+                            <div class="rating">
+                                @RenderStarRating(place.Rating)
+                            </div>
+                            @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
+                            {
+                                <p class="hours">
+                                    @DisplayGroupedHours(place.OpeningHours.weekday_text)
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="hours">
+                                    Hours not available.
+                                </p>
+                            }
                         </div>
-                        @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
-                        {
-                            <p class="hours">
-                                @DisplayGroupedHours(place.OpeningHours.weekday_text)
-                            </p>
-                        }
-                        else
-                        {
-                            <p class="hours">
-                                Hours not available.
-                            </p>
-                        }
-                    </div>
-                </button>
+                    </button>
+                }
             }
-        }
-        else
-        {
-            <!-- Hide "No courts found" when the page loads -->
-        }
+            else
+            {
+                <!-- Hide "No courts found" when the page loads -->
+            }
+        </div>
     </div>
-
-
-
 
     @functions {
-                        @functions {
+                            @functions {
             private string DisplayGroupedHours(List<string> weekdayHours)
             {
                 var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -327,7 +321,7 @@
 
                 return string.Join("\n", groupedHours);
             }
-                        }
+                            }
         public IHtmlContent RenderStarRating(double rating)
 {
     int fullStars = (int)Math.Floor(rating); // Number of full stars
@@ -354,8 +348,9 @@
 
 
 
+    }
 
-    } 
+    <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
     
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -378,36 +373,28 @@
                 {
                     <text>
                             document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
-                                handleInfoBoxClick('@ViewBag.Places[i].Name');
+                            handleInfoBoxClick('@ViewBag.Places[i].PlaceId', '@ViewData["CourtType"]');
                             });
                     </text>
                 }
             }
         });
 
-        var SportName = 'tennis';  // Initialize the variable
 
-        function updateSelectedInfo() {
-            var selectElement = document.getElementById('courtType');
-            SportName = selectElement.value;
-            console.log('SportName:', SportName);
-        }
-
-        async function handleInfoBoxClick(locationName) {
-            console.log('Info box clicked for place:', locationName);
-
+        async function handleInfoBoxClick(locationAddress, courtType) {
+            console.log('Info box clicked for place:', locationAddress);
+            console.log('SportName', courtType);
             // get the sportName
-            var EventLocationInfo = await GetEventsByLocationName(locationName, SportName);
+            var EventLocationInfo = await GetEventsByLocationName(locationAddress, courtType);
+            console.log(JSON.stringify(EventLocationInfo));
             // store information to local storage
             localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
             window.location.href = ('/EventSpecification/GymDetail');
-            // send request to save location info
-
         }
 
-        async function GetEventsByLocationName(locationName) {
+        async function GetEventsByLocationName(PlaceId, SportName) {
             try {
-                const response = await fetch(`/api/${locationName}/${SportName}/GetEventsByLocationName`);
+                const response = await fetch(`/api/${PlaceId}/${SportName}/GetEventsByLocationName`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -417,10 +404,11 @@
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             }
+            var SportName = 'tennis';
         }
 
       
     </script>
-
+   
 </body>
 </html>

@@ -73,6 +73,7 @@ namespace SportMeApp.Controllers.GoogleMap
 
 
             await SaveLocationsAsync(places);
+            ViewData["CourtType"] = courtType;
 
             ViewBag.Places = places;
             return View("Index");

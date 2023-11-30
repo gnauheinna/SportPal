@@ -1,6 +1,7 @@
 ﻿var rootUrl = "/api/user"
 
 document.addEventListener('DOMContentLoaded', function () {
+    localStorage.clear();
     var btnUser = document.getElementById('BtnUser');
 
     btnUser.addEventListener('click', function () {
@@ -29,6 +30,7 @@ async function handleUserLogin(userName) {
     // set localstorage
     let userInfo = await GetUserInfo(data.userId);
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    console.log(JSON.stringify(userInfo));
     window.location.href = '/GoogleMap/Index';
     return data;
 }
