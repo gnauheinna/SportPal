@@ -30,7 +30,7 @@ namespace SportMeApp.Controllers
                 this.GetTokens(code);
 
                 // Redirect to the "Index" action
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index","GoogleMap");
             }
             else
             {

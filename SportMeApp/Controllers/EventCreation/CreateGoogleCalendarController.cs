@@ -3,16 +3,27 @@ using Google.Apis.Calendar.v3;
 using Microsoft.AspNetCore.Mvc;
 using SportMeApp.Services;
 using SportMeApp.Models;
+using Newtonsoft.Json;
+using SportMeApp.Controllers.EventCreation;
+
 
 namespace SportMeApp.Controllers.CreateEvent1
 {
     [Route("CreateGoogleCalendar")]
     public class CreateGoogleCalendarController : Controller
     {
+        private readonly ILogger<CreateGoogleCalendarController> _logger;
+
+        public CreateGoogleCalendarController(ILogger<CreateGoogleCalendarController> logger)
+        {
+            _logger = logger;
+        }
+
 
         [HttpPost ("CreateGoogleCalendarEvent")]
         public ActionResult CreateGoogleCalendarEvent(CreateEvent eventData)
         {
+            _logger.LogInformation($"Received data: {JsonConvert.SerializeObject(eventData)}");
             // Get the Google Calendar service.
             var service = GoogleCalendarService.GetCalendarService();
 
