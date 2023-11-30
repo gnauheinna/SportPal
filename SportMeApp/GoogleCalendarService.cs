@@ -16,12 +16,17 @@ namespace SportMeApp.Services
     {
         private static string[] Scopes = { CalendarService.Scope.Calendar };
         private static string ApplicationName = "Calendar";
+     
 
         public static CalendarService GetCalendarService()
         {
-            // reads user access token from file
+            //Setting up a googleCalendarService
+            // EZ as 123
+            // 1. reads user access token from file
+
             var tokenFile = "C:\\Users\\annie\\Desktop\\PC\\SportMe\\SportMeApp\\files\\tokens.json";
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokenFile));
+          
             // creates new tokenResponse instance
             var token = new TokenResponse
             {
@@ -30,10 +35,10 @@ namespace SportMeApp.Services
                 RefreshToken = tokens["refresh_token"].ToString(),
                 TokenType = "Bearer"
             };
-            // cr
+            // 2. Initializes new user credential instance
             var credentials = new UserCredential(new GoogleAuthorizationCodeFlow(
               new GoogleAuthorizationCodeFlow.Initializer
-              {
+              {     //initializes with our google calendar api secret keys
                   ClientSecrets = new ClientSecrets
                   {
                       ClientId = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com",
@@ -42,7 +47,7 @@ namespace SportMeApp.Services
 
               }), "user", token);
 
-            // Create Google Calendar API service.
+            // 3. Create Google Calendar API service.
             var service = new CalendarService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credentials,

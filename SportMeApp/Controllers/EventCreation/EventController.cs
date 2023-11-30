@@ -27,7 +27,7 @@ namespace SportMeApp.Controllers.EventCreation
         {
             try
             {
-                if (ModelState.IsValid)
+                if (ModelState.IsValid) ///checks if the pass in eventData is valid
                 {
                     var newEvent = new Event
                     {
