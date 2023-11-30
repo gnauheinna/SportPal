@@ -29,15 +29,16 @@ async function sendEventInfo(EventLocationInfo) {
         EndTime: document.getElementById('endTime').value,
         Fee: parseFloat(document.getElementById('fee').value),
         PaypalAccount: document.getElementById('payPalAccount').value,
-        LocationId: 11,
-        SportId: 1,
+        LocationId: EventLocationInfo.location[0].locationId,
+        SportId: EventLocationInfo.sport.sportId,
         
     };
     console.log("formData", JSON.stringify(formData));
-    var LocationId = 11;
-    var SportId = 1;
-    // send request to add event
+    var LocationId = EventLocationInfo.location[0].locationId;
+    var SportId = EventLocationInfo.sport.sportId;
+    // send request to add event to db
     var event = await sendFetchRequest('/Event/CreateEvent', 'POST', formData);
+    // send request to create new event in google calendar
     var googleEvent = await sendFetchRequest('/CreateGoogleCalendar/CreateGoogleCalendarEvent', 'POST', formData);
      
     console.log("new event:" + JSON.stringify(event)); 
@@ -56,29 +57,6 @@ async function sendEventInfo(EventLocationInfo) {
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
     window.location.href = '/EventSpecification/GymDetail';
 }
-
-//async function sendEventToGoogle(EventLocationInfo) {
- //   console.log("CreateEventincalendarggl", EventLocationInfo);
-   // var formData = {
-   ///     EventName: document.getElementById('eventName').value,
-      //  StartTime: document.getElementById('startTime').value,
-       // EndTime: document.getElementById('endTime').value,
-        //Fee: parseFloat(document.getElementById('fee').value),
-        //PaypalAccount: document.getElementById('payPalAccount').value,
-        //LocationId: 5,
-     //   SportId: 1,
-
-    //};
-  //  console.log("formData", JSON.stringify(formData));
-//    var LocationId = 1; //EventLocationInfo.location[0].locationId;
- //   var SportId = 1; //EventLocationInfo.sport.sportId;
-    // send request to add event
- //   var event = await sendFetchRequest('/CreateGoogleCalendar/CreateGoogleCalendarEvent', 'POST', formData);
-  //  console.log("new event:" + JSON.stringify(event));
-   // window.location.href = '/EventSpecification/GymDetail';
-
-//}
-
 
 
 

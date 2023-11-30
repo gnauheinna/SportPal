@@ -25,10 +25,10 @@ namespace SportMeApp.Controllers.CreateEvent1
         public ActionResult CreateGoogleCalendarEvent(CreateEvent eventData)
         {
             _logger.LogInformation($"Received data: {JsonConvert.SerializeObject(eventData)}");
-            // Get the Google Calendar service.
+            // Get the Google Calendar service instance.
             var service = GoogleCalendarService.GetCalendarService();
 
-            // Create an event.
+            // Create a new google calendar event.
 
             Google.Apis.Calendar.v3.Data.Event newEvent = new Google.Apis.Calendar.v3.Data.Event()
             {
