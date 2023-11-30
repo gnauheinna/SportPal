@@ -249,7 +249,13 @@ label {
                         <div class="info-box-content">
                             <h4>@place.Name</h4>
                             <p><strong>Address:</strong> @place.FormattedAddress</p>
-                            <p><strong>Distance:</strong> @(Math.Round(place.Distance)) miles</p>
+                            <p>
+                             <strong>Distance:</strong>
+                             @{
+                             var distanceDisplay = place.Distance < 0.1 ? $"{Math.Round(place.Distance * 5280)} feet" : $"{place.Distance} miles";
+                             }
+                             @distanceDisplay
+                             </p>
                             <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
                             <div class="rating">
                                 @RenderStarRating(place.Rating)
