@@ -12,13 +12,13 @@
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
-            sendEventToGoogle(EventLocationInfo);
+            //sendEventToGoogle(EventLocationInfo);
             
         });
 
-        var sportDisplay = document.getElementById('sport');
+       //var sportDisplay = document.getElementById('sport');
         sportDisplay.textContent = "For A "; // + EventLocationInfo.sport.sportName;
-        var gymDisplay = document.getElementById('gym');
+        //var gymDisplay = document.getElementById('gym');
         gymDisplay.textContent = "At A"//+EventLocationInfo.location[0].name;
     });
 
@@ -30,13 +30,13 @@ async function sendEventInfo(EventLocationInfo) {
         EndTime: document.getElementById('endTime').value,
         Fee: parseFloat(document.getElementById('fee').value),
         PaypalAccount: document.getElementById('payPalAccount').value,
-        LocationId: EventLocationInfo.location[0].locationId,
-        SportId: EventLocationInfo.sport.sportId,
+        LocationId: 1,
+        SportId: 1,
         
     };
     console.log("formData", JSON.stringify(formData));
-    var LocationId = EventLocationInfo.location[0].locationId;
-    var SportId = EventLocationInfo.sport.sportId;
+    var LocationId = 1;//EventLocationInfo.location[0].locationId;
+    var SportId = 1;//EventLocationInfo.sport.sportId;
     // send request to add event
     var event = await sendFetchRequest('/Event/CreateEvent', 'POST', formData);
     console.log("new event:" + JSON.stringify(event)); 
@@ -51,7 +51,6 @@ async function sendEventInfo(EventLocationInfo) {
     var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
     // Store information in local storage
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-
 }
 
 async function sendEventToGoogle(EventLocationInfo) {
