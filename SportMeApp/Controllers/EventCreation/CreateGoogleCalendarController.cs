@@ -9,6 +9,7 @@ using SportMeApp.Controllers.EventCreation;
 
 namespace SportMeApp.Controllers.CreateEvent1
 {
+    [ApiController]
     [Route("CreateGoogleCalendar")]
     public class CreateGoogleCalendarController : Controller
     {
@@ -28,6 +29,7 @@ namespace SportMeApp.Controllers.CreateEvent1
             var service = GoogleCalendarService.GetCalendarService();
 
             // Create an event.
+
             Google.Apis.Calendar.v3.Data.Event newEvent = new Google.Apis.Calendar.v3.Data.Event()
             {
                 Summary = eventData.EventName,
@@ -40,12 +42,12 @@ namespace SportMeApp.Controllers.CreateEvent1
                 },
                 End = new EventDateTime()
                 {
-                    DateTime =eventData.EndTime,
+                    DateTime = eventData.EndTime,
                     TimeZone = "America/New_York",
                 },
                 Recurrence = new List<string> { },
                 Attendees = new List<EventAttendee>
-                {},
+                { },
                 Reminders = new Google.Apis.Calendar.v3.Data.Event.RemindersData()
                 {
                     UseDefault = false,
@@ -56,6 +58,8 @@ namespace SportMeApp.Controllers.CreateEvent1
                 }
                 }
             };
+
+
 
             // Insert the event into the user's primary calendar.
             string calendarId = "dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039@group.calendar.google.com";
