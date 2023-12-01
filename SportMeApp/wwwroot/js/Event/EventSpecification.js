@@ -3,11 +3,12 @@
 //});
 
 async function fetchEventAndDisplay() {
-    //var locationId = 2;
-    //var sportId = 3;
-    //var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
-    var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-    //console.log("EventInfo",EventLocationInfo);
+    // update because after joining event, UserInGroup might changed.
+
+    var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
+    //var EventLocationInfo = await GetEventsByLocation(EventLocationInfo.location[0].LocationId,  EventLocationInfo.sport.sportId);
+    //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+    console.log("updated info",EventLocationInfo);
     displayGroups(EventLocationInfo);
 }
 
