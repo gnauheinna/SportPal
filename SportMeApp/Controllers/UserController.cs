@@ -64,5 +64,41 @@ namespace SportMeApp.Controllers
             var users = _context.User.ToList();
             return Ok(users);
         }
+
+        [HttpPost("AddSport")]
+        public IActionResult AddSportToDb()
+        {
+            
+            var sportsToAdd = new List<Sport>
+            {
+                    new Sport { SportName = "volleyball" },
+                    new Sport { SportName = "tennis" },
+                    new Sport { SportName = "basketball" },
+                    new Sport { SportName = "baseball" },
+                     new Sport { SportName = "soccer" },
+            };
+
+            try
+            {
+                foreach (var sport in sportsToAdd)
+                {
+                    var existingSport = _context.Sport.FirstOrDefault(s => s.SportName == sport.SportName);
+
+                    if (existingSport == null)
+                    {
+                        _context.Sport.Add(sport);
+                    }
+             
+                }
+
+                _context.SaveChanges();
+
+                return Ok("Sports added or updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error adding or updating sports: {ex.Message}");
+            }
+        }
     }
 }
