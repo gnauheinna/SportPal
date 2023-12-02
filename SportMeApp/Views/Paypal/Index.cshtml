@@ -7,6 +7,14 @@
     <script src="https://www.paypal.com/sdk/js?client-id=@ViewBag.ClientId"></script>
 
     <script>
+        async function callInfo() {
+            var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
+            console.log("updated info", EventLocationInfo);
+            var JoinedEventInfo = await JSON.parse(localStorage.getItem('JoinedEventInfo'));
+            console.log("JoinedEventInfo", JoinedEventInfo);
+        }
+        
+        callInfo();
         @*The payment buttons automatically render all eligible buttons in a single location*@
         @*documentation: https://developer.paypal.com/sdk/js/reference/#style*@
         paypal.Buttons({

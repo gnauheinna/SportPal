@@ -6,9 +6,10 @@ async function fetchEventAndDisplay() {
     // update because after joining event, UserInGroup might changed.
 
     var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
+    console.log("updated info", EventLocationInfo);
     //var EventLocationInfo = await GetEventsByLocation(EventLocationInfo.location[0].LocationId,  EventLocationInfo.sport.sportId);
     //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-    console.log("updated info",EventLocationInfo);
+
     displayGroups(EventLocationInfo);
 }
 
@@ -20,10 +21,17 @@ async function displayGroups(EventLocationInfo) {
         //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
         window.location.href = ('/EventCreation/CreateForm');
         console.log("Create Button clicked");
+    });
+    const timecontainer = document.getElementById('operating-hours');
+    var time = EventLocationInfo.location[0].weekdayText.split('?');
+    time.forEach(day => {
+        timecontainer.innerHTML += `
+            < div class="day-hours">${day}</div>
+        `
 
     });
 
-   
+    
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
 
