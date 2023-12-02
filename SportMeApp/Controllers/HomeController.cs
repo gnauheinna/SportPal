@@ -31,7 +31,7 @@ namespace SportMeApp.Controllers
             var client_id = "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com";
 
             var redirectUrl = "https://accounts.google.com/o/oauth2/v2/auth?" +
-                "scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/calendar.events" +
+                "scope=https://www.googleapis.com/auth/calendar+https://www.googleapis.com/auth/calendar.events+https://www.googleapis.com/auth/userinfo.email" +
                 "&access_type=offline&" +
                 "include_granted_scopes=true&" +
                 "response_type=code&" +
