@@ -1,0 +1,14 @@
+{
+  "iss": "https://accounts.google.com",
+  "azp": "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com",
+  "aud": "378858678415-the1gfbovl66l9jbmobcufom12a5kche.apps.googleusercontent.com",
+  "sub": "102543112789054748737",
+  "email": "huangtingchien11@gmail.com",
+  "email_verified": "true",
+  "at_hash": "K9BqRvOxuKi-Sn6x6iPpDg",
+  "iat": "1701538299",
+  "exp": "1701541899",
+  "alg": "RS256",
+  "kid": "e4adfb436b9e197e2e1106af2c842284e4986aff",
+  "typ": "JWT"
+}

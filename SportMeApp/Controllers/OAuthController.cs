@@ -3,6 +3,8 @@ using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using NuGet.Common;
+using System.Net.Http.Headers;
 
 namespace SportMeApp.Controllers
 {
@@ -27,7 +29,9 @@ namespace SportMeApp.Controllers
             if (string.IsNullOrWhiteSpace(error))
             {
                 // Process the authorization code
-                this.GetTokens(code);
+                var tokens = GetTokens(code);
+                // Retrieve the user's email address
+                var userEmail = GetUserEmail();
 
                 // Redirect to the "Index" action
                 return RedirectToAction("Index","GoogleMap");
@@ -74,7 +78,31 @@ namespace SportMeApp.Controllers
             }
             return View("Error");
         }
+        private string GetUserEmail()
+        {
 
+            var contentRootPath = _hostingEnvironment.ContentRootPath;
+            var filePath = Path.Combine(contentRootPath, "files", "tokens.json");
+            var IDfilePath = Path.Combine(contentRootPath, "files", "Idtoken.json");
+            var tokensFile = filePath;
+            var tokens = JObject.Parse(System.IO.File.ReadAllText(tokensFile));
+            var idToken = tokens["id_token"]?.ToString();
+
+            RestClient restClient = new RestClient("https://oauth2.googleapis.com/tokeninfo");
+            RestRequest request = new RestRequest();
+            request.AddQueryParameter("id_token", idToken);
+            var response = restClient.Post(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                System.IO.File.WriteAllText(IDfilePath, response.Content);
+               
+                // Parse the response to get the email address
+                var userEmail = JObject.Parse(response.Content)["email"]?.ToString();
+
+                return userEmail;
+            }
+            return "";
+        }
         public ActionResult RefreshToken()
         {
 
