@@ -146,7 +146,7 @@ namespace SportMeApp.Controllers.GoogleMap
             existingLocation.Rating = newLocation.Rating;
             existingLocation.ImageUrl = newLocation.ImageUrl;
             existingLocation.Address = newLocation.FormattedAddress;
-            existingLocation.WeekdayText = newLocation.OpeningHours?.weekday_text;
+            existingLocation.WeekdayText = string.Join("?", newLocation.OpeningHours?.weekday_text?.DefaultIfEmpty() ?? Array.Empty<string>());
 
             existingLocation.IsTennis |= newLocation.IsTennis;
             existingLocation.IsBaseball |= newLocation.IsBaseball;
@@ -171,16 +171,18 @@ namespace SportMeApp.Controllers.GoogleMap
                 IsVolleyball = newLocation.IsVolleyball,
                 IsSoccer = newLocation.IsSoccer,
                 Address = newLocation.FormattedAddress,
-                PlaceId= newLocation.PlaceId,
-                WeekdayText = newLocation.OpeningHours?.weekday_text
-            };
+                PlaceId = newLocation.PlaceId,
+                WeekdayText = string.Join("?", newLocation.OpeningHours?.weekday_text?.DefaultIfEmpty() ?? Array.Empty<string>())
+
+
+        };
 
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 
         }
 
-
+    
 
         private List<Location> CalculateDistances(Location origin, List<Location> locations)
         {
@@ -367,7 +369,6 @@ namespace SportMeApp.Controllers.GoogleMap
             public string FormattedPhoneNumber { get; set; }
             public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
-            public List<DailyHours> DailyOpeningHours { get; set; }
             public string ImageUrl { get; set; }
             public string Address { get; set; }
             public bool IsVolleyball { get; set; }

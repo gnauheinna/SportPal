@@ -23,6 +23,7 @@ async function displayGroups(EventLocationInfo) {
 
     });
 
+   
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
 
@@ -78,5 +79,25 @@ async function displayGroups(EventLocationInfo) {
     });
 
 }
+function turnIntoDictionary(weekdayText) {
+    const weekdayDictionary = {};
 
+    if (weekdayText && typeof weekdayText === 'string') {
+        const days = weekdayText.split('?');
+
+        for (const day of days) {
+            if (day.trim() !== '') {
+                const parts = day.split(':', 2);
+
+                if (parts.length === 2) {
+                    const dayOfWeek = parts[0].trim();
+                    const times = parts[1].trim();
+                    weekdayDictionary[dayOfWeek] = times;
+                }
+            }
+        }
+    }
+
+    return weekdayDictionary;
+}
 fetchEventAndDisplay();
