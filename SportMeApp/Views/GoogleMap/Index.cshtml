@@ -50,43 +50,8 @@ label {
     font-size: 1em;
 }
 
-       
-        /* CSS for the star rating */
-        .star-rating-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .star {
-            font-size: medium; /* Adjust the font size as needed */
-            width: auto; /* Remove fixed width */
-            margin-right: 0; /* Remove margin between stars */
-            display: inline-block; /* Display stars as blocks */
-            color: gray;
-        }
-
-            .star:last-child {
-                margin-right: 0; /* Ensure no margin after the last star */
-            }
-
-            .star.on:before {
-                content: '\2605'; /* Use a filled star character for 'star on' class */
-                color: gold;
-            }
-
-            .star.half:before {
-                content: '\2605'; /* Use a filled star character for 'star half' class */
-                color: gold;
-            }
-
-        .rating-number {
-            margin-left: 5px; /* Adjust the margin as needed */
-        }
-
 
        
-
-        
 
         /* CSS for the information box container */
         .info-box-container {
@@ -257,9 +222,7 @@ label {
                              @distanceDisplay
                              </p>
                             <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
-                            <div class="rating">
-                                @RenderStarRating(place.Rating)
-                            </div>
+                            <p><strong>Rating:</strong> @place.Rating</p>
                             @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
                             {
                                 <p class="hours">
@@ -284,7 +247,7 @@ label {
     </div>
 
     @functions {
-                            @functions {
+                          
             private string DisplayGroupedHours(List<string> weekdayHours)
             {
                 var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -327,30 +290,7 @@ label {
 
                 return string.Join("\n", groupedHours);
             }
-                            }
-        public IHtmlContent RenderStarRating(double rating)
-{
-    int fullStars = (int)Math.Floor(rating); // Number of full stars
-    double fractionalPart = rating - fullStars; // Fractional part of the rating
-
-    var stars = new StringBuilder();
-
-    for (int i = 0; i < fullStars; i++)
-    {
-        // Use a full star element with the 'star on' class
-        stars.Append("<span class=\"star on\"></span>");
-    }
-
-    if (fractionalPart >= 0.1)
-    {
-        // Use a half star element with the 'star half' class
-        stars.Append("<span class=\"star half\"></span>");
-    }
-
-    return new HtmlString(
-        $"<div class=\"star-rating-container\">{stars.ToString()}<span class=\"rating-number\">{rating}</span></div>"
-    );
-}
+                            
 
 
 
