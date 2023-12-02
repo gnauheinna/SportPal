@@ -67,25 +67,26 @@ namespace SportMeApp.Controllers.EventSpecification
                         .ToList(),
                     Sport = new
                     {
-                        ue.Event.Sport.SportId,
-                        ue.Event.Sport.SportName
+                        SportId=ue.Event.Sport.SportId,
+                        SportName=ue.Event.Sport.SportName
                     },
                     Location = new
                     {
-                        ue.Event.Locations.LocationId,
-                        ue.Event.Locations.Name,
-                        ue.Event.Locations.PlaceId,
-                        ue.Event.Locations.lat,
-                        ue.Event.Locations.lng,
+                        LocationId=ue.Event.Locations.LocationId,
+                        Name=ue.Event.Locations.Name,
+                        PlaceId = ue.Event.Locations.PlaceId,
+                        lat = ue.Event.Locations.lat,
+                        lng = ue.Event.Locations.lng,
                         rating = ue.Event.Locations.Rating,
-                        ue.Event.Locations.Address,
+                        WeekdaySchedule = ue.Event.Locations.WeekdayText,
+                        Address = ue.Event.Locations.Address,
                         isTennis = ue.Event.Locations.IsTennis,
                         isVolleyball = ue.Event.Locations.IsVolleyball,
                         isBasketball = ue.Event.Locations.IsBasketball,
-                        ue.Event.Locations.IsBaseball,
-                        ue.Event.Locations.IsSoccer,
-                        ue.Event.Locations.ImageUrl,
-                        ue.Event.Locations.FormattedPhoneNumber
+                        IsBaseball = ue.Event.Locations.IsBaseball,
+                        IsSoccer = ue.Event.Locations.IsSoccer,
+                        ImageUrl = ue.Event.Locations.ImageUrl,
+                        FormattedPhoneNumber = ue.Event.Locations.FormattedPhoneNumber
                     }
 
                 })
@@ -151,13 +152,14 @@ namespace SportMeApp.Controllers.EventSpecification
                         ue.PlaceId,
                         ue.lat,
                         ue.lng,
-                        rating = ue.Rating,
+                        ue.Rating,
                         ue.Address,
                         ue.ImageUrl,
-                        ue.FormattedPhoneNumber
+                        ue.FormattedPhoneNumber,
+                        ue.WeekdayText,
                     })
                     .ToListAsync();
-
+               
                 var sport = await _context.Sport
                .FirstOrDefaultAsync(ue => ue.SportId == sportId);
 
@@ -232,9 +234,12 @@ namespace SportMeApp.Controllers.EventSpecification
                         rating = ue.Rating,
                         ue.Address,
                         ue.ImageUrl,
-                        ue.FormattedPhoneNumber
+                        ue.FormattedPhoneNumber,
+                        ue.WeekdayText
                     })
                     .ToListAsync();
+
+               
                 var result = new
                 {
                     events,
@@ -268,5 +273,8 @@ namespace SportMeApp.Controllers.EventSpecification
             return Ok(userEvent);
 
         }
+
+
     }
+   
 }

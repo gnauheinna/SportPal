@@ -3,11 +3,12 @@
 //});
 
 async function fetchEventAndDisplay() {
-    //var locationId = 2;
-    //var sportId = 3;
-    //var EventLocationInfo = await GetEventsByLocation(locationId, sportId);
-    var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-    //console.log("EventInfo",EventLocationInfo);
+    // update because after joining event, UserInGroup might changed.
+
+    var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
+    //var EventLocationInfo = await GetEventsByLocation(EventLocationInfo.location[0].LocationId,  EventLocationInfo.sport.sportId);
+    //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+    console.log("updated info",EventLocationInfo);
     displayGroups(EventLocationInfo);
 }
 
@@ -22,6 +23,7 @@ async function displayGroups(EventLocationInfo) {
 
     });
 
+   
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
 
@@ -77,5 +79,25 @@ async function displayGroups(EventLocationInfo) {
     });
 
 }
+function turnIntoDictionary(weekdayText) {
+    const weekdayDictionary = {};
 
+    if (weekdayText && typeof weekdayText === 'string') {
+        const days = weekdayText.split('?');
+
+        for (const day of days) {
+            if (day.trim() !== '') {
+                const parts = day.split(':', 2);
+
+                if (parts.length === 2) {
+                    const dayOfWeek = parts[0].trim();
+                    const times = parts[1].trim();
+                    weekdayDictionary[dayOfWeek] = times;
+                }
+            }
+        }
+    }
+
+    return weekdayDictionary;
+}
 fetchEventAndDisplay();

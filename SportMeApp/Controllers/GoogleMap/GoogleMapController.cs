@@ -22,7 +22,7 @@ namespace SportMeApp.Controllers.GoogleMap
         }
         public async Task<IActionResult> Index()
         {
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=40.730610,-73.935242"; // Replace with your API key
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=42.3601,-71.0589";
             ViewBag.Distance = 5;
             
             return View();
@@ -45,10 +45,10 @@ namespace SportMeApp.Controllers.GoogleMap
             var location = await GetLocationFromZipcode(zipcode);
             if (location == null)
             {
-                location = new Location { lat = 40.730610, lng = -73.935242 };
+                location = new Location { lat = 42.3601, lng = -71.0589 };
             }
 
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}"; // Replace with your API key
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}"; 
             string queryString = courtType switch
             {
                 "tennis" => "Tennis Court",
@@ -56,7 +56,7 @@ namespace SportMeApp.Controllers.GoogleMap
                 "volleyball" => "Volleyball Court",
                 "baseball" => "Baseball Field",
                 "soccer" => "Soccer Field",
-                _ => "Park"
+                _ => "tenniscourt"
             };
             int distance = ViewBag.Distance != null ? (int)ViewBag.Distance : 5;
             var places = await GetPlacesNearby(location, queryString, distance);
@@ -146,7 +146,7 @@ namespace SportMeApp.Controllers.GoogleMap
             existingLocation.Rating = newLocation.Rating;
             existingLocation.ImageUrl = newLocation.ImageUrl;
             existingLocation.Address = newLocation.FormattedAddress;
-            existingLocation.WeekdayText = newLocation.OpeningHours?.weekday_text;
+            existingLocation.WeekdayText = string.Join("?", newLocation.OpeningHours?.weekday_text?.DefaultIfEmpty() ?? Array.Empty<string>());
 
             existingLocation.IsTennis |= newLocation.IsTennis;
             existingLocation.IsBaseball |= newLocation.IsBaseball;
@@ -171,16 +171,18 @@ namespace SportMeApp.Controllers.GoogleMap
                 IsVolleyball = newLocation.IsVolleyball,
                 IsSoccer = newLocation.IsSoccer,
                 Address = newLocation.FormattedAddress,
-                PlaceId= newLocation.PlaceId,
-                WeekdayText = newLocation.OpeningHours?.weekday_text
-            };
+                PlaceId = newLocation.PlaceId,
+                WeekdayText = string.Join("?", newLocation.OpeningHours?.weekday_text?.DefaultIfEmpty() ?? Array.Empty<string>())
+
+
+        };
 
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 
         }
 
-
+    
 
         private List<Location> CalculateDistances(Location origin, List<Location> locations)
         {
@@ -197,7 +199,7 @@ namespace SportMeApp.Controllers.GoogleMap
                 dist = Rad2Deg(dist);
                 dist = dist * 60 * 1.1515;
 
-                location.Distance = dist;
+                location.Distance = Math.Round(dist, 3);
             }
 
             return locations;
@@ -308,17 +310,6 @@ namespace SportMeApp.Controllers.GoogleMap
         }
 
 
-
-
-
-        public class DailyHours
-        {
-            public string DayOfWeek { get; set; }
-            public string OpenTime { get; set; }
-            public string CloseTime { get; set; }
-        }
-
-
         class GeocodeResponse
         {
             public string status { get; set; }
@@ -353,12 +344,6 @@ namespace SportMeApp.Controllers.GoogleMap
             public Location location { get; set; }
         }
 
-        public class OpeningHours
-        {
-            public bool open_now { get; set; }
-            public List<object> weekday_text { get; set; }
-        }
-
         public class Result
         {
             public Geometry geometry { get; set; }
@@ -384,7 +369,6 @@ namespace SportMeApp.Controllers.GoogleMap
             public string FormattedPhoneNumber { get; set; }
             public GooglePlaceApiOpeningHours OpeningHours { get; set; }
             public double Rating { get; set; }
-            public List<DailyHours> DailyOpeningHours { get; set; }
             public string ImageUrl { get; set; }
             public string Address { get; set; }
             public bool IsVolleyball { get; set; }
@@ -396,36 +380,13 @@ namespace SportMeApp.Controllers.GoogleMap
 
         }
 
-        public class OpenCloseResultModel
-        {
-            public string start { get; set; }
-            public string end { get; set; }
-        }
+        
 
-        public class GooglePlaceApiPeriod
-        {
-            public GooglePlaceApiDayTime open { get; set; }
-            public GooglePlaceApiDayTime close { get; set; }
-        }
-
-        public class GooglePlaceApiDayTime
-        {
-            public int day { get; set; }
-            public string time { get; set; }
-        }
-
-        public class OpenCloseDaysModel
-        {
-            public int day { get; set; }
-            public bool is_open { get; set; }
-            public List<OpenCloseResultModel> range { get; set; }
-        }
 
         public class GooglePlaceApiOpeningHours
         {
-            public bool open_now { get; set; }
-            public List<GooglePlaceApiPeriod> periods { get; set; }
-            public List<string> weekday_text { get; set; } // Moved here
+            
+            public List<string> weekday_text { get; set; } 
         }
 
         public class PlacesApiQueryResponse

@@ -14,8 +14,10 @@ namespace SportMeApp.Models
         public double lng { get; set; }
         public double? Rating { get; set; }
         public string? Address { get; set; }
-        [NotMapped]
-        public List<String> WeekdayText { get; set; }
+
+        public String? WeekdayText { get; set; }
+        //public List<Weekday> Weekdays { get; set; }
+
         public Boolean IsTennis { get; set; }
         public Boolean IsVolleyball { get; set; }
         public Boolean IsBasketball { get; set; }
@@ -29,5 +31,20 @@ namespace SportMeApp.Models
 
     }
 
-   
+
+    public class Weekday
+    {
+        [Key]
+        public int WeekdayId { get; set; }
+
+        // Example property, adjust as needed
+        public string DayName { get; set; }
+
+        // Foreign key to Locations
+        public int LocationId { get; set; }
+
+        // Navigation property to represent the relationship
+        [ForeignKey("LocationId")]
+        public Locations Location { get; set; }
+    }
 }
