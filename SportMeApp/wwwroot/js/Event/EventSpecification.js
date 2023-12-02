@@ -29,7 +29,6 @@ async function displayGroups(EventLocationInfo) {
    //         <div class="day-hours">${day}</div> `  
    // });
 
-    
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
 

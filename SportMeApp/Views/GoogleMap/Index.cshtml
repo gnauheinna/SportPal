@@ -362,7 +362,7 @@ label {
         document.addEventListener("DOMContentLoaded", function () {
             var places = @Html.Raw(Json.Serialize(ViewBag.Places));
             var noCourtsMessage = document.querySelector(".no-courts-message");
-
+     
 
         });
 
@@ -371,6 +371,7 @@ label {
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            localStorage.removeItem('EventLocationInfo');
             // Attach click event listeners to each info box button
             @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
             {
