@@ -22,12 +22,12 @@ async function displayGroups(EventLocationInfo) {
         window.location.href = ('/EventCreation/CreateForm');
         console.log("Create Button clicked");
     });
-   // const timecontainer = document.getElementById('operating-hours');
-    //var time = EventLocationInfo.location[0].weekdayText.split('?');
-    //time.forEach(day => {
-   //     timecontainer.innerHTML += `
-   //         <div class="day-hours">${day}</div> `  
-   // });
+    const timecontainer = document.getElementById('operating-hours');
+    var time = EventLocationInfo.location[0].weekdayText.split('?');
+    time.forEach(day => {
+        timecontainer.innerHTML += `
+            <div class="day-hours">${day}</div> `  
+    });
 
     var gymPic = document.querySelector('.gym-pic');
     gymPic.src = EventLocationInfo.location[0].imageUrl;
