@@ -8,7 +8,27 @@
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
         console.log("EventLocationInfo",EventLocationInfo);
         var form = document.getElementById('eventForm');
-     
+
+        var sportName = EventLocationInfo.sport.sportName;
+        // Get the container element
+        var calendarContainer = document.getElementById('calendarContainer');
+
+        // Conditionally render different iframes based on the value
+        if (sportName == 'basketball') {
+            calendarContainer.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=cdd08cff32ab443727d461d9f138d150ee13bbff82733a6e061c310a901f513b%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+        } else if (sportName == 'tennis') {
+            calendarContainer.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=e4c1ddafe23c0856595af11ded6dfeef3b4fe9dc51cfae87b9a9c0d97bf2d4c7%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+        } else if (sportName == 'baseball') {
+            calendarContainer.innerHTML = '    <iframe src="https://calendar.google.com/calendar/embed?src=dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+
+        } else if (sportName == 'volleyball') {
+            calendarContainer.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=63b33d59f80d137b9977e4384bb9ca59a7fcc225a33243ab242882b1aa08ca6b%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+        }
+        else {
+            // Default iframe soccer if 'sportname' doesn't match any condition 
+            calendarContainer.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=dd10b96a0e8d139319ce6ea458dba2931cd382a3a0ffe9086f526edd26fcd54d%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
+        }
+
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
