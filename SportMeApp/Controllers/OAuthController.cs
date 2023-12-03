@@ -5,22 +5,27 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using NuGet.Common;
 using System.Net.Http.Headers;
+using Microsoft.EntityFrameworkCore;
+using SportMeApp.Models;
 
 namespace SportMeApp.Controllers
 {
 
     public class OAuthController : Controller
     {
+        private SportMeContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
 
-        public OAuthController(IWebHostEnvironment hostingEnvironment)
+        public OAuthController(IWebHostEnvironment hostingEnvironment, SportMeContext context)
         {
+            _context = context;
             _hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
         }
 
         public IActionResult Index()
         {
+            
             return View();
         }
 
@@ -33,6 +38,7 @@ namespace SportMeApp.Controllers
                 // Retrieve the user's email address
                 var userEmail = GetUserEmail();
 
+                this.AddUser(userEmail);
                 // Redirect to the "Index" action
                 return RedirectToAction("Index","GoogleMap");
             }
@@ -103,6 +109,31 @@ namespace SportMeApp.Controllers
             }
             return "";
         }
+
+
+
+        [HttpPost("{userName}/AddUser")]
+        public IActionResult AddUser(string userEmail)
+        {
+            // check if user exists
+            var existingUser = _context.User.FirstOrDefault(u => u.Email == userEmail);
+
+            if (existingUser != null)
+            {
+                return Ok(existingUser);
+            }
+            else
+            {
+                var newUser = new User { Username = "user1", Email = userEmail };
+                _context.User.Add(newUser);
+                _context.SaveChanges();
+                return Ok(newUser);
+            }
+        }
+
+
+
+
         public ActionResult RefreshToken()
         {
 
