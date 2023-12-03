@@ -34,3 +34,22 @@ async function handleUserLogin(userName) {
     window.location.href = '/GoogleMap/Index';
     return data;
 }
+
+async function AddSportToDb() {
+    let response = await fetch(`/api/user/AddSport`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response;
+
+  }
+
+
+
