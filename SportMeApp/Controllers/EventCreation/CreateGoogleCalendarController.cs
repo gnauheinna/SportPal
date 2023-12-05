@@ -1,10 +1,13 @@
 ﻿using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Calendar.v3;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.AspNetCore.Hosting;
 using SportMeApp.Services;
 using SportMeApp.Models;
 using Newtonsoft.Json;
 using SportMeApp.Controllers.EventCreation;
+
 
 
 namespace SportMeApp.Controllers.CreateEvent1
@@ -14,22 +17,28 @@ namespace SportMeApp.Controllers.CreateEvent1
     public class CreateGoogleCalendarController : Controller
     {
         private readonly ILogger<CreateGoogleCalendarController> _logger;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public CreateGoogleCalendarController(ILogger<CreateGoogleCalendarController> logger)
         {
             _logger = logger;
+           
         }
 
 
         [HttpPost ("CreateGoogleCalendarEvent")]
         public ActionResult CreateGoogleCalendarEvent(CreateEvent eventData)
         {
+            // Combine the base path of the application with the specific file path
+            var tokensFileName = "tokens.json";
+            var tokensFile = System.IO.Path.Combine(AppContext.BaseDirectory, "files", tokensFileName);
 
+            
             // Inserting a Google Calendar Event 
             // EZ as 1234
             _logger.LogInformation($"Received data: {JsonConvert.SerializeObject(eventData)}");
             // 1. Get the Google Calendar service instance.
-            var service = GoogleCalendarService.GetCalendarService();
+            var service = GoogleCalendarService.GetCalendarService(tokensFile);
 
             // 2. Create a new google calendar event from user's input.
 

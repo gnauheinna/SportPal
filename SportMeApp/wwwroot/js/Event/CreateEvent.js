@@ -32,7 +32,8 @@
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
-            
+            // Reload the page after form submission
+            location.reload();
         });
 
         var sportDisplay = document.getElementById('sport');

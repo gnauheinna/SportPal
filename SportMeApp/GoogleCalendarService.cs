@@ -18,13 +18,13 @@ namespace SportMeApp.Services
         private static string ApplicationName = "Calendar";
      
 
-        public static CalendarService GetCalendarService()
+        public static CalendarService GetCalendarService(string tokenFile)
         {
             //Setting up a googleCalendarService
             // EZ as 123
             // 1. reads user access token from file
 
-            var tokenFile = "C:\\Users\\annie\\Desktop\\PC\\SportMe\\SportMeApp\\files\\tokens.json";
+            
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokenFile));
           
             // creates new tokenResponse instance
