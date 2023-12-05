@@ -1,5 +1,5 @@
-﻿﻿<div class="text-center">
-    <div id="paypal-button-container"></div>
+﻿<div class="text-center">
+    <div id="paypal-button-container" style="max-width:1500px;></div>
 </div>
 <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
 @section Scripts {
@@ -22,7 +22,8 @@
                 layout: 'vertical',
                 color: 'gold',
                 tagline: 'false',
-                shape: 'rect'
+                shape: 'rect',
+                disableMaxWidth: true
             },
         @*Set up the server to call the Create Order API*@
             createOrder: (data, actions) => {
