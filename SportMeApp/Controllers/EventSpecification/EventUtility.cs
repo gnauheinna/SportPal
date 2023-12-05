@@ -13,6 +13,7 @@ namespace SportMeApp.Controllers.EventSpecification
     [Route("api/")]
     public class EventUtility : ControllerBase
     {
+        // give us access for the db 
         private readonly SportMeContext _context;
 
         public EventUtility(SportMeContext context)
@@ -21,9 +22,11 @@ namespace SportMeApp.Controllers.EventSpecification
 
         }
 
+        // this function fetch user info using userid
         [HttpGet("{UserId}/GetUserInfo")]
         public async Task<IActionResult> GetUserInfo(int UserId)
         {
+           
             // Check if the user exists
             var user = await _context.User
                 .FirstOrDefaultAsync(u => u.UserId == UserId);
@@ -102,6 +105,8 @@ namespace SportMeApp.Controllers.EventSpecification
             return Ok(result);
         }
 
+        // this function fetch events based on a certain sportId and locationId
+        // this function is used when i user clicked a specific location in the google map page
         [HttpGet("{locationId}/{sportId}/GetEventsByLocation")]
         public async Task<IActionResult> GetEventsByLocationAndSport(int locationId, int sportId)
         {
@@ -181,8 +186,6 @@ namespace SportMeApp.Controllers.EventSpecification
             }
         }
 
-
-
         [HttpGet("{PlaceId}/{SportName}/GetEventsByLocationName")]
         public async Task<IActionResult> GetEventsByLocationName(string PlaceId, string SportName)
         {
@@ -257,6 +260,7 @@ namespace SportMeApp.Controllers.EventSpecification
             }
         }
 
+        // this function add user to a event, this is used when an event is created and a user paied to join an evnet
         [HttpPost("{userId}/{eventId}/addUserEvent")]
         public async Task<IActionResult> addUserEvent(int userId, int eventId)
         {

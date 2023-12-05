@@ -4,13 +4,21 @@
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        // get this info from local storage
+        // display create event info
+        // ez as 12
+        // 1. get the event location info from the local storage (we need sportId and locationId)
         var EventLocationInfo = JSON.parse(localStorage.getItem('EventLocationInfo'));
-        console.log("EventLocationInfo",EventLocationInfo);
+        console.log("EventLocationInfo", EventLocationInfo);
+        // 2. update the form content using the information
         var form = document.getElementById('eventForm');
+        var sportDisplay = document.getElementById('sport');
+        sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
+        var gymDisplay = document.getElementById('gym');
+        gymDisplay.textContent = "At " + EventLocationInfo.location[0].name;
+
+
 
         var sportName = EventLocationInfo.sport.sportName;
-        // Get the container element
         var calendarContainer = document.getElementById('calendarContainer');
 
         // Conditionally render different iframes based on the value
@@ -35,13 +43,11 @@
             location.reload();
         });
 
-
-        var sportDisplay = document.getElementById('sport');
-        sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
-        var gymDisplay = document.getElementById('gym');
-        gymDisplay.textContent = "At "+EventLocationInfo.location[0].name;
+       
     });
 
+   // this function is called when an event is created
+   // it does the following: 1. create the event entry in the db 2. create the event in google calender 3. update the localstorage becuase information has updated
 async function sendEventInfo(EventLocationInfo) {
     console.log("CreateEvent", EventLocationInfo);
     var formData = {
@@ -57,28 +63,25 @@ async function sendEventInfo(EventLocationInfo) {
     console.log("formData", JSON.stringify(formData));
     var LocationId = EventLocationInfo.location[0].locationId;
     var SportId = EventLocationInfo.sport.sportId;
-    // send request to add event to db
+    // 1. send request to add event to db
     var event = await sendFetchRequest('/Event/CreateEvent', 'POST', formData);
-    // send request to create new event in google calendar
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
+
+    // 2. send request to create new event in google calendar
     var googleEvent = await sendFetchRequest('/CreateGoogleCalendar/CreateGoogleCalendarEvent', 'POST', formData);
      
     console.log("new event:" + JSON.stringify(event)); 
     console.log("new google event:" + JSON.stringify(googleEvent));
 
-    // bind userId with EventId
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-    var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
-
-    //update UserInfo
+    // 3. update local storage
     var UserInfo = await GetUserInfo(userInfo.user.userId);
     localStorage.setItem('userInfo', JSON.stringify(UserInfo));
-
-    // Update the EventLocationInfo
     var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);
     console.log("EventLocationinfo updated",JSON.stringify(EventLocationInfo));
-    // Store information in local storage
     localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
+
+    // the page is redirected to gymdetail page after submitted
     window.location.href = '/EventSpecification/GymDetail';
 }
 

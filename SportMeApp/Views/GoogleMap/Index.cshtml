@@ -303,22 +303,27 @@ label {
     <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
     
     <script>
+       // storing user info to the local storage
+        // ez as 12345
         document.addEventListener("DOMContentLoaded", async function () {
             var places = @Html.Raw(Json.Serialize(ViewBag.Places));
             var noCourtsMessage = document.querySelector(".no-courts-message");
             
+            // 1: getUserInfo is a async function that return user info stored in db
             var user = await getUserInfo();
-
-            // getting the userEmail info from session
             console.log('User Information:', JSON.stringify(user));
+            // 4. use user id (primary key) to ket the user info (including all events that are associated with this user)
             var UserInfo = await GetUserInfo(user.userId);
+            // 5. store this information to local storage so that we can access user info for the rest of the pages
             localStorage.setItem('userInfo', JSON.stringify(UserInfo));
             
             async function getUserInfo() {
+                // 2. first it retrieve user email from session (this information is stored in OAuthController after user logged in)
                 var userEmailSession = '@HttpContextAccessor.HttpContext.Session.GetString("UserEmailSession")';
                 console.log('User Email from Session:', userEmailSession);
  
                 try {
+                    // 3. we use email to get user by calling a function written in js that send a request to backend
                     var user = await GetUserByEmail(userEmailSession);
                     return user;
                 } catch (error) {
@@ -335,14 +340,18 @@ label {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             localStorage.removeItem('EventLocationInfo');
-            // Attach click event listeners to each info box button
+            // connection google map page to location specification page
+            // ez as 123
             @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
             {
+                // 1. for each location displayed after a user input zipcode and click search, we add a eventlistener that passes placeid and sporttype
+                // **note:placeid is the unique identifier for the location that google map returned, and locationid is the primary key for the location table
                 var displayCount = Math.Min(15, ViewBag.Places.Count);
                 for (int i = 0; i < displayCount; i++)
                 {
                     <text>
                             document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
+                            // 2. when the user clicked a certain locaiton, handleInfoBoxClick method is called
                             handleInfoBoxClick('@ViewBag.Places[i].PlaceId', '@ViewData["CourtType"]');
                             });
                     </text>
@@ -354,15 +363,15 @@ label {
         async function handleInfoBoxClick(locationAddress, courtType) {
             console.log('Info box clicked for place:', locationAddress);
             console.log('SportName', courtType);
-            // get the sportName
+            // 3. get all event that are associated with this location and stored this info to the local storage
             var EventLocationInfo = await GetEventsByLocationName(locationAddress, courtType);
             console.log(JSON.stringify(EventLocationInfo));
-            // store information to local storage
             localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
             window.location.href = ('/EventSpecification/GymDetail');
         }
 
         async function GetEventsByLocationName(PlaceId, SportName) {
+            // a function that send request to backend (defined inside Controller/EventSpecification/EventUtility.cs)
             try {
                 const response = await fetch(`/api/${PlaceId}/${SportName}/GetEventsByLocationName`);
                 if (!response.ok) {

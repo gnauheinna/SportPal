@@ -1,5 +1,4 @@
-﻿var rootUrl = "/api/user"
-
+﻿// this js is imported in the google map page
 document.addEventListener('DOMContentLoaded', function () {
     localStorage.clear();
   
