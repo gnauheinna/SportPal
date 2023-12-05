@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// this controller contains the following api calls: getGroupName, GetUserByName
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SportMeApp.Models;
 using System.Text.RegularExpressions;

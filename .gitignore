@@ -85,3 +85,5 @@ _[Ss]cripts
 /.vs/SportMeApp/DesignTimeBuild/.dtbcache.v2
 /SportMeApp/files/tokens.json
 
+/SportMeApp/files/Idtoken.json
+/SportMeApp/files/tokens.json

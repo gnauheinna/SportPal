@@ -1,4 +1,4 @@
-﻿// createGroup, AddUserToGroup,GetGroupName
+﻿// this controller contains the above apis: createGroup, AddUserToGroup
 
 using SportMeApp.Controllers.GroupChat.dataTransferObject;
 using SportMeApp.Models;

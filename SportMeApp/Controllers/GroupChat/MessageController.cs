@@ -1,4 +1,4 @@
-﻿// SendMesasge, GetMessages,
+﻿// the controller contains the following api: SendMesasge, GetMessages,
 
 using SportMeApp.Controllers.GroupChat.dataTransferObject;
 using SportMeApp.Models;

@@ -32,19 +32,4 @@ namespace SportMeApp.Models
     }
 
 
-    public class Weekday
-    {
-        [Key]
-        public int WeekdayId { get; set; }
-
-        // Example property, adjust as needed
-        public string DayName { get; set; }
-
-        // Foreign key to Locations
-        public int LocationId { get; set; }
-
-        // Navigation property to represent the relationship
-        [ForeignKey("LocationId")]
-        public Locations Location { get; set; }
-    }
 }

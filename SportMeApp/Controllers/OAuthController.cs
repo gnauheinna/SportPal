@@ -7,6 +7,9 @@ using NuGet.Common;
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using SportMeApp.Models;
+using SportMeApp.Clients;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace SportMeApp.Controllers
 {
@@ -37,8 +40,12 @@ namespace SportMeApp.Controllers
                 var tokens = GetTokens(code);
                 // Retrieve the user's email address
                 var user = GetUserEmail();
+          
 
-                this.AddUser(user);
+                // save user email in session storage
+                HttpContext.Session.SetString("UserEmailSession", user[1]);
+               this.AddUser(user);
+                
                 // Redirect to the "Index" action
                 return RedirectToAction("Index","GoogleMap");
             }
@@ -76,7 +83,6 @@ namespace SportMeApp.Controllers
                     System.IO.File.WriteAllText(tokensFile, response.Content);
                     return RedirectToAction("Index");
                 }
-
             }
             catch (Exception ex)
             {
@@ -86,14 +92,14 @@ namespace SportMeApp.Controllers
         }
         private string[] GetUserEmail()
         {
-
             var contentRootPath = _hostingEnvironment.ContentRootPath;
             var filePath = Path.Combine(contentRootPath, "files", "tokens.json");
             var IDfilePath = Path.Combine(contentRootPath, "files", "Idtoken.json");
             var tokensFile = filePath;
             var tokens = JObject.Parse(System.IO.File.ReadAllText(tokensFile));
             var idToken = tokens["id_token"]?.ToString();
-            string[] user = new string[2]; 
+
+            string[] user = new string[2];
             RestClient restClient = new RestClient("https://oauth2.googleapis.com/tokeninfo");
             RestRequest request = new RestRequest();
             request.AddQueryParameter("id_token", idToken);
@@ -101,11 +107,13 @@ namespace SportMeApp.Controllers
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 System.IO.File.WriteAllText(IDfilePath, response.Content);
-               
+
+
                 // Parse the response to get the email address
-                 user[1] = JObject.Parse(response.Content)["email"]?.ToString();
+                var userEmail = JObject.Parse(response.Content)["email"]?.ToString();
+                user[1] = JObject.Parse(response.Content)["email"]?.ToString();
                 user[0] = JObject.Parse(response.Content)["name"]?.ToString();
-                
+
                 return user;
             }
             return user;
@@ -113,7 +121,7 @@ namespace SportMeApp.Controllers
 
 
 
-        [HttpPost("{userName}/AddUser")]
+        [HttpPost("{userName}/{userEmail}/AddUser")]
         public IActionResult AddUser(string[] user)
         {
             // check if user exists
@@ -128,6 +136,7 @@ namespace SportMeApp.Controllers
                 var newUser = new User { Username = user[0], Email = user[1] };
                 _context.User.Add(newUser);
                 _context.SaveChanges();
+               
                 return Ok(newUser);
             }
         }

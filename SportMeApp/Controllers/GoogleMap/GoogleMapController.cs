@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SportMeApp.Models;
 using System.Reflection.Emit;
+using static SportMeApp.Controllers.GoogleMap.GoogleMapController;
 
 namespace SportMeApp.Controllers.GoogleMap
 {
@@ -20,14 +21,15 @@ namespace SportMeApp.Controllers.GoogleMap
             _context = context;
             _logger = logger;
         }
+        // EZ 1: shows the maps using url 
         public async Task<IActionResult> Index()
         {
             ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q=42.3601,-71.0589";
             ViewBag.Distance = 5;
-            
+
             return View();
         }
-
+        //helper functions to calcualte the distance, converting to them radians
         private double Deg2Rad(double degrees)
         {
             return degrees * (Math.PI / 180.0);
@@ -37,18 +39,19 @@ namespace SportMeApp.Controllers.GoogleMap
         {
             return radians * (180.0 / Math.PI);
         }
-
+        // 2. Search method is called
         [HttpPost]
         public async Task<IActionResult> Search(string courtType, string zipcode)
         {
+            // calls the zipcode function to convernt zipcode to lat and lng
             _logger.LogInformation("LOG:Starting search method. CourtType:({courtType},ZipCode: {zipcode})", courtType, zipcode);
             var location = await GetLocationFromZipcode(zipcode);
             if (location == null)
             {
                 location = new Location { lat = 42.3601, lng = -71.0589 };
             }
-
-            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}"; 
+            //shows the map based on the zip code 
+            ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={location.lat},{location.lng}";
             string queryString = courtType switch
             {
                 "tennis" => "Tennis Court",
@@ -58,6 +61,7 @@ namespace SportMeApp.Controllers.GoogleMap
                 "soccer" => "Soccer Field",
                 _ => "tenniscourt"
             };
+             // shows places under 5 miles distance 
             int distance = ViewBag.Distance != null ? (int)ViewBag.Distance : 5;
             var places = await GetPlacesNearby(location, queryString, distance);
 
@@ -71,7 +75,7 @@ namespace SportMeApp.Controllers.GoogleMap
                 SetCourtTypeFlags(place, courtType);
             }
 
-
+            // added to the databse 
             await SaveLocationsAsync(places);
             ViewData["CourtType"] = courtType;
 
@@ -80,17 +84,14 @@ namespace SportMeApp.Controllers.GoogleMap
         }
 
 
-
+        // set court type for either false or true based on the query
         private void SetCourtTypeFlags(Location location, string courtType)
         {
-            // Assuming courtType is a string like "tennis", "baseball", etc.
-            // Reset all court type properties to false
+           
             location.IsTennis = false;
             location.IsBasketball = false;
             location.IsVolleyball = false;
-            // Include other court types as necessary
-
-            // Set the appropriate property to true based on the courtType
+           
             switch (courtType.ToLower())
             {
                 case "tennis":
@@ -102,22 +103,21 @@ namespace SportMeApp.Controllers.GoogleMap
                 case "volleyball":
                     location.IsVolleyball = true;
                     break;
-                    // Add additional cases as necessary for other court types
+                    
             }
         }
-
+        // add the places to the databse 
         private async Task SaveLocationsAsync(List<Location> locations)
         {
             _logger.LogInformation("LOG: check locations: {locations}", locations);
             foreach (var location in locations)
             {
-                // Check for an existing location. Here, I'm using PlaceId as an example.
-                // You might use Coordinates, Name, or a combination of properties,
-                // depending on how you define uniqueness in your application.
+                // Check for an existing location using PlaceId 
+               
                 var existingLocation = await _context.Locations
                     .AsNoTracking()
                     .FirstOrDefaultAsync(l => l.PlaceId == location.PlaceId);
-                
+
                 // if we have stored this location before
                 if (existingLocation != null)
                 {
@@ -129,15 +129,17 @@ namespace SportMeApp.Controllers.GoogleMap
                 {
                     // New location, add it to the context
                     await addLocation(location);
-                   
+
                 }
             }
             await _context.SaveChangesAsync();
         }
-
+        // if the location is already in the databse and if information that needs to 
+        // it will be updated here 
         private void UpdateLocation(Locations existingLocation, Location newLocation)
         {
-            // Update general properties
+          // if a place is for tennis and baseball, it will just change the field either true 
+          // or false instead of adding it again
             existingLocation.Name = newLocation.Name;
             existingLocation.lat = newLocation.lat;
             existingLocation.lng = newLocation.lng;
@@ -155,6 +157,8 @@ namespace SportMeApp.Controllers.GoogleMap
             existingLocation.IsSoccer |= newLocation.IsSoccer;
 
         }
+
+        // This function acutally adds the data front end to the database
         private async Task addLocation(Location newLocation)
         {
             var location = new Locations
@@ -175,15 +179,16 @@ namespace SportMeApp.Controllers.GoogleMap
                 WeekdayText = string.Join("?", newLocation.OpeningHours?.weekday_text?.DefaultIfEmpty() ?? Array.Empty<string>())
 
 
-        };
-
+            };
+            // it is being added here
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 
         }
 
-    
-
+        // using harversian method that was insipired by stackoverflow and google research
+        // I believe their is google javascript function but I tried to use c sharp
+        // the margin of error is pretyy low 
         private List<Location> CalculateDistances(Location origin, List<Location> locations)
         {
             foreach (var location in locations)
@@ -205,6 +210,8 @@ namespace SportMeApp.Controllers.GoogleMap
             return locations;
         }
 
+        // by default  tennis court is showed if the user don't pick anything
+        // and place in 5 miles are showed 
         public async Task<IActionResult> SearchByLocation(double lat, double lng)
         {
             string queryString = "Tennis Court";
@@ -215,14 +222,15 @@ namespace SportMeApp.Controllers.GoogleMap
             ViewBag.MapUrl = $"https://www.google.com/maps/embed/v1/place?key=AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU&q={lat},{lng}"; // Replace with your API key
             return View("Index");
         }
-
+        // here the zipcode is convernted to actual lat and lat from the 
+        // the google api 
         private async Task<Location> GetLocationFromZipcode(string zipcode)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; // Replace with your Google Maps API key
+                    string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU"; 
                     string requestUrl = $"https://maps.googleapis.com/maps/api/geocode/json?key={apiKey}&components=postal_code:{zipcode}";
                     var response = await client.GetStringAsync(requestUrl);
                     var geocodeResponse = JsonConvert.DeserializeObject<GeocodeResponse>(response);
@@ -248,68 +256,69 @@ namespace SportMeApp.Controllers.GoogleMap
                 return null;
             }
         }
+        // error cases and log are implemented to look for any errors 
 
-
-
+        // this function actually get infromation of the api by call getplace details 
+        // for all the places that around 
         private async Task<List<Location>> GetPlacesNearby(Location center, string query, int distance)
- {
-     List<Location> locations = new List<Location>();
+        {
+            List<Location> locations = new List<Location>();
 
-     using (HttpClient client = new HttpClient())
-     {
-         string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
-         string placesRequest = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={center.lat},{center.lng}&radius={distance * 1609.34}&keyword={query}&key={apiKey}";
-         string response = await client.GetStringAsync(placesRequest);
-         var placesResponse = JsonConvert.DeserializeObject<PlacesApiQueryResponse>(response);
+            using (HttpClient client = new HttpClient())
+            {
+                string apiKey = "AIzaSyDf0RqSbMr-WJVk8LF_D1Hnhucbr4t8HMU";
+                string placesRequest = $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={center.lat},{center.lng}&radius={distance * 1609.34}&keyword={query}&key={apiKey}";
+                string response = await client.GetStringAsync(placesRequest);
+                var placesResponse = JsonConvert.DeserializeObject<PlacesApiQueryResponse>(response);
 
-         foreach (var result in placesResponse.results)
-         {
-             var placeDetails = await GetPlaceDetails(result.place_id, apiKey);
-             var location = new Location
-             {
-                 lat = result.geometry.location.lat,
-                 lng = result.geometry.location.lng,
-                 Name = result.name,
-                 PlaceId = result.place_id,
-                 FormattedAddress = placeDetails?.formatted_address,
-                 FormattedPhoneNumber = placeDetails?.formatted_phone_number,
-                 Rating = placeDetails?.rating ?? 0,
-                 OpeningHours = placeDetails?.opening_hours,
-                 ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
-             };
+                foreach (var result in placesResponse.results)
+                {
+                    var placeDetails = await GetPlaceDetails(result.place_id, apiKey);
+                    var location = new Location
+                    {
+                        lat = result.geometry.location.lat,
+                        lng = result.geometry.location.lng,
+                        Name = result.name,
+                        PlaceId = result.place_id,
+                        FormattedAddress = placeDetails?.formatted_address,
+                        FormattedPhoneNumber = placeDetails?.formatted_phone_number,
+                        Rating = placeDetails?.rating ?? 0,
+                        OpeningHours = placeDetails?.opening_hours,
+                        ImageUrl = placeDetails.photos != null && placeDetails.photos.Any() ? GetPhotoUrl(placeDetails.photos.First().photo_reference, apiKey) : null
+                    };
 
-             locations.Add(location);
-             //add to the databse 
-         }
-     }
+                    locations.Add(location);
+                    //add to the databse 
+                }
+            }
 
-     return locations;
- }
-
-         private async Task<Result> GetPlaceDetails(string placeId, string apiKey)
- {
-     using (HttpClient client = new HttpClient())
-     {
-         string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_address,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
-         string response = await client.GetStringAsync(placeDetailsRequest);
-         var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
-         if (placeDetailsResponse.status == "OK")
-         {
-             return placeDetailsResponse.result;
-         }
-         else
-         {
-             return null;
-         }
-     }
- }
-
+            return locations;
+        }
+        //using the api and thhe key we get all the details for each place using the palce ID
+        private async Task<Result> GetPlaceDetails(string placeId, string apiKey)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string placeDetailsRequest = $"https://maps.googleapis.com/maps/api/place/details/json?place_id={placeId}&fields=name,formatted_address,formatted_phone_number,opening_hours,rating,photos&key={apiKey}";
+                string response = await client.GetStringAsync(placeDetailsRequest);
+                var placeDetailsResponse = JsonConvert.DeserializeObject<PlaceDetailsResponse>(response);
+                if (placeDetailsResponse.status == "OK")
+                {
+                    return placeDetailsResponse.result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        // this for the getting the pciture
         public string GetPhotoUrl(string photoReference, string apiKey)
         {
             return $"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={photoReference}&key={apiKey}";
         }
 
-
+        // The next three classess are for  zipcode and search. 
         class GeocodeResponse
         {
             public string status { get; set; }
@@ -325,14 +334,14 @@ namespace SportMeApp.Controllers.GoogleMap
         {
             public Location location { get; set; }
         }
-
+        // This for looking for place
         class GooglePlacesResponse
         {
-            public List<object> html_attributions { get; set; }
+            public List<object> html_attributions { get; set; } //this by default when use google api
             public List<Result> results { get; set; }
-            public string status { get; set; }
+            public string status { get; set; } //this is also by default 
         }
-
+        // this get all the result from the databse 
         class PlaceDetailsResponse
         {
             public string status { get; set; }
@@ -343,7 +352,7 @@ namespace SportMeApp.Controllers.GoogleMap
         {
             public Location location { get; set; }
         }
-
+        // this how we storing them 
         public class Result
         {
             public Geometry geometry { get; set; }
@@ -357,7 +366,8 @@ namespace SportMeApp.Controllers.GoogleMap
             public List<Photo> photos { get; set; }
             public string FormattedAddress { get; set; }
         }
-
+        // this important for the database, the fields that need 
+        // to be the databse 
         public class Location
         {
             public string Name { get; set; }
@@ -380,22 +390,22 @@ namespace SportMeApp.Controllers.GoogleMap
 
         }
 
-        
 
 
+        // This for the hours 
         public class GooglePlaceApiOpeningHours
         {
-            
-            public List<string> weekday_text { get; set; } 
-        }
 
+            public List<string> weekday_text { get; set; }
+        }
+        // for getting respones 
         public class PlacesApiQueryResponse
         {
             public List<object> html_attributions { get; set; }
             public List<Result> results { get; set; }
             public string status { get; set; }
         }
-
+        // this for the photo 
         public class Photo
         {
             public string photo_reference { get; set; }

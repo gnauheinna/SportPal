@@ -1,15 +1,9 @@
-﻿//document.addEventListener('DOMContentLoaded', async function () {
-//    await fetchEventAndDisplay();
-//});
-
+﻿
 async function fetchEventAndDisplay() {
-    // update because after joining event, UserInGroup might changed.
-
+    // update localstorage: because after other user joined an event, UserInGroup might changed.
     var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
     console.log("updated info", EventLocationInfo);
-    //var EventLocationInfo = await GetEventsByLocation(EventLocationInfo.location[0].LocationId,  EventLocationInfo.sport.sportId);
-    //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
-
+    // 
     displayGroups(EventLocationInfo);
 }
 

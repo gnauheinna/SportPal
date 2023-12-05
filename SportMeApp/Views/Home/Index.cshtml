@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -106,15 +106,18 @@
             text-align: center;
             letter-spacing: 0;
             line-height: normal;
-            z-index: 2
+            z-index: 2;
+            cursor: pointer;
+           
         }
     </style>
 </head>
 <body>
     <div class="login-page">
         <div class="div">
-            <p class="text-wrapper">Play Hard, Team Up Easily</p>
             <img class="sport-pal" src="@Url.Content("~/Img/sport-pal.png")" alt="My Image" />
+            <p class="text-wrapper">Play Hard, Team Up Easily</p>
+           
 
 
 
@@ -131,6 +134,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
@@ -138,8 +142,10 @@
 
 
 <script>
- 
+ // save sport info to db
     window.onload = function () {
         AddSportToDb();
+
+
     };
 </script>

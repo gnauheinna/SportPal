@@ -58,6 +58,20 @@ namespace SportMeApp.Controllers
             return NotFound("User not found.");
         }
 
+        [HttpGet("{userEmail}/GetUserByEmail")]
+        public async Task<IActionResult> GetUserByEmail(string userEmail)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return NotFound("User not found.");
+        }
+
+
         [HttpGet("GetUsers")]
         public IActionResult GetAllUsers()
         {

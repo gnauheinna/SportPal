@@ -8,7 +8,7 @@ async function GetUserInfo(UserId){
         const response = await fetch(`/api/${UserId}/GetUserInfo`);
         if (response.ok) {
             const info = await response.json();
-            console.log("User Info: " ,JSON.stringify(info));
+            //console.log("User Info: " ,JSON.stringify(info));
             return info;
         } else {
             throw new Error('User info not found');
@@ -16,6 +16,37 @@ async function GetUserInfo(UserId){
             } catch (error) {
         console.error('Error fetching User info:', error);
             throw error;
+    }
+}
+
+async function GetUserId(UserEmail) {
+    try {
+        const response = await fetch(`/api/${UserEmail}/GetUserId`);
+        if (response.ok) {
+            const info = await response.json();
+            console.log("User Info: ", JSON.stringify(info));
+            return info;
+        } else {
+            throw new Error('User info not found');
+        }
+    } catch (error) {
+        console.error('Error fetching User info:', error);
+        throw error;
+    }
+}
+async function GetUserInfoEmail(UserEmail) {
+    try {
+        const response = await fetch(`/api/${UserEmail}/GetUserInfoEmail`);
+        if (response.ok) {
+            const info = await response.json();
+            console.log("User Info: ", JSON.stringify(info));
+            return info;
+        } else {
+            throw new Error('User info not found');
+        }
+    } catch (error) {
+        console.error('Error fetching User info:', error);
+        throw error;
     }
 }
 
