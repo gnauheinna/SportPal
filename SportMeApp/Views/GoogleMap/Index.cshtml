@@ -12,139 +12,142 @@
     <title>Map</title>
 
     <style>
-    
-        .browser{
-            overflow-y:auto;
-            max-height:100vh;
+
+        /* style for the page and contains, the searrch button and any labels */
+        
+        .browser {
+            overflow-y: auto;
+            max-height: 100vh;
         }
 
         .rating-number {
-            margin-left: 5px; /* Add some space between stars and rating number */
+            margin-left: 5px; 
         }
 
         .nav-button {
-            border-radius: 5px; /* Optional for rounded corners */
+            border-radius: 5px; 
         }
+
         .search-form {
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 20px;
-    }
-
-    .search-form select, .search-form input[type="text"], .search-form button {
-        margin-right: 10px;
-        padding: 10px;
-        font-size: 1em;
-        font-weight: normal;
-        height: 50px; /* Set a uniform height */
-        width: 200px; /* Set a uniform width */
-    }
-
-    .search-form button {
-        background-color: #333;
-        color: white;
-        border: none;
-        cursor: pointer;
-    }
-
-label {
-    margin-right: 10px;
-    font-size: 1em;
-}
-
-
-       
-
-        /* CSS for the information box container */
-        .info-box-container {
-            display: flex;
-            flex-direction: row; /* Arrange children in a row */
-            overflow-x: auto; /* Enable horizontal scrolling */
-            overflow-y: hidden; /* Disable vertical scrolling */
-            white-space: nowrap; /* Prevent elements from wrapping to the next line */
-            width: 100%; /* Container takes up full width of its parent */
-            max-height: 700px; /* Adjust this as needed */
         }
 
-        /* CSS for each information box (location button) */
+            .search-form select, .search-form input[type="text"], .search-form button {
+                margin-right: 10px;
+                padding: 10px;
+                font-size: 1em;
+                font-weight: normal;
+                height: 50px; 
+                width: 200px; 
+            }
+
+            .search-form button {
+                background-color: #333;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+
+        label {
+            margin-right: 10px;
+            font-size: 1em;
+        }
+
+
+
+
+        /* style information box container */
+        .info-box-container {
+            display: flex;
+            flex-direction: row; 
+            overflow-x: auto;
+            overflow-y: hidden; 
+            white-space: nowrap;
+            width: 100%;
+            max-height: 700px; 
+        }
+
+        /*  information box (location button) */
         .info-box {
-            display: inline-flex; /* Inline flex to display horizontally */
-            flex-direction: column; /* Content of the box is arranged vertically */
+            display: inline-flex; 
+            flex-direction: column; 
             align-items: flex-start;
             justify-content: space-between;
             padding: 10px;
-            min-width: 500px; /* Minimum width of each box */
-            margin-right: 10px; /* Space between the boxes */
+            min-width: 500px; 
+            margin-right: 10px;
             height: 180px;
-            background-color: #333; /* Dark background color */
+            background-color: #333;
             color: white;
-            border-radius: 10px; /* Rounded corners */
-            padding: 10px; /* Smaller padding inside the box */
-            width: 100%; /* Take full width of the container */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Box shadow for depth */
-            transition: background-color 0.3s; /* Smooth background color transition on hover */
-            text-align: left; /* Align text to the left */
-            position: relative; /* Position relative for absolute positioning of children */
-            margin-bottom: 15px; /* Space between the boxes */
+            border-radius: 10px;
+            padding: 10px; 
+            width: 100%; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+            transition: background-color 0.3s; 
+            text-align: left; 
+            position: relative; 
+            margin-bottom: 15px; 
         }
 
 
         .info-box-content h4 {
-            font-size: 20px; /* Smaller font size for the name */
-            color: #FFD700; /* Yellow color for the name */
-            margin: 0; /* Reset margin for h4 */
+            font-size: 20px; 
+            color: #FFD700; 
+            margin: 0; 
         }
 
         .info-box-content > p {
-            margin: 5px 0; /* Uniform margin for all paragraphs */
-            font-size: 14px; /* Smaller font size for details */
+            margin: 5px 0; 
+            font-size: 14px; 
         }
 
             .info-box-content > p:not(.hours) {
-                font-weight: normal; /* Normal font weight */
+                font-weight: normal; 
             }
 
         .info-box-content p:not(.hours) {
-            font-size: 12px; /* Smaller font size */
+            font-size: 12px;
         }
 
         .info-box-content p:last-child,
         .info-box-content .hours {
             position: absolute;
-            bottom: 10px; /* Reduced space at the bottom */
-            font-size: 14px; /* Smaller font size */
+            bottom: 10px; 
+            font-size: 14px; 
         }
 
         .info-box p {
-            font-size: 1em; /* Standard font size for details */
-            margin: 0.5em 0; /* Vertical space between details */
+            font-size: 1em; 
+            margin: 0.5em 0; 
         }
 
         .info-box-content p:last-child {
-            right: 10px; /* Reduced space on the right for rating */
+            right: 10px; 
         }
 
         .info-box-content .hours {
-            left: 10px; /* Reduced space on the left for hours */
+            left: 10px; 
         }
 
         .info-box:hover {
-            font-size: 1.2em; /* Slightly larger font size for the name on hover */
-            color: #FFD700; /* Yellow color for the name */
-            margin-bottom: 0.5em; /* Reduced space below the name on hover */
-            font-weight: bold; /* Bold font weight on hover */
+            font-size: 1.2em; 
+            color: #FFD700;
+            margin-bottom: 0.5em; 
+            font-weight: bold;
         }
 
         .info-box p {
-            font-size: 1em; /* Standard font size for details */
-            margin: 0.5em 0; /* Vertical space between details */
+            font-size: 1em; 
+            margin: 0.5em 0; 
         }
 
         /* CSS for the map */
         .map-container {
             float: right;
-            width: 100%; /* Made the map wider */
+            width: 100%; 
         }
 
         .map {
@@ -153,47 +156,47 @@ label {
             border: 0;
         }
 
-        /* CSS for the hours */
+        /*  hours */
         .hours {
             font-size: 10px; /* Smaller font size for hours */
         }
 
-        /* CSS for the AM and PM */
+        /*  AM and PM */
         .am-pm {
             font-size: 8px; /* Smaller font size for AM and PM */
         }
 
         .info-box-content p.hours {
-            margin-bottom: 0; /* Remove bottom margin for hours */
-            font-size: 12px; /* Adjust font size for hours */
+            margin-bottom: 0;
+            font-size: 12px; 
         }
 
         .info-box-content p.phone-number {
-            margin-top: -5px; /* Reduce top margin for phone number */
+            margin-top: -5px; 
         }
     </style>
 
-  
+
 </head>
 
 <body>
 
-    <!-- Top bar -->
-        <div class="search-form">
-            <form method="post" action="/GoogleMap/Search">
-                <select id="courtType" name="courtType" >
-                    <option value="tennis"><strong>Tennis Court</strong></option>
-                    <option value="basketball"><strong>Basketball Court</strong></option>
-                    <option value="volleyball"><strong>Volleyball Court</strong></option>
-                    <option value="baseball"><strong>Baseball Field</strong></option>
-                    <option value="soccer"><strong>Soccer Field</strong></option>
-                </select>
-                <label for="zipcode">Zipcode:</label>
-                <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
-                <button type="submit"><strong>Search</strong></button>
-            </form>
-        </div>
-    
+    <!-- Top bar here all the queries are being showed  and all the information for the user -->
+    <div class="search-form">
+        <form method="post" action="/GoogleMap/Search">
+            <select id="courtType" name="courtType">
+                <option value="tennis"><strong>Tennis Court</strong></option>
+                <option value="basketball"><strong>Basketball Court</strong></option>
+                <option value="volleyball"><strong>Volleyball Court</strong></option>
+                <option value="baseball"><strong>Baseball Field</strong></option>
+                <option value="soccer"><strong>Soccer Field</strong></option>
+            </select>
+            <label for="zipcode">Zipcode:</label>
+            <input type="text" name="zipcode" value="@ViewBag.Zipcode" required />
+            <button type="submit"><strong>Search</strong></button>
+        </form>
+    </div>
+
 
     <div class="browser">
         <!-- Map container -->
@@ -206,7 +209,7 @@ label {
             </iframe>
         </div>
 
-        <!-- Information boxes -->
+        <!-- Information boxes, this where all the infromation from the api showed -->
         <div class="info-box-container">
             @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
             {
@@ -219,16 +222,18 @@ label {
                             <h4>@place.Name</h4>
                             <p><strong>Address:</strong> @place.FormattedAddress</p>
                             <p>
-                             <strong>Distance:</strong>
-                             @{
-                             var distanceDisplay = place.Distance < 0.1 ? $"{Math.Round(place.Distance * 5280)} feet" : $"{place.Distance} miles";
-                             }
-                             @distanceDisplay
-                             </p>
+                                <strong>Distance:</strong>
+                                @{
+                                    <!-- rounding to make the values precise and pretty -->
+                                    var distanceDisplay = place.Distance < 0.1 ? $"{Math.Round(place.Distance * 5280)} feet" : $"{place.Distance} miles";
+                                }
+                                @distanceDisplay
+                            </p>
                             <p><strong>Phone Number:</strong> @place.FormattedPhoneNumber</p>
                             <p><strong>Rating:</strong> @place.Rating</p>
                             @if (place.OpeningHours != null && place.OpeningHours.weekday_text != null)
                             {
+                                <!-- grouping same days and hour together so it looks pretty and doesn't overflow -->
                                 <p class="hours">
                                     @DisplayGroupedHours(place.OpeningHours.weekday_text)
                                 </p>
@@ -251,64 +256,66 @@ label {
     </div>
 
     @functions {
-                          
-            private string DisplayGroupedHours(List<string> weekdayHours)
+        //function to arrange the days and in good format 
+            // so if it is monday 8 am , and wednesday 8 am it looks like monday,wednesday 8 am
+           
+        private string DisplayGroupedHours(List<string> weekdayHours)
+        {
+            var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+            var hoursByDay = weekdayHours.Select(dayHour => dayHour.Split(new[] { ": " }, StringSplitOptions.None))
+            .ToDictionary(split => split[0], split => split[1]);
+
+            string currentGroupStartDay = null, lastHours = null;
+            var groupedHours = new List<string>();
+            // 
+            foreach (var day in daysOfWeek)
             {
-                var daysOfWeek = new List<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
-                var hoursByDay = weekdayHours.Select(dayHour => dayHour.Split(new[] { ": " }, StringSplitOptions.None))
-                .ToDictionary(split => split[0], split => split[1]);
-
-                string currentGroupStartDay = null, lastHours = null;
-                var groupedHours = new List<string>();
-
-                foreach (var day in daysOfWeek)
+                hoursByDay.TryGetValue(day, out var currentHours);
+                if (currentHours == lastHours)
                 {
-                    hoursByDay.TryGetValue(day, out var currentHours);
-                    if (currentHours == lastHours)
-                    {
-                        continue;
-                    }
-
-                    if (currentGroupStartDay != null)
-                    {
-                        var previousDayIndex = daysOfWeek.IndexOf(day) - 1;
-                        var groupEndDay = daysOfWeek[previousDayIndex];
-                        var formattedHours = currentGroupStartDay == groupEndDay ?
-                        $"{currentGroupStartDay}: {lastHours}" :
-                        $"{currentGroupStartDay}-{groupEndDay}: {lastHours}";
-                        groupedHours.Add(formattedHours);
-                    }
-
-                    currentGroupStartDay = day;
-                    lastHours = currentHours;
+                    continue;
                 }
 
-                // Handle the last group
-                if (currentGroupStartDay != null && lastHours != null)
+                if (currentGroupStartDay != null)
                 {
-                    var formattedHours = currentGroupStartDay == daysOfWeek.Last() ?
+                    var previousDayIndex = daysOfWeek.IndexOf(day) - 1;
+                    var groupEndDay = daysOfWeek[previousDayIndex];
+                    var formattedHours = currentGroupStartDay == groupEndDay ?
                     $"{currentGroupStartDay}: {lastHours}" :
-                    $"{currentGroupStartDay}-{daysOfWeek.Last()}: {lastHours}";
+                    $"{currentGroupStartDay}-{groupEndDay}: {lastHours}";
                     groupedHours.Add(formattedHours);
                 }
 
-                return string.Join("\n", groupedHours);
+                currentGroupStartDay = day;
+                lastHours = currentHours;
             }
-                            
+
+          
+            if (currentGroupStartDay != null && lastHours != null)
+            {
+                var formattedHours = currentGroupStartDay == daysOfWeek.Last() ?
+                $"{currentGroupStartDay}: {lastHours}" :
+                $"{currentGroupStartDay}-{daysOfWeek.Last()}: {lastHours}";
+                groupedHours.Add(formattedHours);
+            }
+
+            return string.Join("\n", groupedHours);
+        }
+
 
 
 
     }
     <script src="~/js/UserUtility.js" asp-append-version="true"></script>
     <script src="~/js/Event/EventUtility.js" asp-append-version="true"></script>
-    
+
     <script>
-       // storing user info to the local storage
+        // storing user info to the local storage
         // ez as 12345
         document.addEventListener("DOMContentLoaded", async function () {
             var places = @Html.Raw(Json.Serialize(ViewBag.Places));
             var noCourtsMessage = document.querySelector(".no-courts-message");
-            
+
             // 1: getUserInfo is a async function that return user info stored in db
             var user = await getUserInfo();
             console.log('User Information:', JSON.stringify(user));
@@ -316,12 +323,12 @@ label {
             var UserInfo = await GetUserInfo(user.userId);
             // 5. store this information to local storage so that we can access user info for the rest of the pages
             localStorage.setItem('userInfo', JSON.stringify(UserInfo));
-            
+
             async function getUserInfo() {
                 // 2. first it retrieve user email from session (this information is stored in OAuthController after user logged in)
                 var userEmailSession = '@HttpContextAccessor.HttpContext.Session.GetString("UserEmailSession")';
                 console.log('User Email from Session:', userEmailSession);
- 
+
                 try {
                     // 3. we use email to get user by calling a function written in js that send a request to backend
                     var user = await GetUserByEmail(userEmailSession);
@@ -333,7 +340,7 @@ label {
 
         });
 
-       
+
     </script>
 
 
@@ -343,21 +350,21 @@ label {
             // connection google map page to location specification page
             // ez as 123
             @if (ViewBag.Places != null && ViewBag.Places.Count > 0)
+        {
+            // 1. for each location displayed after a user input zipcode and click search, we add a eventlistener that passes placeid and sporttype
+            // **note:placeid is the unique identifier for the location that google map returned, and locationid is the primary key for the location table
+            var displayCount = Math.Min(15, ViewBag.Places.Count);
+            for (int i = 0; i < displayCount; i++)
             {
-                // 1. for each location displayed after a user input zipcode and click search, we add a eventlistener that passes placeid and sporttype
-                // **note:placeid is the unique identifier for the location that google map returned, and locationid is the primary key for the location table
-                var displayCount = Math.Min(15, ViewBag.Places.Count);
-                for (int i = 0; i < displayCount; i++)
-                {
-                    <text>
-                            document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
+                <text>
+                        document.getElementById('infoBoxButton_@i').addEventListener('click', function () {
                             // 2. when the user clicked a certain locaiton, handleInfoBoxClick method is called
                             handleInfoBoxClick('@ViewBag.Places[i].PlaceId', '@ViewData["CourtType"]');
-                            });
-                    </text>
-                }
+                        });
+                </text>
             }
-        });
+        }
+                });
 
 
         async function handleInfoBoxClick(locationAddress, courtType) {
@@ -386,8 +393,8 @@ label {
             var SportName = 'tennis';
         }
 
-      
+
     </script>
-   
+
 </body>
 </html>
