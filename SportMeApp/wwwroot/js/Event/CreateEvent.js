@@ -32,7 +32,7 @@
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
             // Reload the page after form submission
-            location.reload();
+           // location.reload();
         });
 
 
