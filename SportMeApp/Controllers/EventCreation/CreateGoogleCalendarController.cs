@@ -17,12 +17,12 @@ namespace SportMeApp.Controllers.CreateEvent1
     public class CreateGoogleCalendarController : Controller
     {
         private readonly ILogger<CreateGoogleCalendarController> _logger;
-        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly SportMeContext _context;
 
-        public CreateGoogleCalendarController(ILogger<CreateGoogleCalendarController> logger)
+        public CreateGoogleCalendarController(ILogger<CreateGoogleCalendarController> logger, SportMeContext context)
         {
             _logger = logger;
-           
+            _context = context;
         }
 
 
@@ -33,7 +33,8 @@ namespace SportMeApp.Controllers.CreateEvent1
             var tokensFileName = "tokens.json";
             var tokensFile = System.IO.Path.Combine(AppContext.BaseDirectory, "files", tokensFileName);
 
-            
+            string sport = GetCalendarIdBySportId(eventData.SportId);
+
             // Inserting a Google Calendar Event 
             // EZ as 1234
             _logger.LogInformation($"Received data: {JsonConvert.SerializeObject(eventData)}");
@@ -72,9 +73,35 @@ namespace SportMeApp.Controllers.CreateEvent1
             };
 
 
+            string calendarId = "e4c1ddafe23c0856595af11ded6dfeef3b4fe9dc51cfae87b9a9c0d97bf2d4c7@group.calendar.google.com";
+
 
             // 3. Choose correct calendarId based on sports.
-            string calendarId = "dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039@group.calendar.google.com";
+            // Use a switch statement based on the sportName
+            switch (sport)
+            {
+                case "tennis":
+                    calendarId = "e4c1ddafe23c0856595af11ded6dfeef3b4fe9dc51cfae87b9a9c0d97bf2d4c7@group.calendar.google.com";
+                    break;
+                case "baseball":
+                    calendarId = "dcba7de1c5f8598fe103723b195c485848a97e53285972f8a9882726cb541039@group.calendar.google.com";
+                    break;
+                case "basketball":
+                    calendarId = "cdd08cff32ab443727d461d9f138d150ee13bbff82733a6e061c310a901f513b@group.calendar.google.com";
+                    break;
+                case "volleyball":
+                    calendarId = "63b33d59f80d137b9977e4384bb9ca59a7fcc225a33243ab242882b1aa08ca6b@group.calendar.google.com";
+                    break;
+                case "soccer":
+                    calendarId = "dd10b96a0e8d139319ce6ea458dba2931cd382a3a0ffe9086f526edd26fcd54d@group.calendar.google.com";
+
+                    break;
+                default:
+                    // Default logic for unknown sportName
+                    calendarId = "cdd08cff32ab443727d461d9f138d150ee13bbff82733a6e061c310a901f513b@group.calendar.google.com";
+                    break;
+            }
+          
 
             // 4. Insert the event into the Calendar
             EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
@@ -84,6 +111,25 @@ namespace SportMeApp.Controllers.CreateEvent1
 
             return Ok(newEvent);
 
+        }
+        private string GetCalendarIdBySportId(int sportId)
+        {
+            // Query the Sport table using the provided context to get sportName based on sportId
+            var sport = _context.Sport.FirstOrDefault(s => s.SportId == sportId);
+
+            // Map sportId to the corresponding calendarId based on your logic
+            // Example: You might have a dictionary or a switch statement to map sportId to calendarId
+            // This is just a placeholder, update it based on your actual mapping logic.
+            string sportName = "";
+
+            if (sport != null)
+            {
+                // Replace this with your actual mapping logic
+                // Example: Assuming you have a property CalendarId in your Sport model
+                sportName = sport.SportName ?? "";
+            }
+
+            return sportName;
         }
         public IActionResult Index()
         {
