@@ -28,13 +28,13 @@
             // Default iframe soccer if 'sportname' doesn't match any condition 
             calendarContainer.innerHTML = '<iframe src="https://calendar.google.com/calendar/embed?src=dd10b96a0e8d139319ce6ea458dba2931cd382a3a0ffe9086f526edd26fcd54d%40group.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>';
         }
-
         form.addEventListener('submit', function (event) {
             event.preventDefault();
             sendEventInfo(EventLocationInfo);
             // Reload the page after form submission
             location.reload();
         });
+
 
         var sportDisplay = document.getElementById('sport');
         sportDisplay.textContent = "For " + EventLocationInfo.sport.sportName;
