@@ -274,7 +274,6 @@ namespace SportMeApp.Controllers.EventSpecification
 
         }
 
-
     }
    
 }

@@ -6,26 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
     console.log("userInfo", userInfo);
     groupClearField();
-    loadAndDisplayGroups(userInfo.user);
+    displayGroups(userInfo);
 });
 
-// display all registered events for user
-function loadAndDisplayGroups(user) {
 
-    try {
-        (async () => {
-            const Userinfo = await GetUserInfo(user.userId);
-            console.log("Userinfo", JSON.stringify(Userinfo));
-            displayGroups(Userinfo);
-        })();
-    } catch (error) {
-        console.error('Error in finding userid or getting groups', error);
-    }
-
-
-}
-
-// 
 async function displayGroups(Userinfo) {
     const container = document.querySelector('#registeredEvent');
 

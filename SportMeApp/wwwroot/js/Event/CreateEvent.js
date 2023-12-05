@@ -69,7 +69,10 @@ async function sendEventInfo(EventLocationInfo) {
     var userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     var userEvent = await addUserEvent(userInfo.user.userId, event.eventId);
-   
+
+    //update UserInfo
+    var UserInfo = await GetUserInfo(userInfo.user.userId);
+    localStorage.setItem('userInfo', JSON.stringify(UserInfo));
 
     // Update the EventLocationInfo
     var EventLocationInfo = await GetEventsByLocation(LocationId, SportId);

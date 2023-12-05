@@ -89,7 +89,7 @@
     flex-wrap: wrap;
     margin-top: 10px;
     margin-left: 10px;
-    flex: 50%;
+    flex: 70%;
 }
 
 .day-hours {
@@ -104,7 +104,7 @@
 }
 
 .contact-info {
-    flex: 50%;
+    flex: 30%;
     margin-inline: 2px;
     text-align: right;
     display: flex;

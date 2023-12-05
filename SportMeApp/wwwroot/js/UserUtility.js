@@ -2,37 +2,23 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     localStorage.clear();
-    var btnUser = document.getElementById('BtnUser');
-
-    btnUser.addEventListener('click', function () {
-        var userName = document.getElementById('Username').value;
-
-        handleUserLogin(userName);
-            
-    });
+  
 });
 
-async function handleUserLogin(userName) {
-    let response = await fetch(`/api/user/${userName}/AddUser`, {
-        method: 'POST',
+async function GetUserByEmail(userEmail) {
+    let response = await fetch(`/api/user/${userEmail}/GetUserByEmail`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(userName)
+
     });
 
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    let data = await response.json();
-    $("#displayName").text("Welcome! " + userName);
+    return response.json();
 
-    // set localstorage
-    let userInfo = await GetUserInfo(data.userId);
-    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-    console.log(JSON.stringify(userInfo));
-    window.location.href = '/GoogleMap/Index';
-    return data;
 }
 
 async function AddSportToDb() {
@@ -50,6 +36,9 @@ async function AddSportToDb() {
     return response;
 
   }
+
+
+
 
 
 
