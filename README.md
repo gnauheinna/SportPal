@@ -4,7 +4,7 @@
 3. update-database
    ### Both step 2 should return build success, if not, please email us. Sorry for the inconvenience!!!
 
-end for graders' note------------------------------------------------------------------------------------------------------------------------
+end for graders' note----------------------------------------------------------------------------------------------------------------------
 
 
 ## how to use dbContext in our codes?
