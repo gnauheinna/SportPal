@@ -1,7 +1,10 @@
-# First step after cloning
+# FOR GRADERS: First step after cloning
 1. top navbar => tools => Nuget Package Manager => Package Manager Console
-2. update-database
-   ### both step 2 should return build success, if not, call Michelle rn!!!
+2. add-migration init
+3. update-database
+   ### Both step 2 should return build success, if not, please email us. Sorry for the inconvenience!!!
+
+
 
 ## how to use dbContext in our codes?
 1. giving the controller access for dbContext
