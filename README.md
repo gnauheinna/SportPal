@@ -11,10 +11,9 @@
 2. Select a sport type and enter your zip code.
 3. Choose a specific location and redirect to the event specification page.
 4. The event specification page will contain all the location information and registered events associated with this location. **Note: If any of the information is not displayed, it means the Google Maps API returns null for this information. It is not a bug!**
-Create an event (ensure that the start time is before the finish time) and click "Create event."
-5. The event should now be created. **After creating the event, it will be displayed under "Registered Events" in the navigation bar. To test the join feature, you can repeat steps 2, 3, and 4 with the same input and join the event you created. After successfully joining, the same event should appear twice on the specification page
-   **
-
+5. click Create an event, enter all fields (ensure that the start time is before the finish time) and click "Create event."
+6. The event should now be created. **After creating the event, it will be displayed under "Registered Events" in the navigation bar. To test the join feature, you can repeat steps 2, 3, and 4 with the same input and join the event you created. After successfully joining, the same event should appear twice on the specification page**
+   
 end for graders' note----------------------------------------------------------------------------------------------------------------------
 
 
