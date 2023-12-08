@@ -7,7 +7,7 @@
 5. run the program!
 **Both step 3 and step 4 should return build success, if not, please email us. Sorry for the inconvenience!!!
 ## User Flow
-1. Log in with a non-Google account.
+1. Log in with a non-bu Google account.
 2. Select a sport type and enter your zip code.
 3. Choose a specific location and redirect to the event specification page.
 4. The event specification page will contain all the location information and registered events associated with this location. **Note: If any of the information is not displayed, it means the Google Maps API returns null for this information. It is not a bug!**
