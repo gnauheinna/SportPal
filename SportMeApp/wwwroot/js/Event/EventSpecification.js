@@ -3,6 +3,13 @@ async function fetchEventAndDisplay() {
     // update localstorage: because after other user joined an event, UserInGroup might changed.
     var EventLocationInfo = await JSON.parse(localStorage.getItem('EventLocationInfo'));
     console.log("updated info", EventLocationInfo);
+
+    // uodate userInfo
+    var userInfo = await JSON.parse(localStorage.getItem('userInfo'));
+    var UserInfoNew = await GetUserInfo(userInfo.user.userId);
+    // 5. store this information to local storage so that we can access user info for the rest of the pages
+    localStorage.setItem('userInfo', JSON.stringify(UserInfoNew));
+    console.log("updated info", EventLocationInfo);
     // 
     displayGroups(EventLocationInfo);
 }
@@ -15,6 +22,7 @@ async function displayGroups(EventLocationInfo) {
         //localStorage.setItem('EventLocationInfo', JSON.stringify(EventLocationInfo));
         window.location.href = ('/EventCreation/CreateForm');
         console.log("Create Button clicked");
+
     });
     const timecontainer = document.getElementById('operating-hours');
     var time = EventLocationInfo.location[0].weekdayText.split('?');
