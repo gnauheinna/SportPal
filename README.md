@@ -1,7 +1,21 @@
-# First step after cloning
-1. top navbar => tools => Nuget Package Manager => Package Manager Console
-2. update-database
-   ### both step 2 should return build success, if not, call Michelle rn!!!
+# FOR GRADERS: 
+## First step after cloning
+1. create a folder called App_Data (should be located at the root level)
+2. top navbar => tools => Nuget Package Manager => Package Manager Console
+3. add-migration init
+4. update-database
+5. run the program!
+**Both step 3 and step 4 should return build success, if not, please email us. Sorry for the inconvenience!!!
+## User Flow
+1. Log in with a non-Google account.
+2. Select a sport type and enter your zip code.
+3. Choose a specific location and redirect to the event specification page.
+4. The event specification page will contain all the location information and registered events associated with this location. **Note: If any of the information is not displayed, it means the Google Maps API returns null for this information. It is not a bug!**
+5. click Create an event, enter all fields (ensure that the start time is before the finish time) and click "Create event."
+6. The event should now be created. **After creating the event, it will be displayed under "Registered Events" in the navigation bar. To test the join feature, you can repeat steps 2, 3, and 4 with the same input and join the event you created. After successfully joining, the same event should appear twice on the specification page**
+   
+end for graders' note----------------------------------------------------------------------------------------------------------------------
+
 
 ## how to use dbContext in our codes?
 1. giving the controller access for dbContext
