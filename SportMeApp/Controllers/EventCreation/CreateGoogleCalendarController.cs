@@ -25,7 +25,7 @@ namespace SportMeApp.Controllers.CreateEvent1
             _context = context;
         }
 
-
+        // function to create event on google calendar
         [HttpPost ("CreateGoogleCalendarEvent")]
         public ActionResult CreateGoogleCalendarEvent(CreateEvent eventData)
         {
@@ -72,7 +72,7 @@ namespace SportMeApp.Controllers.CreateEvent1
                 }
             };
 
-
+            // default calendar ID
             string calendarId = "e4c1ddafe23c0856595af11ded6dfeef3b4fe9dc51cfae87b9a9c0d97bf2d4c7@group.calendar.google.com";
 
 
@@ -112,20 +112,19 @@ namespace SportMeApp.Controllers.CreateEvent1
             return Ok(newEvent);
 
         }
+
+        // function to return the correct sport name based on sportID
         private string GetCalendarIdBySportId(int sportId)
         {
             // Query the Sport table using the provided context to get sportName based on sportId
             var sport = _context.Sport.FirstOrDefault(s => s.SportId == sportId);
 
-            // Map sportId to the corresponding calendarId based on your logic
-            // Example: You might have a dictionary or a switch statement to map sportId to calendarId
-            // This is just a placeholder, update it based on your actual mapping logic.
+           // initialize string to hold sportname
             string sportName = "";
 
             if (sport != null)
             {
-                // Replace this with your actual mapping logic
-                // Example: Assuming you have a property CalendarId in your Sport model
+                // Map sportId to the corresponding sportname based on your sportID
                 sportName = sport.SportName ?? "";
             }
 
