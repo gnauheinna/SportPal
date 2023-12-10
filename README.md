@@ -14,6 +14,7 @@
 4. The event specification page will contain all the location information and registered events associated with this location. **Note: If any of the information is not displayed, it means the Google Maps API returns null for this information. It is not a bug!**
 5. click Create an event, enter all fields (ensure that the start time is before the finish time) and click "Create event."
 6. The event should now be created. **After creating the event, it will be displayed under "Registered Events" in the navigation bar. To test the join feature, you can repeat steps 2, 3, and 4 with the same input and join the event you created. After successfully joining, the same event should appear twice on the specification page**
+7. To pay to join an event, please use the following PayPal credential: Account: sb-ru3cq28210002@personal.example.com Password: 0LJ#=GLh
    
 end for graders' note----------------------------------------------------------------------------------------------------------------------
 
