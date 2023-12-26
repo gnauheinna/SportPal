@@ -3,7 +3,9 @@
 # C# ASP.NETCORE WebApp dedicated to help sportmen start events and create a sports community. 
 SportPal is powered by Google Cloud Platform and SQL Server Express, it leverages third party APIs including Google Calendar, Google Maps, Pusher, and PayPal.
 # Click to watch A Demo Video
-[<img width="856" alt="Screenshot 2023-12-26 at 2 03 00 PM" src="https://github.com/gnauheinna/SportPal/assets/116969903/8cde009f-abad-4245-84b0-99f03d6324a8">](https://youtu.be/CllZ57M3P7I "SportsPal Demo")
+[<img width="349" alt="Screenshot 2023-12-26 at 2 06 04 PM" src="https://github.com/gnauheinna/SportPal/assets/116969903/99885b87-5b64-43ad-a81a-68e538d83221">](https://youtu.be/CllZ57M3P7I "SportsPal Demo")
+
+
 
 
 
